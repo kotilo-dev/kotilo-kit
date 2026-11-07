@@ -12,6 +12,7 @@ import json from './format/json.js';
 import sql from './format/sql.js';
 import xml from './format/xml.js';
 import hash from './generate/hash.js';
+import password from './generate/password.js';
 import uuid from './generate/uuid.js';
 import caseTool from './text/case.js';
 import count from './text/count.js';
@@ -54,8 +55,9 @@ export const builtinTools: Tool<any>[] = [
   units,
   uuid,
   hash,
+  password,
   urlParse,
   color,
 ];
 
-export { base64, url, jwt, htmlEntity, radix, unicode, json, jsonConvert, csv, jsonTypes, xml, sql, caseTool, lines, diff, regex, escape, fake, count, timestamp, cron, duration, units, uuid, hash, urlParse, color };
+export { base64, url, jwt, htmlEntity, radix, unicode, json, jsonConvert, csv, jsonTypes, xml, sql, caseTool, lines, diff, regex, escape, fake, count, timestamp, cron, duration, units, uuid, hash, password, urlParse, color };

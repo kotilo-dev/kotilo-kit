@@ -56,7 +56,7 @@
 |---|---|---|---|---|
 | uuid | UUID v4/v7, ULID, NanoID | toplu üretim | P1 | 1.0 ✓ K0 |
 | hash | Hash | MD5, SHA-1/256/512, CRC32; metin ve dosya; HMAC | P1 | 1.0 ✓ K0 |
-| password | Parola üret | kural seçimi, entropi | P2 | 1.0 |
+| password | Parola üret | kural seçimi, entropi | P2 | 1.0 ✓ K2 |
 | bcrypt | Bcrypt / Argon2 hash ve doğrula | | P3 | 1.1 |
 | keypair | RSA/ECDSA anahtar çifti, PEM inceleme | yalnızca yerel | P3 | 1.1 |
 | cert | X.509 sertifika inceleme | PEM/DER, zincir, geçerlilik | P2 | 1.1 |
