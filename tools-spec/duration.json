@@ -1,0 +1,311 @@
+{
+  "tool": "duration",
+  "cases": [
+    {
+      "name": "TR tarih biçimi, iki satır, İstanbul saati",
+      "input": "07.11.2026\n01.01.2027",
+      "ctx": {
+        "tz": "Europe/Istanbul",
+        "locale": "tr"
+      },
+      "expect": {
+        "rows": [
+          [
+            "Başlangıç",
+            "2026-11-07 00:00:00 +03:00"
+          ],
+          [
+            "Bitiş",
+            "2027-01-01 00:00:00 +03:00"
+          ],
+          [
+            "Fark",
+            "1 ay 25 gün"
+          ],
+          [
+            "Toplam gün",
+            "55"
+          ],
+          [
+            "İş günü (Pzt–Cum)",
+            "39"
+          ],
+          [
+            "ISO 8601",
+            "P55D"
+          ]
+        ],
+        "meta": {
+          "mode": "between",
+          "businessDays": 39
+        }
+      }
+    },
+    {
+      "name": "ay sonu kırpma ve → ayıracı",
+      "input": "2026-01-31 → 2026-03-01",
+      "expect": {
+        "rows": [
+          [
+            "Difference",
+            "1 mth, 1 day"
+          ],
+          [
+            "Total days",
+            "29"
+          ],
+          [
+            "Business days (Mon–Fri)",
+            "20"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "ISO + artık yıl, saat farkı",
+      "input": "2024-02-29T10:00:00Z..2025-03-01T09:30:15Z",
+      "expect": {
+        "rows": [
+          [
+            "Difference",
+            "1 yr, 23 hr, 30 min, 15 sec"
+          ],
+          [
+            "Total hours",
+            "8,783.5"
+          ],
+          [
+            "ISO 8601",
+            "P365DT23H30M15S"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "ters sıra negatif, ' - ' ayıracı",
+      "input": "2026-03-01 - 2026-01-31",
+      "expect": {
+        "rows": [
+          [
+            "Difference",
+            "−1 mth, 1 day"
+          ],
+          [
+            "Total days",
+            "-29"
+          ],
+          [
+            "ISO 8601",
+            "-P29D"
+          ]
+        ],
+        "meta": {
+          "businessDays": -20
+        }
+      }
+    },
+    {
+      "name": "tek tarih → şimdiye kadar (Unix saniye)",
+      "input": "1700000000",
+      "ctx": {
+        "now": "2026-01-01T00:00:00Z"
+      },
+      "expect": {
+        "rows": [
+          [
+            "From",
+            "2023-11-14 22:13:20 +00:00"
+          ],
+          [
+            "To",
+            "2026-01-01 00:00:00 +00:00"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "ekle: ay kırpma, şimdi, çok satır",
+      "input": "2026-01-31\nşimdi",
+      "opts": {
+        "mode": "add",
+        "amount": "+1mo"
+      },
+      "expect": {
+        "output": "2026-02-28 00:00:00 +00:00\n2026-02-01 00:00:00 +00:00",
+        "meta": {
+          "mode": "add",
+          "count": 2
+        }
+      }
+    },
+    {
+      "name": "ekle: yaz saati — 1 gün yerel saati korur, 24 saat korumaz",
+      "input": "2026-03-28 12:00",
+      "opts": {
+        "mode": "add",
+        "amount": "1d"
+      },
+      "ctx": {
+        "tz": "Europe/Berlin"
+      },
+      "expect": {
+        "output": "2026-03-29 12:00:00 +02:00"
+      }
+    },
+    {
+      "name": "ekle: 24h yaz saatinde",
+      "input": "2026-03-28 12:00",
+      "opts": {
+        "mode": "add",
+        "amount": "24h"
+      },
+      "ctx": {
+        "tz": "Europe/Berlin"
+      },
+      "expect": {
+        "output": "2026-03-29 13:00:00 +02:00"
+      }
+    },
+    {
+      "name": "ekle: Türkçe birimler ve eksi işaret mirası",
+      "input": "01.01.2026",
+      "opts": {
+        "mode": "add",
+        "amount": "-2w 3d"
+      },
+      "ctx": {
+        "tz": "Europe/Istanbul"
+      },
+      "expect": {
+        "output": "2025-12-15 00:00:00 +03:00"
+      }
+    },
+    {
+      "name": "ekle: '1 gün 2 saat'",
+      "input": "01.01.2026",
+      "opts": {
+        "mode": "add",
+        "amount": "1 gün 2 saat"
+      },
+      "ctx": {
+        "tz": "Europe/Istanbul"
+      },
+      "expect": {
+        "output": "2026-01-02 02:00:00 +03:00"
+      }
+    },
+    {
+      "name": "dönüştür: birimli metin, TR",
+      "input": "1d 1h 1m 1s",
+      "opts": {
+        "mode": "convert"
+      },
+      "ctx": {
+        "locale": "tr"
+      },
+      "expect": {
+        "rows": [
+          [
+            "Okunur",
+            "1 gün 1 sa. 1 dk. 1 sn."
+          ],
+          [
+            "Saat (s:dd:ss)",
+            "25:01:01"
+          ],
+          [
+            "ISO 8601",
+            "P1DT1H1M1S"
+          ],
+          [
+            "Toplam saniye",
+            "90.061"
+          ]
+        ],
+        "meta": {
+          "ms": 90061000
+        }
+      }
+    },
+    {
+      "name": "dönüştür: çıplak sayı = saniye",
+      "input": "5400",
+      "opts": {
+        "mode": "convert"
+      },
+      "expect": {
+        "rows": [
+          [
+            "ISO 8601",
+            "PT1H30M"
+          ],
+          [
+            "Total hours",
+            "1.5"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "ISO süresi 'between' modunda da dönüştürülür",
+      "input": "P1DT2H",
+      "expect": {
+        "rows": [
+          [
+            "Readable",
+            "1 day, 2 hr"
+          ],
+          [
+            "ISO 8601",
+            "P1DT2H"
+          ]
+        ],
+        "meta": {
+          "mode": "convert"
+        }
+      }
+    },
+    {
+      "name": "hata: tarih değil",
+      "input": "yarın..dün",
+      "expect": {
+        "error": "error.duration.date"
+      }
+    },
+    {
+      "name": "hata: üç tarih",
+      "input": "2026-01-01\n2026-02-01\n2026-03-01",
+      "expect": {
+        "error": "error.duration.pair"
+      }
+    },
+    {
+      "name": "hata: miktar",
+      "input": "2026-01-01",
+      "opts": {
+        "mode": "add",
+        "amount": "3 parsek"
+      },
+      "expect": {
+        "error": "error.duration.amount"
+      }
+    },
+    {
+      "name": "hata: süre",
+      "input": "biraz",
+      "opts": {
+        "mode": "convert"
+      },
+      "expect": {
+        "error": "error.duration.duration"
+      }
+    },
+    {
+      "name": "hata: geçersiz gün",
+      "input": "31.02.2026",
+      "expect": {
+        "error": "error.duration.date"
+      }
+    }
+  ]
+}

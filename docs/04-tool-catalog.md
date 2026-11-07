@@ -47,7 +47,7 @@
 |---|---|---|---|---|
 | timestamp | Unix timestamp ⇄ tarih | ms/s algılama, saat dilimi, ISO 8601; layout: table | P1 | 1.0 ✓ K0 |
 | cron | Cron ifadesi | açıklama + sonraki 5 çalışma | P1 | 1.0 ✓ K0 |
-| duration | Süre hesabı | iki tarih arası, iş günü, dilim dönüşümü | P2 | 1.0 |
+| duration | Süre hesabı | iki tarih arası, iş günü, dilim dönüşümü | P2 | 1.0 ✓ K2 |
 | units | Sayı tabanı ve birim | bayt KB/MiB, hex/oct/bin | P2 | 1.0 |
 | calc | İfade hesap makinesi | `0x1F + 2**10`; sonuç her tabanda | P3 | 1.1 |
 
