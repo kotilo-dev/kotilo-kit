@@ -34,6 +34,8 @@
   { "input": "1.5 GB", "top": "units" },
   { "input": "page=2&sort=name&tag=a&tag=b", "top": "query" },
   { "input": "?q=istanbul&lang=tr", "top": "query" },
+  { "input": "404", "top": "http-ref" },
+  { "input": "418", "top": "http-ref" },
   { "input": "merhaba dünya", "top": null },
   { "input": "Password", "top": null },
   { "input": "deadbeefcafebabe", "top": null },

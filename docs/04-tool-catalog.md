@@ -67,7 +67,7 @@
 |---|---|---|---|---|
 | url-parse | URL ayrıştır | şema, host, yol, query tablo; layout: table | P1 | 1.0 ✓ K0 |
 | query | Query string ⇄ JSON | | P2 | 1.0 ✓ K2 |
-| http-ref | HTTP durum kodu ve MIME sözlüğü | arama | P2 | 1.0 |
+| http-ref | HTTP durum kodu ve MIME sözlüğü | arama | P2 | 1.0 ✓ K2 |
 | useragent | User-Agent ayrıştır | | P3 | 1.1 |
 | cidr | IP / CIDR hesaplayıcı | IPv4/IPv6 | P2 | 1.1 |
 | chmod | chmod hesaplayıcı | | P3 | 1.1 |
