@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Kotilo Kit palette</title>
+<script src="./support.js"></script>
+<script src="themes.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+a{color:#89b4fa}a:hover{color:#b4befe}
+</style>
+</helmet>
+<div style="{{vars}}; width: 720px; height: 480px; box-sizing: border-box; background: var(--base); border-radius: 14px; border: 1px solid var(--s1); box-shadow: 0 24px 64px rgba(0,0,0,0.5); display: flex; flex-direction: column; font-family: Inter, system-ui, sans-serif; color: var(--text); overflow: hidden">
+
+  <div style="display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--s0)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--subtext)" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <input aria-label="Araç ara" value="jwt" style="flex: 1; background: transparent; border: none; outline: none; font: 500 18px JetBrains Mono, monospace; color: var(--text)">
+    <span style="font: 500 11px JetBrains Mono, monospace; color: var(--overlay); padding: 3px 7px; border: 1px solid var(--s1); border-radius: 6px">esc</span>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 8px; padding: 10px 16px; background: var(--mantle); border-bottom: 1px solid var(--s0)">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>
+    <span style="font-size: 12px; color: var(--teal); font-weight: 500">Panoda JWT algılandı</span>
+    <span style="font: 400 12px JetBrains Mono, monospace; color: var(--overlay); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwi…</span>
+  </div>
+
+  <div style="display: flex; flex-direction: column; padding: 8px; gap: 2px; flex: 1">
+    <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; color: var(--overlay); padding: 6px 8px 4px">ÖNERİLEN</div>
+
+    <div style="display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 8px; background: var(--s0)">
+      <span style="width: 32px; height: 32px; border-radius: 8px; background: var(--mauve); display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--crust)" stroke-width="2.2" aria-hidden="true"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg></span>
+      <span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 600">JWT Decode</span><span style="font-size: 12px; color: var(--subtext)">header, payload, imza · süre: 3 gün 4 saat kaldı</span></span>
+      <span style="font: 500 11px JetBrains Mono, monospace; color: var(--crust); background: var(--mauve); padding: 3px 8px; border-radius: 6px">enter</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 8px">
+      <span style="width: 32px; height: 32px; border-radius: 8px; background: var(--s0); display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg></span>
+      <span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 500">Base64 Decode</span><span style="font-size: 12px; color: var(--subtext)">payload bölümünü düz metin olarak çöz</span></span>
+      <span style="font: 500 11px JetBrains Mono, monospace; color: var(--overlay)">⌘2</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 8px">
+      <span style="width: 32px; height: 32px; border-radius: 8px; background: var(--s0); display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--yellow)" stroke-width="2.2" aria-hidden="true"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></span>
+      <span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 500">JSON Format</span><span style="font-size: 12px; color: var(--subtext)">claims'i biçimlendir, JSONPath ile sorgula</span></span>
+      <span style="font: 500 11px JetBrains Mono, monospace; color: var(--overlay)">⌘3</span>
+    </div>
+
+    <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; color: var(--overlay); padding: 10px 8px 4px">SON KULLANILAN</div>
+
+    <div style="display: flex; align-items: center; gap: 12px; padding: 8px 12px; border-radius: 8px">
+      <span style="width: 32px; height: 32px; border-radius: 8px; background: var(--s0); display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+      <span style="flex: 1; font-size: 14px; font-weight: 500">Unix Timestamp → Tarih</span>
+      <span style="font-size: 12px; color: var(--overlay)">2 dk önce</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 12px; padding: 8px 12px; border-radius: 8px">
+      <span style="width: 32px; height: 32px; border-radius: 8px; background: var(--s0); display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--peach)" stroke-width="2.2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16M9 3v18"/></svg></span>
+      <span style="flex: 1; font-size: 14px; font-weight: 500">CSV → Markdown Tablo</span>
+      <span style="font-size: 12px; color: var(--overlay)">bugün</span>
+    </div>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 16px; padding: 10px 16px; border-top: 1px solid var(--s0); background: var(--mantle); font-size: 11px; color: var(--overlay)">
+    <span><b style="color: var(--subtext); font-weight: 500">↵</b> çalıştır ve panoya yaz</span>
+    <span><b style="color: var(--subtext); font-weight: 500">ctrl ↵</b> tam pencerede aç</span>
+    <span><b style="color: var(--subtext); font-weight: 500">tab</b> seçenekler</span>
+    <span style="flex: 1"></span>
+    <span style="display: flex; align-items: center; gap: 6px"><span style="width: 6px; height: 6px; border-radius: 50%; background: var(--green)"></span>{{themeName}}</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","default":"catppuccin-mocha","options":["catppuccin-mocha","gruvbox-dark","tokyo-night","everforest-dark","nord","rose-pine-moon","dracula"],"section":"Tema"},"$preview":{"width":720,"height":480}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var id = this.props.theme || 'catppuccin-mocha';
+    var t = window.KotiloThemes[id] || window.KotiloThemes['catppuccin-mocha'];
+    return { vars: window.kotiloThemeVars(id), themeName: t.name };
+  }
+}
+</script>
+</body>
+</html>

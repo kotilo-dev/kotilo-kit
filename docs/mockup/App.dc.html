@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Kotilo Kit — Base64</title>
+<script src="./support.js"></script>
+<script src="themes.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+a{color:#89b4fa}a:hover{color:#b4befe}
+</style>
+</helmet>
+<div style="{{vars}}; width: 1280px; height: 800px; box-sizing: border-box; background: var(--base); border-radius: 12px; border: 1px solid var(--s1); display: flex; flex-direction: column; font-family: Inter, system-ui, sans-serif; color: var(--text); overflow: hidden">
+
+  <div style="display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: var(--mantle); border-bottom: 1px solid var(--s0)">
+    <span style="display: flex; gap: 7px; margin-right: 8px"><span style="width: 11px; height: 11px; border-radius: 50%; background: var(--red)"></span><span style="width: 11px; height: 11px; border-radius: 50%; background: var(--yellow)"></span><span style="width: 11px; height: 11px; border-radius: 50%; background: var(--green)"></span></span>
+    <span style="display: flex; align-items: center; gap: 8px"><span style="width: 22px; height: 22px; border-radius: 6px; background: var(--mauve); display: flex; align-items: center; justify-content: center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--base)" stroke-width="2.5" aria-hidden="true"><path d="M12 3a9 9 0 1 1-6.4 15.4"/><path d="M12 8a4 4 0 1 1-2.8 6.8"/></svg></span><span style="font-size: 13px; font-weight: 600">Kotilo Kit</span></span>
+    <div style="flex: 1; display: flex; justify-content: center">
+      <div style="width: 480px; display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--base); border: 1px solid var(--s0); border-radius: 8px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--overlay)" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input aria-label="Araç ara" placeholder="Araç ara veya panodan yapıştır…" style="flex: 1; background: transparent; border: none; outline: none; font-size: 13px; color: var(--text)">
+        <span style="font: 500 10px JetBrains Mono, monospace; color: var(--overlay); padding: 2px 6px; border: 1px solid var(--s1); border-radius: 5px">ctrl K</span>
+      </div>
+    </div>
+    <button aria-label="Tema" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--s0); background: var(--base); display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--subtext)" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="var(--subtext)"/></svg></button>
+    <button aria-label="Ayarlar" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--s0); background: var(--base); display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--subtext)" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+  </div>
+
+  <div style="display: flex; flex: 1; min-height: 0">
+
+    <nav aria-label="Kategoriler" style="width: 232px; box-sizing: border-box; padding: 12px 10px; border-right: 1px solid var(--s0); background: var(--mantle); display: flex; flex-direction: column; gap: 2px; font-size: 13px; overflow: hidden">
+      <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; color: var(--overlay); padding: 4px 10px 6px">KODLAMA</div>
+      <a href="#" style="display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 7px; background: var(--s0); color: var(--text); text-decoration: none; font-weight: 500"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--blue)"></span>Base64</a>
+      <a href="#" style="display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--blue)"></span>URL Encode</a>
+      <a href="#" style="display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--blue)"></span>JWT Decode</a>
+      <a href="#" style="display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--blue)"></span>Hex · Binary · Decimal</a>
+      <a href="#" style="display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--blue)"></span>Unicode İnceleme</a>
+      <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; color: var(--overlay); padding: 12px 10px 6px">FORMAT</div>
+      <a href="#" style="display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--yellow)"></span>JSON</a>
+      <a href="#" style="display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--yellow)"></span>JSON ⇄ YAML ⇄ TOML</a>
+      <a href="#" style="display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--yellow)"></span>SQL Format</a>
+      <a href="#" style="display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--yellow)"></span>CSV ⇄ JSON ⇄ Markdown</a>
+      <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; color: var(--overlay); padding: 12px 10px 6px">METİN</div>
+      <a href="#" style="display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--green)"></span>Case Dönüştür</a>
+      <a href="#" style="display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--green)"></span>Regex Test</a>
+      <a href="#" style="display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--green)"></span>Diff</a>
+      <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.08em; color: var(--overlay); padding: 12px 10px 6px">ZAMAN · ÜRETEÇ</div>
+      <a href="#" style="display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--peach)"></span>Unix Timestamp</a>
+      <a href="#" style="display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--peach)"></span>Cron</a>
+      <a href="#" style="display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--mauve)"></span>UUID · ULID</a>
+      <a href="#" style="display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--mauve)"></span>Hash · HMAC</a>
+    </nav>
+
+    <main style="flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 20px 24px; gap: 14px">
+
+      <div style="display: flex; align-items: center; gap: 14px">
+        <h1 style="margin: 0; font-size: 20px; font-weight: 600">Base64</h1>
+        <div role="group" aria-label="Mod" style="display: flex; background: var(--mantle); border: 1px solid var(--s0); border-radius: 8px; padding: 3px; font-size: 12px">
+          <button style="padding: 5px 14px; border-radius: 6px; border: none; background: var(--blue); color: var(--base); font-weight: 600; cursor: pointer">Encode</button>
+          <button style="padding: 5px 14px; border-radius: 6px; border: none; background: transparent; color: var(--subtext); cursor: pointer">Decode</button>
+        </div>
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--subtext)"><input type="checkbox" checked style="accent-color: var(--blue); width: 14px; height: 14px">URL-safe</label>
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--subtext)"><input type="checkbox" style="accent-color: var(--blue); width: 14px; height: 14px">Satır sarma 76</label>
+        <span style="flex: 1"></span>
+        <button style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 7px; border: 1px solid var(--s0); background: var(--mantle); color: var(--subtext); font-size: 12px; cursor: pointer"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--subtext)" stroke-width="2" aria-hidden="true"><path d="M4 14l6-6 4 4 6-6"/><path d="M14 6h6v6"/></svg>Pipeline'a ekle</button>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; flex: 1; min-height: 0">
+
+        <section style="display: flex; flex-direction: column; border: 1px solid var(--s0); border-radius: 10px; background: var(--mantle); overflow: hidden">
+          <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--s0); font-size: 12px; color: var(--subtext)">
+            <span style="font-weight: 600; color: var(--text)">Giriş</span>
+            <span style="font: 400 11px JetBrains Mono, monospace; color: var(--overlay)">metin · 184 bayt · UTF-8</span>
+            <span style="flex: 1"></span>
+            <button style="padding: 4px 9px; border-radius: 5px; border: 1px solid var(--s0); background: transparent; color: var(--subtext); font-size: 11px; cursor: pointer">Yapıştır</button>
+            <button style="padding: 4px 9px; border-radius: 5px; border: 1px solid var(--s0); background: transparent; color: var(--subtext); font-size: 11px; cursor: pointer">Dosya</button>
+            <button style="padding: 4px 9px; border-radius: 5px; border: 1px solid var(--s0); background: transparent; color: var(--subtext); font-size: 11px; cursor: pointer">Temizle</button>
+          </div>
+          <textarea aria-label="Giriş" style="flex: 1; resize: none; border: none; outline: none; background: transparent; padding: 14px; font: 400 13px/1.6 JetBrains Mono, monospace; color: var(--text)">{
+  "sub": "1234567890",
+  "name": "Mustafa",
+  "role": "admin",
+  "iat": 1762512000,
+  "exp": 1762771200,
+  "scopes": ["read", "write", "deploy"]
+}</textarea>
+        </section>
+
+        <section style="display: flex; flex-direction: column; border: 1px solid var(--s0); border-radius: 10px; background: var(--mantle); overflow: hidden">
+          <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--s0); font-size: 12px; color: var(--subtext)">
+            <span style="font-weight: 600; color: var(--text)">Çıktı</span>
+            <span style="font: 400 11px JetBrains Mono, monospace; color: var(--overlay)">base64url · 248 karakter</span>
+            <span style="flex: 1"></span>
+            <button style="display: flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 5px; border: none; background: var(--blue); color: var(--base); font-size: 11px; font-weight: 600; cursor: pointer"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--base)" stroke-width="2.5" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Kopyala</button>
+            <button style="padding: 4px 9px; border-radius: 5px; border: 1px solid var(--s0); background: transparent; color: var(--subtext); font-size: 11px; cursor: pointer">Kaydet</button>
+            <button style="padding: 4px 9px; border-radius: 5px; border: 1px solid var(--s0); background: transparent; color: var(--subtext); font-size: 11px; cursor: pointer">Araca gönder ›</button>
+          </div>
+          <div style="flex: 1; padding: 14px; font: 400 13px/1.6 JetBrains Mono, monospace; color: var(--green); word-break: break-all; overflow: hidden">ewogICJzdWIiOiAiMTIzNDU2Nzg5MCIsCiAgIm5hbWUiOiAiTXVzdGFmYSIsCiAgInJvbGUiOiAiYWRtaW4iLAogICJpYXQiOiAxNzYyNTEyMDAwLAogICJleHAiOiAxNzYyNzcxMjAwLAogICJzY29wZXMiOiBbInJlYWQiLCAid3JpdGUiLCAiZGVwbG95Il0KfQ</div>
+        </section>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; background: var(--mantle); border: 1px solid var(--s0); font-size: 12px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" aria-hidden="true"><path d="M12 2l7 4v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/></svg>
+        <span style="color: var(--subtext)">Girişin JSON olduğu algılandı:</span>
+        <a href="#" style="color: var(--blue); text-decoration: none; font-weight: 500">JSON Format</a>
+        <span style="color: var(--overlay)">·</span>
+        <a href="#" style="color: var(--blue); text-decoration: none; font-weight: 500">JSON → TypeScript tipi</a>
+        <span style="color: var(--overlay)">·</span>
+        <a href="#" style="color: var(--blue); text-decoration: none; font-weight: 500">JSON → YAML</a>
+      </div>
+    </main>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 16px; padding: 6px 16px; background: var(--crust); border-top: 1px solid var(--s0); font: 400 11px JetBrains Mono, monospace; color: var(--overlay)">
+    <span style="display: flex; align-items: center; gap: 6px"><span style="width: 6px; height: 6px; border-radius: 50%; background: var(--green)"></span>çevrimdışı · ağ yok · telemetri yok</span>
+    <span>{{themeName}}</span>
+    <span>JetBrains Mono 13</span>
+    <span style="flex: 1"></span>
+    <span>62 araç · 3 eklenti</span>
+    <span>v1.0.0</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","default":"catppuccin-mocha","options":["catppuccin-mocha","gruvbox-dark","tokyo-night","everforest-dark","nord","rose-pine-moon","dracula"],"section":"Tema"},"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var id = this.props.theme || 'catppuccin-mocha';
+    var t = window.KotiloThemes[id] || window.KotiloThemes['catppuccin-mocha'];
+    return { vars: window.kotiloThemeVars(id), themeName: t.name };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+window.KotiloThemes = {
+  "catppuccin-mocha": { name: "Catppuccin Mocha", crust: "#11111b", mantle: "#181825", base: "#1e1e2e", s0: "#313244", s1: "#45475a", overlay: "#6c7086", subtext: "#a6adc8", text: "#cdd6f4", blue: "#89b4fa", mauve: "#cba6f7", green: "#a6e3a1", yellow: "#f9e2af", peach: "#fab387", red: "#f38ba8", teal: "#94e2d5" },
+  "gruvbox-dark":     { name: "Gruvbox Dark",     crust: "#1d2021", mantle: "#282828", base: "#32302f", s0: "#3c3836", s1: "#504945", overlay: "#7c6f64", subtext: "#bdae93", text: "#ebdbb2", blue: "#83a598", mauve: "#d3869b", green: "#b8bb26", yellow: "#fabd2f", peach: "#fe8019", red: "#fb4934", teal: "#8ec07c" },
+  "tokyo-night":      { name: "Tokyo Night",      crust: "#16161e", mantle: "#1a1b26", base: "#1f2335", s0: "#292e42", s1: "#3b4261", overlay: "#565f89", subtext: "#a9b1d6", text: "#c0caf5", blue: "#7aa2f7", mauve: "#bb9af7", green: "#9ece6a", yellow: "#e0af68", peach: "#ff9e64", red: "#f7768e", teal: "#73daca" },
+  "everforest-dark":  { name: "Everforest Dark",  crust: "#232a2e", mantle: "#2d353b", base: "#343f44", s0: "#3d484d", s1: "#475258", overlay: "#859289", subtext: "#9da9a0", text: "#d3c6aa", blue: "#7fbbb3", mauve: "#d699b6", green: "#a7c080", yellow: "#dbbc7f", peach: "#e69875", red: "#e67e80", teal: "#83c092" },
+  "nord":             { name: "Nord",             crust: "#242933", mantle: "#2e3440", base: "#3b4252", s0: "#434c5e", s1: "#4c566a", overlay: "#7b88a1", subtext: "#d8dee9", text: "#eceff4", blue: "#81a1c1", mauve: "#b48ead", green: "#a3be8c", yellow: "#ebcb8b", peach: "#d08770", red: "#bf616a", teal: "#88c0d0" },
+  "rose-pine-moon":   { name: "Rosé Pine Moon",   crust: "#191724", mantle: "#232136", base: "#2a273f", s0: "#393552", s1: "#44415a", overlay: "#6e6a86", subtext: "#908caa", text: "#e0def4", blue: "#9ccfd8", mauve: "#c4a7e7", green: "#3e8fb0", yellow: "#f6c177", peach: "#ea9a97", red: "#eb6f92", teal: "#9ccfd8" },
+  "dracula":          { name: "Dracula",          crust: "#191a21", mantle: "#21222c", base: "#282a36", s0: "#343746", s1: "#44475a", overlay: "#6272a4", subtext: "#a9afcf", text: "#f8f8f2", blue: "#8be9fd", mauve: "#bd93f9", green: "#50fa7b", yellow: "#f1fa8c", peach: "#ffb86c", red: "#ff5555", teal: "#8be9fd" }
+};
+window.kotiloThemeVars = function (id) {
+  var t = window.KotiloThemes[id] || window.KotiloThemes["catppuccin-mocha"];
+  return "--crust:" + t.crust + ";--mantle:" + t.mantle + ";--base:" + t.base + ";--s0:" + t.s0 + ";--s1:" + t.s1 + ";--overlay:" + t.overlay + ";--subtext:" + t.subtext + ";--text:" + t.text + ";--blue:" + t.blue + ";--mauve:" + t.mauve + ";--green:" + t.green + ";--yellow:" + t.yellow + ";--peach:" + t.peach + ";--red:" + t.red + ";--teal:" + t.teal;
+};
