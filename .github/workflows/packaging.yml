@@ -1,0 +1,42 @@
+name: Packaging manifests
+
+# After a maintainer publishes a release: render the winget / AUR / Homebrew manifests from the
+# published asset URLs + sha256 digests and attach them to the release. Submitting them to
+# winget-pkgs, the AUR and kotilo-dev/homebrew-tap is a separate manual step (packaging/README.md).
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag, e.g. v1.0.0'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  manifests:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Render
+        run: |
+          gh release view "$TAG" --json assets > assets.json
+          pnpm exec tsx packaging/render.ts "${TAG#v}" assets.json out
+          tar -czf "kotilo-kit-manifests-${TAG}.tar.gz" -C out .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: manifests-${{ env.TAG }}
+          path: out
+      - name: Attach to the release
+        run: gh release upload "$TAG" "kotilo-kit-manifests-${TAG}.tar.gz" --clobber

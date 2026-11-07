@@ -14,7 +14,7 @@ import {
 } from '@kotilo/kit-core';
 import { builtinTools } from '@kotilo/kit-tools';
 
-export const VERSION = '0.1.0';
+export const VERSION = '1.0.0'; // release.yml checks this against the tag
 
 export interface CliIO {
   stdin: Uint8Array;

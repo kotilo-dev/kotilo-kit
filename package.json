@@ -16,7 +16,8 @@
     "build": "pnpm -r build",
     "build:desktop": "pnpm --filter @kotilo/kit-desktop tauri build",
     "check-tool": "tsx --import ./apps/cli/raw-hook.mjs packages/kit-tools/scripts/check-tool.ts",
-    "test:contrast": "vitest run packages/kit-themes/test/contrast.test.ts"
+    "test:contrast": "vitest run packages/kit-themes/test/contrast.test.ts",
+    "readme:tools": "tsx --import ./apps/cli/raw-hook.mjs packages/kit-tools/scripts/readme-tools.ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
