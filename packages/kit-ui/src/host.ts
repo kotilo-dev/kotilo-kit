@@ -36,6 +36,10 @@ export interface Host {
   theme: ThemeStore;
   /** Fires every time the palette is shown: re-read the clipboard, reset the search. */
   onActivate(cb: () => void): () => void;
+  /** Full window: a tool + input handed over from the palette (ctrl+Enter). Replays a pending one. */
+  onOpenFull?(cb: (toolId: string, input: string) => void): () => void;
+  /** Frameless window controls (Windows/Linux full window). Absent = native title bar. */
+  windowControls?: { minimize(): void; toggleMaximize(): void; close(): void };
   now(): Date;
 }
 

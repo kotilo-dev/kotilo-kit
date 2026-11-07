@@ -1,4 +1,4 @@
-import type { Category, Detection, KitConfig, Locale, Registry, Tool } from '@kotilo/kit-core';
+import { CATEGORIES, type Category, type Detection, type KitConfig, type Locale, type Registry, type Tool, type ToolResult } from '@kotilo/kit-core';
 
 export type Section = 'suggested' | 'recent' | 'results' | 'all';
 
@@ -45,7 +45,7 @@ export function buildItems(opts: {
   return [...suggested, ...recentItems];
 }
 
-const intlLocale = (l: Locale) => (l === 'tr' ? 'tr-TR' : 'en-US');
+export const intlLocale = (l: Locale) => (l === 'tr' ? 'tr-TR' : 'en-US');
 
 /** "2 dk. önce" · "bugün" · "dün" · "3 gün önce" (Intl, short). Empty when unknown. */
 export function formatUsed(usedSec: number, now: Date, locale: Locale): string {
@@ -75,4 +75,42 @@ export const CATEGORY_ACCENT: Record<Category, string> = {
 /** One-line clipboard preview for the strip (ellipsis is CSS). */
 export function clipboardPreview(text: string): string {
   return text.replace(/\s+/g, ' ').trim().slice(0, 200);
+}
+
+/** Sidebar groups in catalog order; `query` filters by name/id/keyword (tr-TR aware). Empty groups are dropped. */
+export function groupTools(
+  tools: readonly Tool<any>[],
+  locale: Locale,
+  query = '',
+): { category: Category; tools: Tool<any>[] }[] {
+  const q = query.trim().toLocaleLowerCase(intlLocale(locale));
+  const match = (tool: Tool<any>) =>
+    !q ||
+    [tool.id, tool.name[locale], tool.name.en, ...tool.keywords].some((s) =>
+      s.toLocaleLowerCase(intlLocale(locale)).includes(q),
+    );
+  return CATEGORIES.map((category) => ({ category, tools: tools.filter((t) => t.category === category && match(t)) })).filter(
+    (g) => g.tools.length > 0,
+  );
+}
+
+/** UTF-8 byte length without allocating. */
+export function utf8Length(text: string): number {
+  let n = 0;
+  for (const ch of text) {
+    const c = ch.codePointAt(0)!;
+    n += c < 0x80 ? 1 : c < 0x800 ? 2 : c < 0x10000 ? 3 : 4;
+  }
+  return n;
+}
+
+export type OutputSummary =
+  | { kind: 'chars'; chars: number }
+  | { kind: 'rows'; rows: number }
+  | { kind: 'binary'; bytes: number };
+
+export function summarizeOutput(result: ToolResult): OutputSummary {
+  if (result.bytes) return { kind: 'binary', bytes: result.bytes.length };
+  if (typeof result.output !== 'string') return { kind: 'rows', rows: result.output.rows.length };
+  return { kind: 'chars', chars: [...result.output].length };
 }

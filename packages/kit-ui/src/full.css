@@ -1,0 +1,544 @@
+/* Full window — docs/02-design.md "Tam pencere" + docs/mockup/App.dc.html. Colors only via var(--kit-*). */
+
+.kf {
+  height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background: var(--kit-base);
+  color: var(--kit-text);
+  font-family: Inter, system-ui, sans-serif;
+  overflow: hidden;
+  transition:
+    background-color 200ms,
+    color 200ms;
+}
+.kf *,
+.kf *::before,
+.kf *::after {
+  transition:
+    background-color 200ms,
+    border-color 200ms,
+    color 200ms;
+}
+.kf button {
+  font-family: inherit;
+}
+.kf :focus-visible {
+  outline: 2px solid var(--kit-blue);
+  outline-offset: 1px;
+}
+.kf-spacer {
+  flex: 1;
+}
+
+/* ---------- title bar 44 px ---------- */
+.kf-titlebar {
+  height: 44px;
+  box-sizing: border-box;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  background: var(--kit-mantle);
+  border-bottom: 1px solid var(--kit-s0);
+  user-select: none;
+}
+/* macOS: native traffic lights sit over the bar */
+.kf-mac .kf-titlebar {
+  padding-left: 84px;
+}
+.kf-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.kf-logo {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--kit-mauve);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.kf-brand-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+.kf-search-wrap {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-self: stretch;
+  align-items: center;
+}
+.kf-search {
+  width: 480px;
+  max-width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: var(--kit-base);
+  border: 1px solid var(--kit-s0);
+  border-radius: 8px;
+}
+.kf-search:focus-within {
+  border-color: var(--kit-blue);
+}
+.kf-search input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  font: inherit;
+  font-size: 13px;
+  color: var(--kit-text);
+}
+.kf-search input::placeholder {
+  color: var(--kit-overlay);
+}
+.kf-kbd {
+  font: 500 10px 'JetBrains Mono', monospace;
+  color: var(--kit-overlay);
+  padding: 2px 6px;
+  border: 1px solid var(--kit-s1);
+  border-radius: 5px;
+  white-space: nowrap;
+}
+.kf-icon-btn {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: 8px;
+  border: 1px solid var(--kit-s0);
+  background: var(--kit-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+.kf-icon-btn:hover:not(:disabled) {
+  border-color: var(--kit-s1);
+}
+.kf-icon-btn:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+/* Windows/Linux caption buttons (frameless window) */
+.kf-caption {
+  display: flex;
+  align-self: stretch;
+  margin: -1px -16px -1px 4px;
+}
+.kf-caption button {
+  width: 46px;
+  border: none;
+  background: transparent;
+  color: var(--kit-subtext);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+.kf-caption button:hover {
+  background: var(--kit-s0);
+  color: var(--kit-text);
+}
+.kf-caption .kf-caption-close:hover {
+  background: var(--kit-red);
+  color: var(--kit-crust);
+}
+
+/* ---------- body ---------- */
+.kf-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ---------- sidebar 232 px ---------- */
+.kf-nav {
+  width: 232px;
+  flex: none;
+  box-sizing: border-box;
+  padding: 12px 10px;
+  border-right: 1px solid var(--kit-s0);
+  background: var(--kit-mantle);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--kit-s1) transparent;
+}
+.kf-nav > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.kf-cat {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--kit-overlay);
+  padding: 12px 10px 6px;
+}
+.kf-cat-first {
+  padding-top: 4px;
+}
+.kf-tool {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 7px;
+  color: var(--kit-subtext);
+  text-decoration: none;
+  white-space: nowrap;
+  min-width: 0;
+}
+.kf-tool-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.kf-tool:hover {
+  color: var(--kit-text);
+}
+.kf-tool-on {
+  background: var(--kit-s0);
+  color: var(--kit-text);
+  font-weight: 500;
+}
+.kf-dot {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 2px;
+}
+.kf-nav-empty {
+  padding: 8px 10px;
+  color: var(--kit-overlay);
+}
+
+/* ---------- main ---------- */
+.kf-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 24px;
+  gap: 14px;
+}
+.kf-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  row-gap: 10px;
+}
+.kf-head h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+.kf-seg {
+  display: flex;
+  background: var(--kit-mantle);
+  border: 1px solid var(--kit-s0);
+  border-radius: 8px;
+  padding: 3px;
+  font-size: 12px;
+}
+.kf-seg button {
+  padding: 5px 14px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--kit-subtext);
+  font-size: 12px;
+  cursor: pointer;
+}
+.kf-seg button:hover:not(.kf-seg-on) {
+  color: var(--kit-text);
+}
+.kf-seg .kf-seg-on {
+  background: var(--kit-blue);
+  color: var(--kit-crust);
+  font-weight: 600;
+}
+.kf-check,
+.kf-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--kit-subtext);
+}
+.kf-check input {
+  accent-color: var(--kit-blue);
+  width: 14px;
+  height: 14px;
+  margin: 0;
+}
+.kf-field select,
+.kf-num,
+.kf-text {
+  background: var(--kit-mantle);
+  border: 1px solid var(--kit-s0);
+  border-radius: 6px;
+  color: var(--kit-text);
+  font-size: 12px;
+  padding: 4px 8px;
+  outline: none;
+}
+.kf-field select:focus,
+.kf-num:focus,
+.kf-text:focus {
+  border-color: var(--kit-blue);
+}
+.kf-num {
+  width: 56px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.kf-text {
+  width: 160px;
+}
+.kf-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 7px;
+  border: 1px solid var(--kit-s0);
+  background: var(--kit-mantle);
+  color: var(--kit-subtext);
+  font-size: 12px;
+  cursor: pointer;
+}
+.kf-btn:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+/* ---------- input / output ---------- */
+.kf-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+}
+.kf-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 0;
+}
+.kf-panel {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--kit-s0);
+  border-radius: 10px;
+  background: var(--kit-mantle);
+  overflow: hidden;
+}
+.kf-panel-error {
+  border-color: color-mix(in srgb, var(--kit-red) 40%, transparent);
+}
+.kf-panel-head {
+  height: 36px;
+  box-sizing: border-box;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--kit-s0);
+  font-size: 12px;
+  color: var(--kit-subtext);
+}
+.kf-panel-title {
+  font-weight: 600;
+  color: var(--kit-text);
+}
+.kf-meta {
+  font: 400 11px 'JetBrains Mono', monospace;
+  color: var(--kit-overlay);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.kf-mini {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: 5px;
+  border: 1px solid var(--kit-s0);
+  background: transparent;
+  color: var(--kit-subtext);
+  font-size: 11px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.kf-mini:hover:not(:disabled) {
+  color: var(--kit-text);
+  border-color: var(--kit-s1);
+}
+.kf-mini:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+.kf-mini-primary {
+  padding: 4px 10px;
+  border: none;
+  background: var(--kit-blue);
+  color: var(--kit-base);
+  font-weight: 600;
+}
+.kf-mini-primary:hover:not(:disabled) {
+  color: var(--kit-base);
+}
+.kf-textarea {
+  flex: 1;
+  min-height: 0;
+  resize: none;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 14px;
+  line-height: 1.6;
+  color: var(--kit-text);
+  font-weight: 400;
+}
+.kf-textarea:focus-visible {
+  outline: none;
+}
+.kf-out {
+  flex: 1;
+  min-height: 0;
+  padding: 14px;
+  line-height: 1.6;
+  color: var(--kit-green);
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow: auto;
+  outline: none;
+  user-select: text;
+}
+.kf-fade {
+  animation: kf-fade 120ms ease-out;
+}
+@keyframes kf-fade {
+  from {
+    opacity: 0;
+  }
+}
+.kf-error {
+  color: var(--kit-red);
+  font: 400 12px Inter, system-ui, sans-serif;
+  white-space: normal;
+}
+.kf-empty {
+  padding: 14px;
+  font-size: 13px;
+  color: var(--kit-overlay);
+}
+.kf-out-table {
+  white-space: normal;
+  word-break: normal;
+}
+.kf-out-table table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: inherit;
+}
+.kf-out-table th {
+  text-align: left;
+  font: 600 11px Inter, system-ui, sans-serif;
+  color: var(--kit-overlay);
+  padding: 0 16px 8px 0;
+  border-bottom: 1px solid var(--kit-s0);
+  white-space: nowrap;
+}
+.kf-out-table td {
+  padding: 6px 16px 6px 0;
+  border-bottom: 1px solid var(--kit-s0);
+  vertical-align: top;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.kf-out-table td:first-child {
+  color: var(--kit-subtext);
+  white-space: nowrap;
+}
+
+/* ---------- suggestion strip 40 px ---------- */
+.kf-suggest {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--kit-mantle);
+  border: 1px solid var(--kit-s0);
+  font-size: 12px;
+  flex: none;
+}
+.kf-suggest-lead {
+  color: var(--kit-subtext);
+}
+.kf-suggest-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.kf-suggest a {
+  color: var(--kit-blue);
+  text-decoration: none;
+  font-weight: 500;
+}
+.kf-suggest a:hover {
+  color: var(--kit-text);
+}
+.kf-sep {
+  color: var(--kit-overlay);
+}
+
+/* ---------- status bar 28 px ---------- */
+.kf-status {
+  height: 28px;
+  box-sizing: border-box;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 16px;
+  background: var(--kit-crust);
+  border-top: 1px solid var(--kit-s0);
+  font: 400 11px 'JetBrains Mono', monospace;
+  color: var(--kit-overlay);
+  white-space: nowrap;
+}
+.kf-offline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.kf-offline-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--kit-green);
+}

@@ -2,6 +2,7 @@ import { defaultConfig, localeFromTag, parseConfig, stringifyConfig, type KitCon
 import { configThemeStore, type ConfigStore, type Host, type Platform } from '@kotilo/kit-ui';
 import { invoke } from '@tauri-apps/api/core';
 import { emit, listen } from '@tauri-apps/api/event';
+import { getCurrentWindow } from '@tauri-apps/api/window';
 import { readText, writeText } from '@tauri-apps/plugin-clipboard-manager';
 
 function detectPlatform(): Platform {
@@ -63,8 +64,12 @@ export async function createTauriHost(): Promise<Host> {
     // readText rejects when the clipboard is empty or holds non-text (image, files)
     readClipboard: () => readText().catch(() => ''),
     writeClipboard: (text) => writeText(text),
-    saveFile: () => Promise.reject(new Error('saveFile: full window (K2)')),
-    openFile: () => Promise.reject(new Error('openFile: full window (K2)')),
+    // native "Save as" in Rust; bytes go as the raw IPC body (no JSON number arrays)
+    saveFile: async (name, data) => {
+      await invoke('save_file', new Uint8Array(await data.arrayBuffer()), { headers: { 'x-file-name': encodeURIComponent(name) } });
+    },
+    // the webview's own file picker: no fs permission needed, the file never leaves the process
+    openFile: () => pickFile(),
     notify: (message) => void invoke('notify', { message }),
     openFull: (toolId, input) => void invoke('open_full', { toolId, input }),
     close: () => void invoke('hide_window'),
@@ -74,6 +79,36 @@ export async function createTauriHost(): Promise<Host> {
       const unlisten = listen('palette:show', () => cb());
       return () => void unlisten.then((f) => f());
     },
+    onOpenFull(cb) {
+      void invoke<FullPayload | null>('pending_full').then((p) => p && cb(p.toolId, p.input));
+      const unlisten = listen<FullPayload>('open-full', (e) => cb(e.payload.toolId, e.payload.input));
+      return () => void unlisten.then((f) => f());
+    },
+    // macOS keeps native traffic lights (overlay title bar); Windows/Linux draw caption buttons
+    ...(platform === 'mac'
+      ? {}
+      : {
+          windowControls: {
+            minimize: () => void getCurrentWindow().minimize(),
+            toggleMaximize: () => void getCurrentWindow().toggleMaximize(),
+            close: () => void invoke('hide_window'),
+          },
+        }),
     now: () => new Date(),
   };
+}
+
+interface FullPayload {
+  toolId: string;
+  input: string;
+}
+
+function pickFile(): Promise<File | null> {
+  return new Promise((resolve) => {
+    const el = document.createElement('input');
+    el.type = 'file';
+    el.addEventListener('change', () => resolve(el.files?.[0] ?? null), { once: true });
+    el.addEventListener('cancel', () => resolve(null), { once: true });
+    el.click();
+  });
 }

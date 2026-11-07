@@ -146,6 +146,48 @@ fn open_full(app: AppHandle, tool_id: String, input: String) {
     let _ = app.emit_to("main", "open-full", payload);
 }
 
+/// Native "Save as…" for the full window's Save button. Bytes arrive as the raw IPC body.
+/// Writes only to the path the user just picked in the OS dialog; no general fs access for the webview.
+#[tauri::command]
+async fn save_file(app: AppHandle, request: tauri::ipc::Request<'_>) -> Result<bool, String> {
+    use tauri_plugin_dialog::DialogExt;
+    let tauri::ipc::InvokeBody::Raw(bytes) = request.body() else {
+        return Err("expected raw bytes".into());
+    };
+    let name = request
+        .headers()
+        .get("x-file-name")
+        .and_then(|v| v.to_str().ok())
+        .map(percent_decode)
+        .unwrap_or_else(|| "output.txt".into());
+    let mut dialog = app.dialog().file().set_file_name(&name);
+    if let Some(parent) = app.get_webview_window("main") {
+        dialog = dialog.set_parent(&parent);
+    }
+    let Some(path) = dialog.blocking_save_file() else { return Ok(false) };
+    let path = path.into_path().map_err(|e| e.to_string())?;
+    fs::write(path, bytes).map_err(|e| e.to_string())?;
+    Ok(true)
+}
+
+fn percent_decode(s: &str) -> String {
+    let bytes = s.as_bytes();
+    let mut out = Vec::with_capacity(bytes.len());
+    let mut i = 0;
+    while i < bytes.len() {
+        if bytes[i] == b'%' && i + 2 < bytes.len() {
+            if let Ok(b) = u8::from_str_radix(&s[i + 1..i + 3], 16) {
+                out.push(b);
+                i += 3;
+                continue;
+            }
+        }
+        out.push(bytes[i]);
+        i += 1;
+    }
+    String::from_utf8_lossy(&out).into_owned()
+}
+
 #[tauri::command]
 fn pending_full(app: AppHandle) -> Option<FullPayload> {
     app.state::<AppState>().pending_full.lock().unwrap().take()
@@ -282,11 +324,24 @@ pub fn run() {
 
     builder
         .plugin(tauri_plugin_clipboard_manager::init())
+        .plugin(tauri_plugin_dialog::init())
         .manage(AppState::default())
-        .invoke_handler(tauri::generate_handler![config_read, config_write, hide_window, notify, open_full, pending_full])
+        .invoke_handler(tauri::generate_handler![config_read, config_write, hide_window, notify, open_full, pending_full, save_file])
         .setup(|app| {
             #[cfg(target_os = "macos")]
             app.set_activation_policy(tauri::ActivationPolicy::Accessory);
+
+            // Full window title bar (docs/02-design.md): macOS keeps native traffic lights over our 44 px bar;
+            // Windows/Linux are frameless and kit-ui draws the caption buttons.
+            if let Some(main) = app.get_webview_window("main") {
+                #[cfg(target_os = "macos")]
+                {
+                    let _ = main.set_title_bar_style(tauri::TitleBarStyle::Overlay);
+                    let _ = main.set_title("");
+                }
+                #[cfg(not(target_os = "macos"))]
+                let _ = main.set_decorations(false);
+            }
 
             #[cfg(desktop)]
             {

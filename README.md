@@ -4,7 +4,7 @@
 
 Goal: **clipboard → result in two keystrokes.** Copy a JWT, press `Ctrl+Shift+K`, hit `Enter` — the decoded payload is on your clipboard.
 
-> **Status: pre-alpha (phase K1).** The core library, 16 tools, the CLI and the desktop palette (global shortcut → palette → Enter → clipboard) work today. The full window comes next. See the [roadmap](#roadmap).
+> **Status: pre-alpha (phase K2).** The core library, 16 tools, the CLI, the desktop palette (global shortcut → palette → Enter → clipboard) and the full window work today. The remaining 1.0 tools are landing one PR at a time. See the [roadmap](#roadmap).
 
 Part of [Kotilo](https://kotilo.dev) · Türkçe: [aşağıda](#türkçe)
 
@@ -44,7 +44,7 @@ pnpm dev               # Tauri dev: hidden palette window + tray
 pnpm build:desktop     # release build
 ```
 
-Press `Ctrl+Shift+K` (`Cmd+Shift+K` on macOS) anywhere. Tools that recognize your clipboard appear under **Suggested**. `Enter` runs the selected one and puts the result on the clipboard. `Ctrl+Enter` opens the tool in the full window, `Tab` shows its options, and `Alt+letter` switches an option. `Ctrl+1…9` runs a row directly. Clipboard detection asks for consent on first launch, and no clipboard content is ever stored. Requires the [Tauri prerequisites](https://v2.tauri.app/start/prerequisites/).
+Press `Ctrl+Shift+K` (`Cmd+Shift+K` on macOS) anywhere. Tools that recognize your clipboard appear under **Suggested**. `Enter` runs the selected one and puts the result on the clipboard. `Ctrl+Enter` opens the tool in the full window, `Tab` shows its options, and `Alt+letter` switches an option. `Ctrl+1…9` runs a row directly. Clipboard detection asks for consent on first launch, and no clipboard content is ever stored. The full window (tray › Open, or `Ctrl+Enter` from the palette) has every tool in a sidebar with live input → output. `Ctrl+K` searches, and pasting recognized content into the search opens the matching tool. `Ctrl+Shift+C` copies the output and `Ctrl+L` clears the input. Requires the [Tauri prerequisites](https://v2.tauri.app/start/prerequisites/).
 
 ## Writing a tool
 
