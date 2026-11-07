@@ -1,7 +1,18 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
-  "description": "Kit windows: events + clipboard text only. No fs, shell, http.",
-  "windows": ["palette", "main", "toast"],
-  "permissions": ["core:default", "clipboard-manager:allow-read-text", "clipboard-manager:allow-write-text"]
+  "description": "Kit windows: events, clipboard text, own window controls. No fs, shell, http.",
+  "windows": [
+    "palette",
+    "main",
+    "toast"
+  ],
+  "permissions": [
+    "core:default",
+    "clipboard-manager:allow-read-text",
+    "clipboard-manager:allow-write-text",
+    "core:window:allow-minimize",
+    "core:window:allow-toggle-maximize",
+    "core:window:allow-start-dragging"
+  ]
 }
