@@ -7,17 +7,20 @@
     "node": ">=20"
   },
   "scripts": {
+    "dev": "pnpm --filter @kotilo/kit-desktop dev",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "eslint . && tsc -b",
-    "typecheck": "tsc -b",
+    "lint": "eslint . && pnpm typecheck",
+    "typecheck": "tsc -p tsconfig.json && tsc -p packages/kit-ui && tsc -p apps/desktop",
     "kit": "tsx apps/cli/src/main.ts",
-    "build": "pnpm -r build"
+    "build": "pnpm -r build",
+    "build:desktop": "pnpm --filter @kotilo/kit-desktop tauri build"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^26.6.6",
     "eslint": "^10.14.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.14.0",
     "tsup": "^9.0.0",
     "tsx": "^4.23.15",

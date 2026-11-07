@@ -5,10 +5,10 @@ import {
   errorMessage,
   localeFromTag,
   resolveOptions,
+  resultText,
   t,
   type Locale,
   type OptionDef,
-  type TableOutput,
   type Tool,
   type ToolResult,
 } from '@kotilo/kit-core';
@@ -78,17 +78,6 @@ function camel(key: string): string {
   return key.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase());
 }
 
-export function formatTable(table: TableOutput): string {
-  const all = [table.columns, ...table.rows];
-  const widths = table.columns.map((_, i) => Math.max(...all.map((r) => [...(r[i] ?? '')].length)));
-  const line = (r: string[]) =>
-    r
-      .map((c, i) => (i === r.length - 1 ? c : c + ' '.repeat(widths[i]! - [...c].length)))
-      .join('  ')
-      .trimEnd();
-  return [line(table.columns), widths.map((w) => '─'.repeat(w)).join('  '), ...table.rows.map(line)].join('\n');
-}
-
 function describeOption(tool: Tool<any>, opt: OptionDef, locale: Locale): string {
   const label = t(locale, `tool.${tool.id}.opt.${opt.key}`);
   let detail: string;
@@ -153,7 +142,7 @@ function render(result: ToolResult, io: CliIO, asJson: boolean): string | Uint8A
     return JSON.stringify({ ...rest, ...(bytes ? { bytesLength: bytes.length } : {}) }, null, 2) + '\n';
   }
   if (result.bytes && !io.stdoutIsTTY) return result.bytes; // binary to a pipe/file: raw bytes
-  const text = typeof result.output === 'string' ? result.output : formatTable(result.output);
+  const text = resultText(result);
   return text.endsWith('\n') || text === '' ? text : text + '\n';
 }
 

@@ -4,7 +4,7 @@
 
 Goal: **clipboard → result in two keystrokes.** Copy a JWT, press `Ctrl+Shift+K`, hit `Enter` — the decoded payload is on your clipboard.
 
-> **Status: pre-alpha (phase K0).** The core library, 16 tools and the CLI work today. The desktop app (Tauri palette + full window) is next. See the [roadmap](#roadmap).
+> **Status: pre-alpha (phase K1).** The core library, 16 tools, the CLI and the desktop palette (global shortcut → palette → Enter → clipboard) work today. The full window comes next. See the [roadmap](#roadmap).
 
 Part of [Kotilo](https://kotilo.dev) · Türkçe: [aşağıda](#türkçe)
 
@@ -36,6 +36,15 @@ pnpm kit jwt --help
 ```
 
 Bare words select option values (`base64 decode` = `base64 --mode decode`). `--json` prints the result with metadata. Errors go to stderr with exit code 1. Messages follow your locale (`KOTILO_LANG=tr` or `--lang tr`).
+
+## Desktop (palette)
+
+```sh
+pnpm dev               # Tauri dev: hidden palette window + tray
+pnpm build:desktop     # release build
+```
+
+Press `Ctrl+Shift+K` (`Cmd+Shift+K` on macOS) anywhere. Tools that recognize your clipboard appear under **Suggested**. `Enter` runs the selected one and puts the result on the clipboard. `Ctrl+Enter` opens the tool in the full window, `Tab` shows its options, and `Alt+letter` switches an option. `Ctrl+1…9` runs a row directly. Clipboard detection asks for consent on first launch, and no clipboard content is ever stored. Requires the [Tauri prerequisites](https://v2.tauri.app/start/prerequisites/).
 
 ## Writing a tool
 
@@ -70,6 +79,9 @@ pnpm --filter @kotilo/kit-cli build    # apps/cli/dist/kotilo.cjs (single file)
 ```
 packages/kit-core    defineTool, registry + search, detect, i18n (EN/TR), config (TOML)
 packages/kit-tools   built-in tools: src/<category>/<id>.ts
+packages/kit-themes  docs/05-themes.toml → --kit-* CSS variables
+packages/kit-ui      React: Palette, Toast, Host interface (shell adapter)
+apps/desktop         Tauri shell: windows, global shortcut, tray, clipboard
 apps/cli             kotilo kit …
 tools-spec/          per-tool acceptance tables read by the tests
 docs/                requirements, design, architecture, catalog, themes
@@ -82,7 +94,7 @@ Contributing: one tool per PR — `src/<category>/<id>.ts`, i18n entries in `pac
 | Phase | Scope |
 |---|---|
 | **K0** ✓ | Monorepo, `kit-core`, P1 tools, CLI |
-| K1 | Tauri shell: hidden window, global shortcut, clipboard, tray, palette window |
+| **K1** ✓ | Tauri shell: hidden window, global shortcut, clipboard, tray, palette window |
 | K2 | Full window: category tree, tool panel, suggestion strip, status bar; all 1.0 tools |
 | K3 | Theme system: 7 themes (Catppuccin, Gruvbox, Tokyo Night, Everforest, Nord, Rosé Pine, Dracula), settings, contrast CI |
 | K4 | Packaging (winget, AUR, Homebrew), 1.0 release |

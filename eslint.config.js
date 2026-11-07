@@ -1,4 +1,5 @@
 import js from '@eslint/js';
+import reactHooks from 'eslint-plugin-react-hooks';
 import tseslint from 'typescript-eslint';
 
 /** Core and tools run in browser, Node and Workers: no network, DOM, fs or process. */
@@ -25,9 +26,14 @@ const BANNED_IMPORTS = {
 };
 
 export default tseslint.config(
-  { ignores: ['**/node_modules/**', '**/dist/**', 'docs/**'] },
+  { ignores: ['**/node_modules/**', '**/dist/**', '**/target/**', '**/gen/**', 'docs/**'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
+  {
+    files: ['**/*.tsx'],
+    plugins: { 'react-hooks': reactHooks },
+    rules: { 'react-hooks/rules-of-hooks': 'error', 'react-hooks/exhaustive-deps': 'warn' },
+  },
   {
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',

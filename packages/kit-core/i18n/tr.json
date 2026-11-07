@@ -7,7 +7,6 @@
   "category.web": "Web · Ağ",
   "category.visual": "Renk · Görsel",
   "category.pipeline": "Pipeline'lar",
-
   "ui.copied": "Panoya kopyalandı",
   "ui.emptyInput": "Bir şey yapıştır ya da yaz",
   "ui.clipboardDetected": "Panoda {name} algılandı",
@@ -15,17 +14,46 @@
   "ui.suggested": "Önerilen",
   "ui.recent": "Son kullanılan",
   "ui.offline": "çevrimdışı",
-
+  "ui.searchLabel": "Araç ara",
+  "ui.results": "Sonuçlar",
+  "ui.allTools": "Tüm araçlar",
+  "ui.noResults": "Eşleşen araç yok",
+  "ui.runAndCopy": "çalıştır ve panoya yaz",
+  "ui.openFull": "tam pencerede aç",
+  "ui.optionsHint": "seçenekler",
+  "ui.binaryOutput": "İkili çıktı — tam pencerede aç (ctrl ↵)",
+  "ui.consentQuestion": "Araç önermek için pano içeriği yerelde algılansın mı?",
+  "ui.yes": "Evet",
+  "ui.no": "Hayır",
+  "ui.fullWindowSoon": "Tam pencere K2 fazında geliyor. Araç: {tool}",
+  "tray.open": "Aç",
+  "tray.palette": "Palette",
+  "tray.theme": "Tema",
+  "tray.quit": "Çıkış",
+  "kind.base64": "Base64",
+  "kind.url": "URL kodlu metin",
+  "kind.jwt": "JWT",
+  "kind.json": "JSON",
+  "kind.json-convert": "YAML / TOML",
+  "kind.csv": "CSV",
+  "kind.case": "metin",
+  "kind.lines": "metin",
+  "kind.diff": "metin",
+  "kind.regex": "metin",
+  "kind.timestamp": "zaman damgası",
+  "kind.cron": "cron ifadesi",
+  "kind.uuid": "UUID",
+  "kind.hash": "metin",
+  "kind.url-parse": "URL",
+  "kind.color": "renk",
   "cli.usage": "Kullanım: kotilo kit <araç> [--seçenek değer …] < giriş\n          kotilo kit list\n          kotilo kit detect < giriş\n          kotilo kit <araç> --help",
   "cli.unknownTool": "Bilinmeyen araç: {id}. `kotilo kit list` ile listele.",
   "cli.unknownOption": "{tool} için bilinmeyen seçenek: --{key}",
   "cli.noDetection": "Bu girişi tanıyan araç yok.",
   "cli.options": "Seçenekler",
   "cli.examples": "Örnekler",
-
   "error.unexpected": "Beklenmeyen hata: {detail}",
   "error.time.tz": "Bilinmeyen saat dilimi: {tz}",
-
   "tool.base64.name": "Base64",
   "tool.base64.description": "Base64 kodla veya çöz",
   "tool.base64.opt.mode": "Mod",
@@ -36,7 +64,6 @@
   "tool.base64.binary": "İkili veri, {bytes} bayt (geçerli UTF-8 metin değil). Dosya olarak kaydet veya kopyala.",
   "error.base64.invalidChar": "Geçersiz base64: {pos}. karakter",
   "error.base64.invalidLength": "Geçersiz base64: uzunluk veya dolgu hatalı",
-
   "tool.url.name": "URL kodlama",
   "tool.url.description": "URL yüzde kodla veya çöz",
   "tool.url.opt.mode": "Mod",
@@ -47,7 +74,6 @@
   "tool.url.opt.scope.full": "Tam URL",
   "tool.url.opt.plusSpace": "Boşluk = +",
   "error.url.malformed": "Hatalı yüzde kodlaması: {pos}. karakter",
-
   "tool.jwt.name": "JWT çöz",
   "tool.jwt.description": "JWT'yi çöz, HS256 imzasını yerelde doğrula",
   "tool.jwt.opt.secret": "Gizli anahtar",
@@ -69,7 +95,6 @@
   "error.jwt.header": "JWT başlığı geçerli JSON değil",
   "error.jwt.payload": "JWT yükü geçerli JSON değil",
   "error.jwt.secret": "Gizli anahtar geçerli base64 değil",
-
   "tool.json.name": "JSON biçimlendir",
   "tool.json.description": "JSON biçimlendir, küçült, doğrula ve sorgula",
   "tool.json.opt.mode": "Mod",
@@ -88,7 +113,6 @@
   "error.json.trailingComma": "Geçersiz JSON: {line}. satır, {column}. sütunda fazladan virgül",
   "error.json.badString": "Geçersiz JSON: {line}. satır, {column}. sütunda hatalı metin",
   "error.json.badNumber": "Geçersiz JSON: {line}. satır, {column}. sütunda hatalı sayı",
-
   "tool.json-convert.name": "JSON ⇄ YAML ⇄ TOML ⇄ XML",
   "tool.json-convert.description": "JSON, YAML, TOML ve XML arasında dönüştür",
   "tool.json-convert.opt.from": "Kaynak",
@@ -107,7 +131,6 @@
   "error.convert.parse": "Geçersiz {format}: {line}. satır, {column}. sütun",
   "error.convert.xml": "Geçersiz XML: {line}. satır, {column}. sütun",
   "error.convert.tomlRoot": "TOML en üst düzeyde bir nesne ister",
-
   "tool.csv.name": "CSV ⇄ JSON ⇄ Markdown",
   "tool.csv.description": "CSV'yi JSON'a veya Markdown tabloya dönüştür, tersi de",
   "tool.csv.opt.mode": "Mod",
@@ -124,7 +147,6 @@
   "error.csv.empty": "Giriş boş",
   "error.csv.parse": "Geçersiz CSV, {row}. satır: {detail}",
   "error.csv.jsonArray": "JSON → CSV için nesne veya satır dizisi gerekir",
-
   "tool.case.name": "Harf dönüştürücü",
   "tool.case.description": "BÜYÜK, küçük, Başlık, camelCase, snake_case, kebab-case…",
   "tool.case.opt.mode": "Biçim",
@@ -141,7 +163,6 @@
   "tool.case.opt.lang.auto": "Otomatik",
   "tool.case.opt.lang.tr": "Türkçe",
   "tool.case.opt.lang.en": "İngilizce",
-
   "tool.lines.name": "Satır işlemleri",
   "tool.lines.description": "Satırları sırala, tekilleştir, ters çevir, numaralandır, temizle",
   "tool.lines.opt.op": "İşlem",
@@ -158,7 +179,6 @@
   "tool.lines.opt.lang.auto": "Otomatik",
   "tool.lines.opt.lang.tr": "Türkçe",
   "tool.lines.opt.lang.en": "İngilizce",
-
   "tool.diff.name": "Metin farkı",
   "tool.diff.description": "İki metni satır ya da karakter bazında karşılaştır",
   "tool.diff.opt.other": "Karşılaştırılan",
@@ -168,7 +188,6 @@
   "tool.diff.opt.granularity.char": "Karakter",
   "tool.diff.opt.ignoreWhitespace": "Boşlukları yok say",
   "tool.diff.line": "Satır",
-
   "tool.regex.name": "Regex test",
   "tool.regex.description": "Düzenli ifadeleri test et: eşleşmeler, gruplar, değiştirme",
   "tool.regex.opt.pattern": "Desen",
@@ -182,7 +201,6 @@
   "tool.regex.truncated": "… {max} eşleşmeden sonra durduruldu",
   "error.regex.empty": "Bir desen gir",
   "error.regex.invalid": "Geçersiz regex: {detail}",
-
   "tool.timestamp.name": "Unix zaman damgası",
   "tool.timestamp.description": "Unix zaman damgası ⇄ tarih, her saat diliminde",
   "tool.timestamp.opt.unit": "Birim",
@@ -202,7 +220,6 @@
   "tool.timestamp.http": "HTTP / RFC 7231",
   "tool.timestamp.relative": "Göreli",
   "error.timestamp.invalid": "Zaman damgası veya tarih değil: {input}",
-
   "tool.cron.name": "Cron ifadesi",
   "tool.cron.description": "Cron ifadesini açıkla, sonraki çalışmaları listele",
   "tool.cron.opt.tz": "Saat dilimi",
@@ -210,7 +227,6 @@
   "tool.cron.next": "Sonraki {count} çalışma ({tz})",
   "error.cron.empty": "Bir cron ifadesi gir, ör. */5 * * * *",
   "error.cron.invalid": "Geçersiz cron ifadesi: {detail}",
-
   "tool.uuid.name": "UUID / ULID",
   "tool.uuid.description": "UUID v4/v7, ULID, NanoID üret veya incele",
   "tool.uuid.opt.kind": "Tür",
@@ -223,7 +239,6 @@
   "tool.uuid.version": "Sürüm",
   "tool.uuid.variant": "Varyant",
   "tool.uuid.time": "Zaman damgası",
-
   "tool.hash.name": "Hash",
   "tool.hash.description": "MD5, SHA-1/256/384/512, CRC32 ve HMAC",
   "tool.hash.opt.algorithm": "Algoritma",
@@ -240,7 +255,6 @@
   "tool.hash.opt.encoding.base64": "Base64",
   "tool.hash.opt.uppercase": "Büyük harf",
   "error.hash.hmacCrc": "CRC32 için HMAC tanımlı değil",
-
   "tool.url-parse.name": "URL ayrıştırıcı",
   "tool.url-parse.description": "URL’yi şema, host, yol ve sorgu parçalarına ayır",
   "tool.url-parse.opt.decode": "Değerleri çöz",
@@ -256,7 +270,6 @@
   "tool.url-parse.hash": "Parça (#)",
   "tool.url-parse.origin": "Köken",
   "error.urlParse.invalid": "Geçerli bir mutlak URL değil (şema gerekir, ör. https://)",
-
   "tool.color.name": "Renk dönüştürücü",
   "tool.color.description": "HEX, RGB, HSL, OKLCH ve WCAG kontrastı",
   "tool.color.opt.against": "Kontrast rengi",

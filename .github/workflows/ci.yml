@@ -31,3 +31,30 @@ jobs:
         run: |
           out=$(echo 'aGVsbG8gS290aWxvIQ==' | node apps/cli/dist/kotilo.cjs base64 decode)
           test "$out" = "hello Kotilo!"
+
+  desktop:
+    # Tauri shell compiles on every OS (no bundling/signing here — that is K4)
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: apps/desktop/src-tauri
+      - name: Linux system deps
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @kotilo/kit-desktop vite:build
+      - run: cargo build --manifest-path apps/desktop/src-tauri/Cargo.toml

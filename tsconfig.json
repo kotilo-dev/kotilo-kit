@@ -1,5 +1,19 @@
 {
   "extends": "./tsconfig.base.json",
-  "compilerOptions": { "types": ["node"] },
-  "include": ["packages/*/src", "packages/*/test", "apps/*/src", "apps/*/test", "vitest.config.ts"]
+  "compilerOptions": {
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "packages/kit-core/src",
+    "packages/kit-core/test",
+    "packages/kit-tools/src",
+    "packages/kit-tools/test",
+    "packages/kit-themes/src",
+    "packages/kit-themes/test",
+    "apps/cli/src",
+    "apps/cli/test",
+    "vitest.config.ts"
+  ]
 }

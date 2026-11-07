@@ -1,0 +1,301 @@
+/* Palette — docs/02-design.md › Palette (720×480). Colors only from --kit-* tokens. */
+
+.kp {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--kit-base);
+  border: 1px solid var(--kit-s1);
+  border-radius: 14px;
+  font-family: Inter, system-ui, sans-serif;
+  color: var(--kit-text);
+  user-select: none;
+}
+
+/* theme change: 200 ms color transition, nothing else animates */
+.kp,
+.kp * {
+  transition:
+    background-color 200ms,
+    color 200ms,
+    border-color 200ms;
+}
+
+.kp :focus-visible {
+  outline: 2px solid var(--kit-blue);
+  outline-offset: 2px;
+}
+
+.kp-spacer {
+  flex: 1;
+}
+
+/* 1 — search row, 52 px */
+.kp-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--kit-s0);
+}
+.kp-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  font: 500 18px 'JetBrains Mono', monospace;
+  color: var(--kit-text);
+  caret-color: var(--kit-blue);
+  user-select: text;
+}
+.kp .kp-input:focus-visible {
+  outline: none;
+}
+.kp-key {
+  font: 500 11px 'JetBrains Mono', monospace;
+  color: var(--kit-overlay);
+  padding: 3px 7px;
+  border: 1px solid var(--kit-s1);
+  border-radius: 6px;
+}
+
+/* 2 — clipboard strip, 40 px */
+.kp-strip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--kit-mantle);
+  border-bottom: 1px solid var(--kit-s0);
+}
+.kp-strip-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--kit-teal);
+  white-space: nowrap;
+}
+.kp-strip-preview {
+  flex: 1;
+  min-width: 0;
+  font: 400 12px 'JetBrains Mono', monospace;
+  color: var(--kit-overlay);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.kp-strip-btn {
+  font: inherit;
+  font-size: 11px;
+  padding: 2px 9px;
+  border-radius: 5px;
+  border: 1px solid var(--kit-s0);
+  background: transparent;
+  color: var(--kit-subtext);
+  cursor: pointer;
+}
+.kp-strip-btn.is-primary {
+  background: var(--kit-blue);
+  border-color: var(--kit-blue);
+  color: var(--kit-crust);
+  font-weight: 600;
+}
+
+/* 3 — list */
+.kp-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--kit-s1) transparent;
+}
+.kp-section {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--kit-overlay);
+  padding: 10px 8px 4px;
+}
+.kp-section.is-first {
+  padding-top: 6px;
+}
+.kp-row {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: default;
+}
+.kp-row.is-compact {
+  padding: 8px 12px;
+}
+.kp-row.is-selected {
+  background: var(--kit-s0);
+}
+.kp-icon {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--kit-s0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.kp-row.is-selected .kp-icon {
+  background: var(--kit-mauve);
+}
+.kp-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.kp-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+.kp-row.is-selected .kp-name {
+  font-weight: 600;
+}
+.kp-desc,
+.kp-error {
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.kp-desc {
+  color: var(--kit-subtext);
+}
+.kp-error {
+  color: var(--kit-red);
+}
+.kp-enter {
+  font: 500 11px 'JetBrains Mono', monospace;
+  color: var(--kit-crust);
+  background: var(--kit-mauve);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+.kp-shortcut {
+  font: 500 11px 'JetBrains Mono', monospace;
+  color: var(--kit-overlay);
+}
+.kp-used {
+  font-size: 12px;
+  color: var(--kit-overlay);
+}
+.kp-empty {
+  padding: 16px 12px;
+  font-size: 13px;
+  color: var(--kit-overlay);
+}
+
+/* Tab — inline options under the selected row */
+.kp-options {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  padding: 4px 12px 10px 56px;
+  font-size: 11px;
+  color: var(--kit-overlay);
+}
+.kp-opt {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.kp-opt input[type='checkbox'] {
+  margin: 0;
+  accent-color: var(--kit-blue);
+}
+.kp-seg {
+  display: inline-flex;
+  border: 1px solid var(--kit-s0);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.kp-seg button {
+  font: inherit;
+  font-size: 11px;
+  padding: 3px 8px;
+  border: none;
+  background: transparent;
+  color: var(--kit-subtext);
+  cursor: pointer;
+}
+.kp-seg button.is-active {
+  background: var(--kit-blue);
+  color: var(--kit-crust);
+  font-weight: 600;
+}
+.kp-select {
+  font: inherit;
+  font-size: 11px;
+  padding: 2px 4px;
+  border: 1px solid var(--kit-s0);
+  border-radius: 6px;
+  background: var(--kit-mantle);
+  color: var(--kit-text);
+}
+.kp-hint {
+  font: 500 10px 'JetBrains Mono', monospace;
+  color: var(--kit-overlay);
+}
+
+/* 4 — footer, 36 px */
+.kp-footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--kit-s0);
+  background: var(--kit-mantle);
+  font-size: 11px;
+  color: var(--kit-overlay);
+  white-space: nowrap;
+}
+.kp-footer b {
+  color: var(--kit-subtext);
+  font-weight: 500;
+}
+.kp-theme {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.kp-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--kit-green);
+}
+
+/* Toast — transient notice window after Enter */
+.kt {
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 16px;
+  background: var(--kit-mantle);
+  border: 1px solid var(--kit-s1);
+  border-radius: 10px;
+  font: 500 13px Inter, system-ui, sans-serif;
+  color: var(--kit-text);
+  white-space: nowrap;
+}

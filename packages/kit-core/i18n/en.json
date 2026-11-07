@@ -7,7 +7,6 @@
   "category.web": "Web · Network",
   "category.visual": "Color · Visual",
   "category.pipeline": "Pipelines",
-
   "ui.copied": "Copied to clipboard",
   "ui.emptyInput": "Paste or type something",
   "ui.clipboardDetected": "{name} detected in clipboard",
@@ -15,17 +14,46 @@
   "ui.suggested": "Suggested",
   "ui.recent": "Recently used",
   "ui.offline": "offline",
-
+  "ui.searchLabel": "Search tools",
+  "ui.results": "Results",
+  "ui.allTools": "All tools",
+  "ui.noResults": "No matching tool",
+  "ui.runAndCopy": "run and copy to clipboard",
+  "ui.openFull": "open in full window",
+  "ui.optionsHint": "options",
+  "ui.binaryOutput": "Binary output — open it in the full window (ctrl ↵)",
+  "ui.consentQuestion": "Detect clipboard content locally to suggest tools?",
+  "ui.yes": "Yes",
+  "ui.no": "No",
+  "ui.fullWindowSoon": "The full window arrives in phase K2. Tool: {tool}",
+  "tray.open": "Open",
+  "tray.palette": "Palette",
+  "tray.theme": "Theme",
+  "tray.quit": "Quit",
+  "kind.base64": "Base64",
+  "kind.url": "URL-encoded text",
+  "kind.jwt": "JWT",
+  "kind.json": "JSON",
+  "kind.json-convert": "YAML / TOML",
+  "kind.csv": "CSV",
+  "kind.case": "text",
+  "kind.lines": "text",
+  "kind.diff": "text",
+  "kind.regex": "text",
+  "kind.timestamp": "a timestamp",
+  "kind.cron": "a cron expression",
+  "kind.uuid": "a UUID",
+  "kind.hash": "text",
+  "kind.url-parse": "a URL",
+  "kind.color": "a color",
   "cli.usage": "Usage: kotilo kit <tool> [--option value …] < input\n       kotilo kit list\n       kotilo kit detect < input\n       kotilo kit <tool> --help",
   "cli.unknownTool": "Unknown tool: {id}. Run `kotilo kit list`.",
   "cli.unknownOption": "Unknown option for {tool}: --{key}",
   "cli.noDetection": "No tool recognized this input.",
   "cli.options": "Options",
   "cli.examples": "Examples",
-
   "error.unexpected": "Unexpected error: {detail}",
   "error.time.tz": "Unknown time zone: {tz}",
-
   "tool.base64.name": "Base64",
   "tool.base64.description": "Encode or decode Base64",
   "tool.base64.opt.mode": "Mode",
@@ -36,7 +64,6 @@
   "tool.base64.binary": "Binary data, {bytes} bytes (not valid UTF-8 text). Save or copy as file.",
   "error.base64.invalidChar": "Invalid base64: character {pos}",
   "error.base64.invalidLength": "Invalid base64: wrong length or padding",
-
   "tool.url.name": "URL encode",
   "tool.url.description": "Percent-encode or decode URLs",
   "tool.url.opt.mode": "Mode",
@@ -47,7 +74,6 @@
   "tool.url.opt.scope.full": "Full URL",
   "tool.url.opt.plusSpace": "Space as +",
   "error.url.malformed": "Malformed percent-encoding at character {pos}",
-
   "tool.jwt.name": "JWT decode",
   "tool.jwt.description": "Decode a JWT and verify HS256 locally",
   "tool.jwt.opt.secret": "Secret",
@@ -69,7 +95,6 @@
   "error.jwt.header": "JWT header is not valid JSON",
   "error.jwt.payload": "JWT payload is not valid JSON",
   "error.jwt.secret": "Secret is not valid base64",
-
   "tool.json.name": "JSON format",
   "tool.json.description": "Format, minify, validate and query JSON",
   "tool.json.opt.mode": "Mode",
@@ -88,7 +113,6 @@
   "error.json.trailingComma": "Invalid JSON: trailing comma at line {line}, column {column}",
   "error.json.badString": "Invalid JSON: bad string at line {line}, column {column}",
   "error.json.badNumber": "Invalid JSON: bad number at line {line}, column {column}",
-
   "tool.json-convert.name": "JSON ⇄ YAML ⇄ TOML ⇄ XML",
   "tool.json-convert.description": "Convert between JSON, YAML, TOML and XML",
   "tool.json-convert.opt.from": "From",
@@ -107,7 +131,6 @@
   "error.convert.parse": "Invalid {format} at line {line}, column {column}",
   "error.convert.xml": "Invalid XML at line {line}, column {column}",
   "error.convert.tomlRoot": "TOML needs an object at the top level",
-
   "tool.csv.name": "CSV ⇄ JSON ⇄ Markdown",
   "tool.csv.description": "Convert CSV to JSON or a Markdown table, and back",
   "tool.csv.opt.mode": "Mode",
@@ -124,7 +147,6 @@
   "error.csv.empty": "Input is empty",
   "error.csv.parse": "Invalid CSV at row {row}: {detail}",
   "error.csv.jsonArray": "JSON → CSV needs an array of objects or rows",
-
   "tool.case.name": "Case converter",
   "tool.case.description": "UPPER, lower, Title, camelCase, snake_case, kebab-case…",
   "tool.case.opt.mode": "Case",
@@ -141,7 +163,6 @@
   "tool.case.opt.lang.auto": "Auto",
   "tool.case.opt.lang.tr": "Turkish",
   "tool.case.opt.lang.en": "English",
-
   "tool.lines.name": "Line tools",
   "tool.lines.description": "Sort, dedupe, reverse, number or clean up lines",
   "tool.lines.opt.op": "Operation",
@@ -158,7 +179,6 @@
   "tool.lines.opt.lang.auto": "Auto",
   "tool.lines.opt.lang.tr": "Turkish",
   "tool.lines.opt.lang.en": "English",
-
   "tool.diff.name": "Text diff",
   "tool.diff.description": "Compare two texts line by line or character by character",
   "tool.diff.opt.other": "Compare with",
@@ -168,7 +188,6 @@
   "tool.diff.opt.granularity.char": "Characters",
   "tool.diff.opt.ignoreWhitespace": "Ignore whitespace",
   "tool.diff.line": "Line",
-
   "tool.regex.name": "Regex tester",
   "tool.regex.description": "Test regular expressions: matches, groups, replace",
   "tool.regex.opt.pattern": "Pattern",
@@ -182,7 +201,6 @@
   "tool.regex.truncated": "… stopped after {max} matches",
   "error.regex.empty": "Enter a pattern",
   "error.regex.invalid": "Invalid regex: {detail}",
-
   "tool.timestamp.name": "Unix timestamp",
   "tool.timestamp.description": "Convert Unix timestamps ⇄ dates, any time zone",
   "tool.timestamp.opt.unit": "Unit",
@@ -202,7 +220,6 @@
   "tool.timestamp.http": "HTTP / RFC 7231",
   "tool.timestamp.relative": "Relative",
   "error.timestamp.invalid": "Not a timestamp or date: {input}",
-
   "tool.cron.name": "Cron expression",
   "tool.cron.description": "Explain a cron expression and list its next runs",
   "tool.cron.opt.tz": "Time zone",
@@ -210,7 +227,6 @@
   "tool.cron.next": "Next {count} runs ({tz})",
   "error.cron.empty": "Enter a cron expression, e.g. */5 * * * *",
   "error.cron.invalid": "Invalid cron expression: {detail}",
-
   "tool.uuid.name": "UUID / ULID",
   "tool.uuid.description": "Generate or inspect UUID v4/v7, ULID, NanoID",
   "tool.uuid.opt.kind": "Kind",
@@ -223,7 +239,6 @@
   "tool.uuid.version": "Version",
   "tool.uuid.variant": "Variant",
   "tool.uuid.time": "Timestamp",
-
   "tool.hash.name": "Hash",
   "tool.hash.description": "MD5, SHA-1/256/384/512, CRC32 and HMAC",
   "tool.hash.opt.algorithm": "Algorithm",
@@ -240,7 +255,6 @@
   "tool.hash.opt.encoding.base64": "Base64",
   "tool.hash.opt.uppercase": "Uppercase",
   "error.hash.hmacCrc": "HMAC is not defined for CRC32",
-
   "tool.url-parse.name": "URL parser",
   "tool.url-parse.description": "Split a URL into scheme, host, path and query",
   "tool.url-parse.opt.decode": "Decode values",
@@ -256,7 +270,6 @@
   "tool.url-parse.hash": "Fragment",
   "tool.url-parse.origin": "Origin",
   "error.urlParse.invalid": "Not a valid absolute URL (needs a scheme, e.g. https://)",
-
   "tool.color.name": "Color converter",
   "tool.color.description": "HEX, RGB, HSL, OKLCH and WCAG contrast",
   "tool.color.opt.against": "Contrast against",
