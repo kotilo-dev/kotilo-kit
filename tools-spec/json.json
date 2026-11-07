@@ -1,0 +1,15 @@
+{
+  "tool": "json",
+  "cases": [
+    { "name": "tab girinti", "input": "{\"a\":[1]}", "opts": { "indent": "tab" }, "expect": { "output": "{\n\t\"a\": [\n\t\t1\n\t]\n}" } },
+    { "name": "TR sıralama ı/i", "input": "{\"ılık\":1,\"iğne\":2,\"hız\":3}", "opts": { "mode": "minify", "sortKeys": true }, "ctx": { "locale": "tr" }, "expect": { "output": "{\"hız\":3,\"ılık\":1,\"iğne\":2}" } },
+    { "name": "jsonpath ..", "input": "{\"a\":{\"id\":1,\"b\":{\"id\":2}}}", "opts": { "mode": "minify", "query": "$..id" }, "expect": { "output": "[1,2]", "meta": { "matches": 2 } } },
+    { "name": "jsonpath negatif indeks", "input": "[1,2,3]", "opts": { "mode": "minify", "query": "$[-1]" }, "expect": { "output": "[3]" } },
+    { "name": "jsonpath tırnaklı anahtar", "input": "{\"a b\":{\"c\":1}}", "opts": { "mode": "minify", "query": "$['a b'].c" }, "expect": { "output": "[1]" } },
+    { "name": "fazladan virgül", "input": "{\n  \"a\": 1,\n}", "expect": { "error": "error.json.trailingComma" } },
+    { "name": "beklenmeyen", "input": "{\n  \"a\": tru\n}", "expect": { "error": "error.json.unexpectedToken" } },
+    { "name": "yarım", "input": "{\"a\":", "expect": { "error": "error.json.unexpectedEnd" } },
+    { "name": "boş", "input": "  ", "expect": { "error": "error.json.empty" } },
+    { "name": "geçersiz sorgu", "input": "{}", "opts": { "query": "a.b" }, "expect": { "error": "error.json.query" } }
+  ]
+}

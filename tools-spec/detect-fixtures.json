@@ -1,0 +1,23 @@
+[
+  { "input": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiIsIm5hbWUiOiLDh2HEn3LEsSIsImlhdCI6MTcwMDAwMDAwMCwiZXhwIjoxNzAwMDAzNjAwfQ.2uI2kSHB-vc1nK7YbgY-78eLxa2XDjivHfQ0tdjbcmw", "top": "jwt" },
+  { "input": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiJ9.c2ln", "top": "jwt" },
+  { "input": "{\"a\": [1, 2, {\"b\": null}]}", "top": "json" },
+  { "input": "[1,2,3]", "top": "json" },
+  { "input": "1700000000", "top": "timestamp" },
+  { "input": "1700000000123", "top": "timestamp" },
+  { "input": "2026-11-07T10:00:00Z", "top": "timestamp" },
+  { "input": "https://kotilo.dev/kit?x=1", "top": "url-parse" },
+  { "input": "aGVsbG8gS290aWxvIEtpdCE=", "top": "base64" },
+  { "input": "a%20b%26c%3D%C3%A7", "top": "url" },
+  { "input": "*/5 * * * *", "top": "cron" },
+  { "input": "0 9 * * 1-5", "top": "cron" },
+  { "input": "f47ac10b-58cc-4372-a567-0e02b2c3d479", "top": "uuid" },
+  { "input": "ad,soyad,şehir\nAyşe,Yılmaz,İzmir\nIşıl,Kaya,Iğdır", "top": "csv" },
+  { "input": "server:\n  host: localhost\n  port: 8080", "top": "json-convert" },
+  { "input": "#89b4fa", "top": "color" },
+  { "input": "rgb(137 180 250)", "top": "color" },
+  { "input": "merhaba dünya", "top": null },
+  { "input": "Password", "top": null },
+  { "input": "deadbeefcafebabe", "top": null },
+  { "input": "", "top": null }
+]

@@ -1,0 +1,16 @@
+{
+  "name": "@kotilo/kit-cli",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "kotilo": "./dist/kotilo.cjs"
+  },
+  "scripts": {
+    "build": "tsup"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@kotilo/kit-core": "workspace:*",
+    "@kotilo/kit-tools": "workspace:*"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "tool": "uuid",
+  "cases": [
+    { "name": "v7 incele", "input": "019a5d6c-2a00-7cc3-98c4-dc0c0c07398f", "expect": { "contains": ["Version: 7", "Variant: RFC 9562", "Timestamp: 2025-11-"], "meta": { "mode": "inspect" } } },
+    { "name": "v4 incele TR", "input": "f47ac10b-58cc-4372-a567-0e02b2c3d479", "ctx": { "locale": "tr" }, "expect": { "contains": ["Sürüm: 4", "Varyant: RFC 9562"] } },
+    { "name": "v1 zaman", "input": "c232ab00-9414-11ec-b3c8-9f6bdeced846", "expect": { "contains": ["Version: 1", "Timestamp: 2022-02-22T19:22:22.000Z"] } },
+    { "name": "ULID incele", "input": "01ARZ3NDEKTSV4RRFFQ69G5FAV", "expect": { "contains": ["Timestamp: 2016-07-30T23:54:10.259Z"] } },
+    { "name": "uuid olmayan giriş üretir", "input": "merhaba", "expect": { "meta": { "mode": "generate", "count": 1 } } }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "tool": "base64",
+  "cases": [
+    { "name": "boş", "input": "", "expect": { "output": "" } },
+    { "name": "satır sarma", "input": "Kotilo Kit çevrimdışı araç kutusu", "opts": { "wrap": 16 }, "expect": { "output": "S290aWxvIEtpdCDD\np2V2cmltZMSxxZ/E\nsSBhcmHDpyBrdXR1\nc3U=" } },
+    { "name": "boşluklu decode", "input": "aGVs\nbG8=", "opts": { "mode": "decode" }, "expect": { "output": "hello" } },
+    { "name": "url-safe decode", "input": "Pz8-", "opts": { "mode": "decode" }, "expect": { "output": "??>" } },
+    { "name": "dolgusuz decode", "input": "aGk", "opts": { "mode": "decode" }, "expect": { "output": "hi" } },
+    { "name": "geçersiz karakter", "input": "aGk*", "opts": { "mode": "decode" }, "expect": { "error": "error.base64.invalidChar" } },
+    { "name": "geçersiz uzunluk", "input": "aGkxa", "opts": { "mode": "decode" }, "expect": { "error": "error.base64.invalidLength" } },
+    { "name": "ikili çıktı", "input": "H4sIAAAAAAAA", "opts": { "mode": "decode" }, "expect": { "contains": ["00000000  1f 8b 08"], "meta": { "bytes": 9 } } }
+  ]
+}

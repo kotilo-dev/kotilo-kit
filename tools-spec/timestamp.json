@@ -1,0 +1,16 @@
+{
+  "tool": "timestamp",
+  "cases": [
+    { "name": "saniye", "input": "1700000000", "ctx": { "now": "2023-11-15T22:13:20Z", "tz": "Europe/Istanbul" },
+      "expect": { "rows": [["Unix (s)", "1700000000"], ["Unix (ms)", "1700000000000"], ["ISO 8601 (UTC)", "2023-11-14T22:13:20.000Z"], ["Local", "2023-11-15 01:13:20 +03:00  (Europe/Istanbul)"]], "meta": { "unit": "s" } } },
+    { "name": "göreli", "input": "1700000000", "ctx": { "now": "2023-11-15T22:13:20Z" }, "expect": { "rows": [["Relative", "yesterday"]] } },
+    { "name": "göreli TR", "input": "1700000000", "ctx": { "now": "2023-11-15T22:13:20Z", "locale": "tr" }, "expect": { "rows": [["Göreli", "dün"]] } },
+    { "name": "milisaniye", "input": "1700000000123", "expect": { "rows": [["ISO 8601 (UTC)", "2023-11-14T22:13:20.123Z"]], "meta": { "unit": "ms" } } },
+    { "name": "nanosaniye", "input": "1700000000123456789", "expect": { "rows": [["Unix (ms)", "1700000000123"]], "meta": { "unit": "ns" } } },
+    { "name": "ISO giriş", "input": "2024-02-29T12:00:00Z", "expect": { "rows": [["Unix (s)", "1709208000"]], "meta": { "unit": "date" } } },
+    { "name": "boş = şimdi", "input": "", "ctx": { "now": "2026-01-01T00:00:00Z" }, "expect": { "rows": [["Unix (s)", "1767225600"]], "meta": { "unit": "now" } } },
+    { "name": "tz seçeneği", "input": "0", "opts": { "tz": "America/New_York" }, "expect": { "rows": [["Local", "1969-12-31 19:00:00 -05:00  (America/New_York)"]] } },
+    { "name": "geçersiz tz", "input": "0", "opts": { "tz": "Mars/Olympus" }, "expect": { "error": "error.time.tz" } },
+    { "name": "geçersiz", "input": "dün öğlen", "expect": { "error": "error.timestamp.invalid" } }
+  ]
+}
