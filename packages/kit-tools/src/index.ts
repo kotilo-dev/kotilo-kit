@@ -14,6 +14,7 @@ import xml from './format/xml.js';
 import hash from './generate/hash.js';
 import uuid from './generate/uuid.js';
 import caseTool from './text/case.js';
+import count from './text/count.js';
 import diff from './text/diff.js';
 import escape from './text/escape.js';
 import fake from './text/fake.js';
@@ -44,6 +45,7 @@ export const builtinTools: Tool<any>[] = [
   regex,
   escape,
   fake,
+  count,
   timestamp,
   cron,
   uuid,
@@ -52,4 +54,4 @@ export const builtinTools: Tool<any>[] = [
   color,
 ];
 
-export { base64, url, jwt, htmlEntity, radix, unicode, json, jsonConvert, csv, jsonTypes, xml, sql, caseTool, lines, diff, regex, escape, fake, timestamp, cron, uuid, hash, urlParse, color };
+export { base64, url, jwt, htmlEntity, radix, unicode, json, jsonConvert, csv, jsonTypes, xml, sql, caseTool, lines, diff, regex, escape, fake, count, timestamp, cron, uuid, hash, urlParse, color };
