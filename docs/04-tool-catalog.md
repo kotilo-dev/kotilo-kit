@@ -37,7 +37,7 @@
 | lines | Satır işlemleri | sırala (TR collation), tekilleştir, ters çevir, boş sil, numaralandır | P1 | 1.0 ✓ K0 |
 | diff | Metin farkı | satır/karakter, yan yana; layout: table | P1 | 1.0 ✓ K0 |
 | regex | Regex test | eşleşme vurgusu, gruplar, replace, açıklama; JS/PCRE | P1 | 1.0 ✓ K0 |
-| fake | Lorem ipsum / sahte veri | isim, e-posta, adres, IBAN; TR yerel verisi | P2 | 1.0 |
+| fake | Lorem ipsum / sahte veri | isim, e-posta, adres, IBAN; TR yerel verisi | P2 | 1.0 ✓ K2 |
 | escape | Escape/unescape | JSON, SQL, regex, shell | P2 | 1.0 ✓ K2 |
 | count | Karakter/kelime/satır, bayt | | P2 | 1.0 |
 | slug | Slug üret | TR karakter dönüşümü | P3 | 1.1 |

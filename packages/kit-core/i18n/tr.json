@@ -415,5 +415,20 @@
   "error.escape.invalidEscape": "{pos}. konumda geçersiz kaçış: {seq}",
   "error.escape.trailingBackslash": "Girdi tek bir ters bölüyle bitiyor",
   "error.escape.sqlQuote": "{pos}. konumda kaçışsız tek tırnak; '' olarak ikile",
-  "error.escape.unterminated": "{pos}. konumdaki {quote} tırnağı kapanmamış"
+  "error.escape.unterminated": "{pos}. konumdaki {quote} tırnağı kapanmamış",
+  "tool.fake.name": "Sahte veri",
+  "tool.fake.description": "Lorem ipsum, isim, e-posta, adres, telefon, IBAN; TR ve EN veri",
+  "tool.fake.opt.kind": "Tür",
+  "tool.fake.opt.kind.lorem": "Lorem ipsum",
+  "tool.fake.opt.kind.name": "İsim",
+  "tool.fake.opt.kind.email": "E-posta",
+  "tool.fake.opt.kind.address": "Adres",
+  "tool.fake.opt.kind.phone": "Telefon",
+  "tool.fake.opt.kind.iban": "IBAN",
+  "tool.fake.opt.kind.company": "Şirket",
+  "tool.fake.opt.kind.id": "Kimlik (UUID)",
+  "tool.fake.opt.count": "Adet",
+  "tool.fake.opt.locale": "Veri dili",
+  "tool.fake.opt.locale.tr": "Türkçe",
+  "tool.fake.opt.locale.en": "İngilizce"
 }

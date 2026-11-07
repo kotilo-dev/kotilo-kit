@@ -415,5 +415,20 @@
   "error.escape.invalidEscape": "Invalid escape {seq} at position {pos}",
   "error.escape.trailingBackslash": "Input ends with a lone backslash",
   "error.escape.sqlQuote": "Unescaped single quote at position {pos}; double it as ''",
-  "error.escape.unterminated": "Unclosed {quote} quote at position {pos}"
+  "error.escape.unterminated": "Unclosed {quote} quote at position {pos}",
+  "tool.fake.name": "Fake data",
+  "tool.fake.description": "Lorem ipsum, names, emails, addresses, phones, IBANs; TR and EN data",
+  "tool.fake.opt.kind": "Kind",
+  "tool.fake.opt.kind.lorem": "Lorem ipsum",
+  "tool.fake.opt.kind.name": "Name",
+  "tool.fake.opt.kind.email": "Email",
+  "tool.fake.opt.kind.address": "Address",
+  "tool.fake.opt.kind.phone": "Phone",
+  "tool.fake.opt.kind.iban": "IBAN",
+  "tool.fake.opt.kind.company": "Company",
+  "tool.fake.opt.kind.id": "ID (UUID)",
+  "tool.fake.opt.count": "Count",
+  "tool.fake.opt.locale": "Data locale",
+  "tool.fake.opt.locale.tr": "Turkish",
+  "tool.fake.opt.locale.en": "English"
 }
