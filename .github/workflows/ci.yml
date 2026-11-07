@@ -24,6 +24,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
+      - name: Theme contrast (docs/02-design.md matrix)
+        run: pnpm test:contrast
       - run: pnpm test
       - run: pnpm --filter @kotilo/kit-cli build
       - name: CLI smoke test

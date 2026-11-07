@@ -113,6 +113,31 @@ fn config_read() -> String {
     read_config_text()
 }
 
+/// Status bar text: `~/.config/kotilo/kit/config.toml` or `%APPDATA%\kotilo\kit\config.toml` (docs/02).
+#[tauri::command]
+fn config_path_display() -> String {
+    if cfg!(windows) {
+        "%APPDATA%\\kotilo\\kit\\config.toml".into()
+    } else {
+        "~/.config/kotilo/kit/config.toml".into()
+    }
+}
+
+/// User themes imported from Settings › Appearance (same `[themes.<id>]` format as docs/05-themes.toml).
+#[tauri::command]
+fn themes_read() -> String {
+    fs::read_to_string(config_dir().join("themes.toml")).unwrap_or_default()
+}
+
+#[tauri::command]
+fn themes_write(contents: String) -> Result<(), String> {
+    let dir = config_dir();
+    fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
+    let tmp = dir.join("themes.toml.tmp");
+    fs::write(&tmp, contents.as_bytes()).map_err(|e| e.to_string())?;
+    fs::rename(&tmp, dir.join("themes.toml")).map_err(|e| e.to_string())
+}
+
 #[tauri::command]
 fn config_write(app: AppHandle, contents: String) -> Result<(), String> {
     let dir = config_dir();
@@ -326,7 +351,7 @@ pub fn run() {
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_dialog::init())
         .manage(AppState::default())
-        .invoke_handler(tauri::generate_handler![config_read, config_write, hide_window, notify, open_full, pending_full, save_file])
+        .invoke_handler(tauri::generate_handler![config_read, config_write, config_path_display, themes_read, themes_write, hide_window, notify, open_full, pending_full, save_file])
         .setup(|app| {
             #[cfg(target_os = "macos")]
             app.set_activation_policy(tauri::ActivationPolicy::Accessory);

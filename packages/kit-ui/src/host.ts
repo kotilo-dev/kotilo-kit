@@ -38,6 +38,15 @@ export interface Host {
   onActivate(cb: () => void): () => void;
   /** Full window: a tool + input handed over from the palette (ctrl+Enter). Replays a pending one. */
   onOpenFull?(cb: (toolId: string, input: string) => void): () => void;
+  /** User themes file (themes.toml next to config.toml). Absent = built-in themes only. */
+  userThemes?: {
+    read(): Promise<string>;
+    write(toml: string): Promise<void>;
+    /** Another window imported a theme. */
+    subscribe(cb: () => void): () => void;
+  };
+  /** Shown in the settings status bar, e.g. `%APPDATA%\kotilo\kit\config.toml`. */
+  configPath?: string;
   /** Frameless window controls (Windows/Linux full window). Absent = native title bar. */
   windowControls?: { minimize(): void; toggleMaximize(): void; close(): void };
   now(): Date;

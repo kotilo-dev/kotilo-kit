@@ -13,7 +13,7 @@ import {
   type Tool,
   type ToolResult,
 } from '@kotilo/kit-core';
-import { getTheme, primaryThemes } from '@kotilo/kit-themes';
+import { getTheme, primaryThemes, themes, type Theme } from '@kotilo/kit-themes';
 import {
   useCallback,
   useDeferredValue,
@@ -36,6 +36,8 @@ import {
   ThemeIcon,
 } from './icons.js';
 import { CATEGORY_ACCENT, groupTools, intlLocale, summarizeOutput, utf8Length } from './model.js';
+import { SettingsAppearance, SettingsNav } from './Settings.js';
+import { syncAppearance } from './theme.js';
 
 export interface FullWindowProps {
   host: Host;
@@ -83,6 +85,12 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => host.config.subscribe(setConfig), [host]);
+
+  // Settings › Appearance lives in this window; theme list includes user themes
+  const [view, setView] = useState<'tools' | 'settings'>('tools');
+  const [themeList, setThemeList] = useState<readonly Theme[]>(themes);
+  const [appliedTheme, setAppliedTheme] = useState(config.theme.id);
+  useEffect(() => syncAppearance(host, { onList: setThemeList, onApplied: setAppliedTheme }), [host]);
 
   const selectTool = useCallback(
     (id: string) => {
@@ -196,6 +204,10 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const mod = host.platform === 'mac' ? e.metaKey : e.ctrlKey;
+      if (view === 'settings') {
+        if (e.key === 'Escape') setView('tools');
+        return;
+      }
       if (mod && !e.shiftKey && letterOf(e) === 'k') {
         e.preventDefault();
         searchRef.current?.focus();
@@ -248,8 +260,9 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
   };
 
   // ---------- render helpers ----------
-  const mono = { fontFamily: `"${config.theme.font}", "JetBrains Mono", monospace`, fontSize: config.theme.size };
-  const theme = getTheme(config.theme.id);
+  // Settings › Font: --kp-* set by applyAppearance (defaults in full.css)
+  const mono = { fontFamily: 'var(--kp-mono)', fontSize: 'var(--kp-mono-size)', fontVariantLigatures: 'var(--kp-ligatures)' };
+  const theme = getTheme(appliedTheme, themeList);
   const accent = (category: Tool<any>['category']) => `var(--kit-${CATEGORY_ACCENT[category]})`;
   const optLabel = (key: string) => tr(`tool.${tool.id}.opt.${key}`);
   const valueLabel = (key: string, v: string) => tr(`tool.${tool.id}.opt.${key}.${v}`);
@@ -277,12 +290,29 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
     <div className={`kf${host.platform === 'mac' ? ' kf-mac' : ''}`} lang={locale}>
       {/* ---------- title bar ---------- */}
       <header className="kf-titlebar" data-tauri-drag-region>
-        <span className="kf-brand" data-tauri-drag-region>
-          <span className="kf-logo">
-            <LogoMark />
+        {view === 'settings' ? (
+          /* mockup "Ayarlar › Görünüm": breadcrumb title bar; "Kotilo Kit" goes back to the tools */
+          <nav className="kf-crumbs" aria-label={tr('settings.breadcrumb')} data-tauri-drag-region>
+            <button className="kf-crumb-home" onClick={() => setView('tools')} title={tr('settings.back')}>
+              Kotilo Kit
+            </button>
+            <span className="kf-crumb-sep">/</span>
+            <span className="kf-crumb">{tr('settings.title')}</span>
+            <span className="kf-crumb-sep">/</span>
+            <span className="kf-crumb kf-crumb-current" aria-current="page">
+              {tr('settings.nav.appearance')}
+            </span>
+          </nav>
+        ) : (
+          <span className="kf-brand" data-tauri-drag-region>
+            <span className="kf-logo">
+              <LogoMark />
+            </span>
+            <span className="kf-brand-name">Kotilo Kit</span>
           </span>
-          <span className="kf-brand-name">Kotilo Kit</span>
-        </span>
+        )}
+        {view === 'settings' && <span className="kf-spacer" data-tauri-drag-region />}
+        {view === 'tools' && (
         <div className="kf-search-wrap" data-tauri-drag-region>
           <div className="kf-search">
             <SmallSearchIcon />
@@ -299,12 +329,17 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
             <span className="kf-kbd">{host.platform === 'mac' ? '⌘ K' : 'ctrl K'}</span>
           </div>
         </div>
-        <button className="kf-icon-btn" aria-label={tr('ui.theme')} title={tr('ui.themeNext')} onClick={nextTheme}>
-          <ThemeIcon />
-        </button>
-        <button className="kf-icon-btn" aria-label={tr('ui.settings')} title={tr('ui.settingsSoon')} disabled>
-          <SettingsIcon />
-        </button>
+        )}
+        {view === 'tools' && (
+          <>
+            <button className="kf-icon-btn" aria-label={tr('ui.theme')} title={tr('ui.themeNext')} onClick={nextTheme}>
+              <ThemeIcon />
+            </button>
+            <button className="kf-icon-btn" aria-label={tr('ui.settings')} onClick={() => setView('settings')}>
+              <SettingsIcon />
+            </button>
+          </>
+        )}
         {controls && (
           <span className="kf-caption">
             <button aria-label={tr('ui.minimize')} onClick={controls.minimize}>
@@ -320,6 +355,12 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
         )}
       </header>
 
+      {view === 'settings' ? (
+        <div className="kf-body">
+          <SettingsNav tr={tr} />
+          <SettingsAppearance host={host} config={config} list={themeList} tr={tr} />
+        </div>
+      ) : (
       <div className="kf-body">
         {/* ---------- sidebar ---------- */}
         <nav className="kf-nav" aria-label={tr('ui.categories')}>
@@ -536,6 +577,7 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
           )}
         </main>
       </div>
+      )}
 
       {/* ---------- status bar ---------- */}
       <footer className="kf-status">
@@ -543,13 +585,22 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
           <span className="kf-offline-dot" />
           {tr('ui.offlineBadge')}
         </span>
-        <span>{theme?.name ?? config.theme.id}</span>
-        <span>
-          {config.theme.font} {config.theme.size}
-        </span>
-        <span className="kf-spacer" />
-        <span>{tr('ui.toolCount', { tools: nf.format(registry.tools.length), plugins: nf.format(pluginCount) })}</span>
-        <span>v{version}</span>
+        <span>{theme.name}</span>
+        {view === 'settings' ? (
+          <>
+            <span className="kf-spacer" />
+            {host.configPath && <span>{tr('settings.configPath', { path: host.configPath })}</span>}
+          </>
+        ) : (
+          <>
+            <span>
+              {config.theme.font} {config.theme.size}
+            </span>
+            <span className="kf-spacer" />
+            <span>{tr('ui.toolCount', { tools: nf.format(registry.tools.length), plugins: nf.format(pluginCount) })}</span>
+            <span>v{version}</span>
+          </>
+        )}
       </footer>
     </div>
   );
