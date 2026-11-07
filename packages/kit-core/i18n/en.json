@@ -400,5 +400,20 @@
   "tool.sql.opt.keywordCase.preserve": "Keep",
   "tool.sql.opt.indent": "Indent",
   "error.sql.empty": "Input is empty",
-  "error.sql.parse": "Can't parse SQL: {detail}"
+  "error.sql.parse": "Can't parse SQL: {detail}",
+  "tool.escape.name": "Escape / unescape",
+  "tool.escape.description": "Escape strings for JSON, JS, SQL, regex or shell",
+  "tool.escape.opt.mode": "Mode",
+  "tool.escape.opt.mode.escape": "Escape",
+  "tool.escape.opt.mode.unescape": "Unescape",
+  "tool.escape.opt.lang": "Language",
+  "tool.escape.opt.lang.json": "JSON string",
+  "tool.escape.opt.lang.js": "JS string",
+  "tool.escape.opt.lang.sql": "SQL string",
+  "tool.escape.opt.lang.regex": "Regex",
+  "tool.escape.opt.lang.shell": "Shell (POSIX)",
+  "error.escape.invalidEscape": "Invalid escape {seq} at position {pos}",
+  "error.escape.trailingBackslash": "Input ends with a lone backslash",
+  "error.escape.sqlQuote": "Unescaped single quote at position {pos}; double it as ''",
+  "error.escape.unterminated": "Unclosed {quote} quote at position {pos}"
 }

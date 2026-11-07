@@ -400,5 +400,20 @@
   "tool.sql.opt.keywordCase.preserve": "Koru",
   "tool.sql.opt.indent": "Girinti",
   "error.sql.empty": "Girdi boş",
-  "error.sql.parse": "SQL ayrıştırılamadı: {detail}"
+  "error.sql.parse": "SQL ayrıştırılamadı: {detail}",
+  "tool.escape.name": "Escape / unescape",
+  "tool.escape.description": "Metni JSON, JS, SQL, regex veya shell için kaçışla",
+  "tool.escape.opt.mode": "Mod",
+  "tool.escape.opt.mode.escape": "Kaçışla",
+  "tool.escape.opt.mode.unescape": "Kaçışı çöz",
+  "tool.escape.opt.lang": "Dil",
+  "tool.escape.opt.lang.json": "JSON dizesi",
+  "tool.escape.opt.lang.js": "JS dizesi",
+  "tool.escape.opt.lang.sql": "SQL dizesi",
+  "tool.escape.opt.lang.regex": "Regex",
+  "tool.escape.opt.lang.shell": "Shell (POSIX)",
+  "error.escape.invalidEscape": "{pos}. konumda geçersiz kaçış: {seq}",
+  "error.escape.trailingBackslash": "Girdi tek bir ters bölüyle bitiyor",
+  "error.escape.sqlQuote": "{pos}. konumda kaçışsız tek tırnak; '' olarak ikile",
+  "error.escape.unterminated": "{pos}. konumdaki {quote} tırnağı kapanmamış"
 }
