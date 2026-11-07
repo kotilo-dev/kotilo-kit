@@ -1,0 +1,105 @@
+name: Release
+
+# Pushing a `v*` tag builds the installers on all three OSes and attaches them to a DRAFT GitHub
+# release. A maintainer reviews and publishes the draft by hand; publishing triggers packaging.yml.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tag matches the app version
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          for f in apps/desktop/src-tauri/tauri.conf.json apps/desktop/package.json apps/cli/package.json; do
+            v=$(node -p "require('./$f').version")
+            if [ "$v" != "$tag" ]; then echo "::error file=$f::version $v does not match tag $GITHUB_REF_NAME"; exit 1; fi
+          done
+          v=$(grep -m1 '^version' apps/desktop/src-tauri/Cargo.toml | cut -d'"' -f2)
+          if [ "$v" != "$tag" ]; then echo "::error file=apps/desktop/src-tauri/Cargo.toml::version $v does not match tag"; exit 1; fi
+          grep -q "export const VERSION = '$tag'" apps/cli/src/cli.ts || { echo "::error file=apps/cli/src/cli.ts::VERSION does not match tag"; exit 1; }
+
+  build:
+    needs: check
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            args: ''
+          - os: macos-latest
+            args: '--target universal-apple-darwin'
+          - os: ubuntu-22.04
+            args: '--bundles appimage,deb'
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ runner.os == 'macOS' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: apps/desktop/src-tauri
+      - name: Linux system deps
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev patchelf
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: apps/desktop
+          tagName: ${{ github.ref_name }}
+          releaseName: Kotilo Kit ${{ github.ref_name }}
+          releaseBody: 'Offline developer toolbox. Checksums are shown next to every asset. Unsigned build: see README › Install.'
+          releaseDraft: true
+          prerelease: false
+          args: ${{ matrix.args }}
+      - name: Installer size budget (≤ 25 MB, docs/01-requirements.md)
+        shell: bash
+        run: |
+          status=0
+          while IFS= read -r -d '' f; do
+            size=$(wc -c < "$f")
+            printf '%8.1f MB  %s\n' "$(echo "$size / 1048576" | bc -l)" "$f"
+            if [ "$size" -gt 26214400 ]; then echo "::error file=$f::installer is larger than 25 MB"; status=1; fi
+          done < <(find apps/desktop/src-tauri/target -path '*/bundle/*' -type f \( -name '*.msi' -o -name '*.exe' -o -name '*.dmg' -o -name '*.AppImage' -o -name '*.deb' \) -print0)
+          exit $status
+
+  cli:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @kotilo/kit-cli build
+      - name: Attach the CLI (single file, Node ≥ 20) to the draft release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cp apps/cli/dist/kotilo.cjs "kotilo-kit-cli-${GITHUB_REF_NAME}.cjs"
+          # the draft may not exist yet if the build jobs are still running: retry for a few minutes
+          for i in $(seq 1 20); do
+            gh release upload "$GITHUB_REF_NAME" "kotilo-kit-cli-${GITHUB_REF_NAME}.cjs" --clobber && exit 0
+            sleep 30
+          done
+          exit 1

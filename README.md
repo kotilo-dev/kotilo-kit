@@ -8,19 +8,35 @@ Goal: **clipboard → result in two keystrokes.** Copy a JWT, press `Ctrl+Shift+
 
 Part of [Kotilo](https://kotilo.dev) · Türkçe: [aşağıda](#türkçe)
 
-## Tools (K0)
+## Install
+
+Installers for Windows (MSI / setup.exe), macOS (universal .dmg) and Linux (.AppImage / .deb) are attached to every [GitHub release](https://github.com/kotilo-dev/kotilo-kit/releases). Each one is ≤ 25 MB and works offline. After 1.0 the package managers follow:
+
+```sh
+winget install Kotilo.KotiloKit              # Windows
+brew install --cask kotilo-dev/tap/kotilo-kit   # macOS
+yay -S kotilo-kit-bin                        # Arch (AUR)
+```
+
+The builds are not code-signed yet. On Windows, SmartScreen shows "unknown publisher". On macOS, open the app the first time with right-click › Open. The release process is described in [`packaging/README.md`](packaging/README.md).
+
+## Tools
+
+<!-- tools:start -->
+31 built-in tools, generated from the registry by `pnpm readme:tools`.
 
 | Category | Tools |
 |---|---|
-| Encoding | `base64` · `url` · `jwt` (decode, `exp`/`iat` as dates, local HS256/384/512 verify) |
-| Format | `json` (format/minify/validate, JSONPath, line:column errors) · `json-convert` (JSON ⇄ YAML ⇄ TOML ⇄ XML) · `csv` (⇄ JSON ⇄ Markdown) |
-| Text | `case` (camel/snake/kebab…, Turkish İ/ı aware) · `lines` (sort with locale collation, dedupe…) · `diff` · `regex` |
-| Time | `timestamp` (s/ms/µs/ns auto-detect, any time zone) · `cron` (explain + next runs) |
-| Generate | `uuid` (v4, v7, ULID, NanoID; inspect) · `hash` (MD5, SHA-1/256/384/512, CRC32, HMAC) |
-| Web | `url-parse` |
-| Visual | `color` (HEX/RGB/HSL/OKLCH, WCAG contrast) |
+| Encoding | `base64` Base64 · `url` URL encode · `jwt` JWT decode · `html-entity` HTML entities · `radix` Hex / text / binary · `unicode` Unicode inspector |
+| Format | `json` JSON format · `json-convert` JSON ⇄ YAML ⇄ TOML ⇄ XML · `csv` CSV ⇄ JSON ⇄ Markdown · `json-types` JSON to types · `xml` XML format · `sql` SQL format |
+| Text | `case` Case converter · `lines` Line tools · `diff` Text diff · `regex` Regex tester · `escape` Escape / unescape · `fake` Fake data · `count` Text counter |
+| Time · Number | `timestamp` Unix timestamp · `cron` Cron expression · `duration` Duration calculator · `units` Number bases & units |
+| Generate · Crypto | `uuid` UUID / ULID · `hash` Hash · `password` Password generator |
+| Web · Network | `url-parse` URL parser · `query` Query string · `http-ref` HTTP status & MIME |
+| Color · Visual | `color` Color converter · `theme-palette` Theme palette |
+<!-- tools:end -->
 
-The full catalog (40 tools for 1.0) is in [`docs/04-tool-catalog.md`](docs/04-tool-catalog.md).
+Options, examples and detection rules for each tool are in [`docs/04-tool-catalog.md`](docs/04-tool-catalog.md).
 
 ## CLI
 
@@ -95,9 +111,9 @@ Contributing: one tool per PR — `src/<category>/<id>.ts`, i18n entries in `pac
 |---|---|
 | **K0** ✓ | Monorepo, `kit-core`, P1 tools, CLI |
 | **K1** ✓ | Tauri shell: hidden window, global shortcut, clipboard, tray, palette window |
-| K2 | Full window: category tree, tool panel, suggestion strip, status bar; all 1.0 tools |
-| K3 | Theme system: 7 themes (Catppuccin, Gruvbox, Tokyo Night, Everforest, Nord, Rosé Pine, Dracula), settings, contrast CI |
-| K4 | Packaging (winget, AUR, Homebrew), 1.0 release |
+| **K2** ✓ | Full window: category tree, tool panel, suggestion strip, status bar; all 1.0 tools |
+| **K3** ✓ | Theme system: 7 themes (Catppuccin, Gruvbox, Tokyo Night, Everforest, Nord, Rosé Pine, Dracula), settings, contrast CI |
+| K4 | Packaging (winget, AUR, Homebrew), generated tool list, GitHub releases → 1.0 tag |
 | K5 (1.1) | Pipelines, plugin loader, `kit-tools` repo |
 
 ## Türkçe

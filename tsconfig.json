@@ -14,6 +14,7 @@
     "packages/kit-themes/test",
     "apps/cli/src",
     "apps/cli/test",
+    "packaging",
     "vitest.config.ts"
   ]
 }
