@@ -601,5 +601,18 @@
   "tool.http-ref.status.507": "Server cannot store what is needed (WebDAV)",
   "tool.http-ref.status.508": "Infinite loop detected while processing (WebDAV)",
   "tool.http-ref.status.510": "Further extensions are required for the request",
-  "tool.http-ref.status.511": "Network access needs authentication (captive portal)"
+  "tool.http-ref.status.511": "Network access needs authentication (captive portal)",
+  "tool.theme-palette.name": "Theme palette",
+  "tool.theme-palette.description": "Copy the color codes of the 7 dev themes",
+  "tool.theme-palette.opt.as": "Format",
+  "tool.theme-palette.opt.as.table": "Table",
+  "tool.theme-palette.opt.as.css": "CSS",
+  "tool.theme-palette.opt.as.json": "JSON",
+  "tool.theme-palette.opt.as.toml": "TOML",
+  "tool.theme-palette.opt.color": "Color",
+  "tool.theme-palette.opt.color.hex": "HEX",
+  "tool.theme-palette.opt.color.rgb": "RGB",
+  "tool.theme-palette.opt.color.hsl": "HSL",
+  "tool.theme-palette.token": "Token",
+  "error.theme-palette.notFound": "No theme matches \"{query}\""
 }

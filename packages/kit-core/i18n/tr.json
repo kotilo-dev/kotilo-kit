@@ -601,5 +601,18 @@
   "tool.http-ref.status.507": "Sunucu gereken veriyi depolayamıyor (WebDAV)",
   "tool.http-ref.status.508": "İşlerken sonsuz döngü algılandı (WebDAV)",
   "tool.http-ref.status.510": "İstek için ek uzantılar gerekli",
-  "tool.http-ref.status.511": "Ağ erişimi için kimlik doğrulama gerekli (giriş portalı)"
+  "tool.http-ref.status.511": "Ağ erişimi için kimlik doğrulama gerekli (giriş portalı)",
+  "tool.theme-palette.name": "Tema paleti",
+  "tool.theme-palette.description": "7 dev temasının renk kodlarını kopyala",
+  "tool.theme-palette.opt.as": "Biçim",
+  "tool.theme-palette.opt.as.table": "Tablo",
+  "tool.theme-palette.opt.as.css": "CSS",
+  "tool.theme-palette.opt.as.json": "JSON",
+  "tool.theme-palette.opt.as.toml": "TOML",
+  "tool.theme-palette.opt.color": "Renk",
+  "tool.theme-palette.opt.color.hex": "HEX",
+  "tool.theme-palette.opt.color.rgb": "RGB",
+  "tool.theme-palette.opt.color.hsl": "HSL",
+  "tool.theme-palette.token": "Token",
+  "error.theme-palette.notFound": "\"{query}\" ile eşleşen tema yok"
 }

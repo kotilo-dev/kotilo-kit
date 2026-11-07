@@ -76,7 +76,7 @@
 | id | Araç | Not | P | Sürüm |
 |---|---|---|---|---|
 | color | Renk dönüştür | HEX/RGB/HSL/OKLCH; WCAG kontrast | P1 | 1.0 ✓ K0 |
-| theme-palette | Dev tema paleti | 7 temanın renk kodlarını kopyala | P2 | 1.0 |
+| theme-palette | Dev tema paleti | 7 temanın renk kodlarını kopyala | P2 | 1.0 ✓ K2 |
 | image | Görsel dönüştür ve sıkıştır | PNG/JPG/WebP/SVG; boyutlandır | P2 | 1.2 |
 | svg | SVG optimize ve önizle | | P3 | 1.2 |
 | code-image | Kod → görsel | snippet görseli, dev temalı | P2 | 1.2 |
