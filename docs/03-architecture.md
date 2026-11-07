@@ -45,7 +45,7 @@ export default defineTool({
 ## Registry ve arama
 - `kit-core/registry` tüm `defineTool` modüllerini toplar (yerleşik + kullanıcı eklentileri), id benzersiz.
 - Arama: `fuse.js` ile ad (EN+TR), keywords, kategori; skor + son kullanım ağırlığı.
-- Son kullanılanlar `config.toml`'da (`[recent] ids = [...]`); içerik değil, yalnızca id.
+- Son kullanılanlar `config.toml`'da (`[recent] ids = [...]`, `used = [...]` Unix saniye; palette'teki "2 dk önce" için); içerik değil, yalnızca id ve zaman.
 
 ## Pano algılama
 - Kabuk pano metnini okur (Tauri `clipboard-manager`), `kit-core/detect` her aracın `detect`'ini çalıştırır (Worker, 20 ms bütçe), ilk 3 skoru döner.
@@ -86,7 +86,7 @@ interface Host {
 [general]  locale = "tr"  hotkey = "Ctrl+Shift+K"  start_hidden = true
 [clipboard] detect = true  # varsayılan açık? → ilk açılışta sorulur
 [theme] id = "catppuccin-mocha"  follow_system = true  font = "JetBrains Mono"  size = 13  ligatures = true  palette_opacity = 96  radius = 12  compact = false
-[recent] ids = ["jwt", "base64", "timestamp"]
+[recent] ids = ["jwt", "base64", "timestamp"]  used = [1762512000, 1762500000, 1762400000]
 ```
 
 ## Test

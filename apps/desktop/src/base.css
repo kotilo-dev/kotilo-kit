@@ -1,0 +1,12 @@
+/* Window chrome: transparent so the palette's 14 px rounded corners show (frameless window). */
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+}
+body {
+  -webkit-font-smoothing: antialiased;
+}

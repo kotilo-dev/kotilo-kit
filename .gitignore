@@ -5,3 +5,4 @@ coverage/
 .DS_Store
 target/
 *.tsbuildinfo
+apps/desktop/src-tauri/gen/

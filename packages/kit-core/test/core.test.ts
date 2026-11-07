@@ -142,17 +142,20 @@ ids = ["jwt", "base64", "timestamp", "a", "b", "c", 3]
     expect(cfg.clipboard.detect).toBe(true);
     expect(cfg.theme).toMatchObject({ id: 'nord', size: 18, palette_opacity: 60, radius: 12, font: 'JetBrains Mono' });
     expect(cfg.recent.ids).toEqual(['jwt', 'base64', 'timestamp', 'a', 'b']);
+    expect(cfg.recent.used).toEqual([0, 0, 0, 0, 0]); // older configs without times
+    expect(parseConfig('[recent]\nids = ["jwt"]\nused = [1762512000]').recent).toEqual({ ids: ['jwt'], used: [1762512000] });
   });
 
   it('round-trips through TOML', () => {
-    const cfg = pushRecent(defaultConfig({ locale: 'tr' }), 'jwt');
+    const cfg = pushRecent(defaultConfig({ locale: 'tr' }), 'jwt', 1762512000);
     expect(parseConfig(stringifyConfig(cfg))).toEqual(cfg);
   });
 
   it('pushRecent dedupes and caps at 5', () => {
     let cfg = defaultConfig();
-    for (const id of ['a', 'b', 'c', 'd', 'e', 'f', 'b']) cfg = pushRecent(cfg, id);
+    ['a', 'b', 'c', 'd', 'e', 'f', 'b'].forEach((id, i) => (cfg = pushRecent(cfg, id, 100 + i)));
     expect(cfg.recent.ids).toEqual(['b', 'f', 'e', 'd', 'c']);
+    expect(cfg.recent.used).toEqual([106, 105, 104, 103, 102]);
   });
 
   it('resolves config paths per platform', () => {

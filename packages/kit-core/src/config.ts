@@ -16,8 +16,8 @@ export interface KitConfig {
     radius: number;
     compact: boolean;
   };
-  /** Only tool ids — never content. */
-  recent: { ids: string[] };
+  /** Only tool ids and when they were used (Unix seconds, same order) — never content. */
+  recent: { ids: string[]; used: number[] };
 }
 
 export const RECENT_MAX = 5;
@@ -40,7 +40,7 @@ export function defaultConfig(opts: { locale?: Locale; platform?: string } = {})
       radius: 12,
       compact: false,
     },
-    recent: { ids: [] },
+    recent: { ids: [], used: [] },
   };
 }
 
@@ -74,11 +74,7 @@ export function parseConfig(source: string, defaults: KitConfig = defaultConfig(
       radius: clamp(th.radius, 0, 16, d.theme.radius),
       compact: bool(th.compact, d.theme.compact),
     },
-    recent: {
-      ids: Array.isArray(r.ids)
-        ? r.ids.filter((x): x is string => typeof x === 'string').slice(0, RECENT_MAX)
-        : [],
-    },
+    recent: parseRecent(r.ids, r.used),
   };
 }
 
@@ -86,10 +82,24 @@ export function stringifyConfig(config: KitConfig): string {
   return stringify(config) + '\n';
 }
 
-/** Move `id` to the front of the recent list (ids only, max 5). */
-export function pushRecent(config: KitConfig, id: string): KitConfig {
-  const ids = [id, ...config.recent.ids.filter((x) => x !== id)].slice(0, RECENT_MAX);
-  return { ...config, recent: { ids } };
+function parseRecent(ids: unknown, used: unknown): KitConfig['recent'] {
+  const out: KitConfig['recent'] = { ids: [], used: [] };
+  if (!Array.isArray(ids)) return out;
+  const times = Array.isArray(used) ? used : [];
+  ids.forEach((id, i) => {
+    if (typeof id !== 'string' || out.ids.length >= RECENT_MAX) return;
+    const t = times[i];
+    out.ids.push(id);
+    out.used.push(typeof t === 'number' && Number.isFinite(t) ? t : 0); // 0 = unknown
+  });
+  return out;
+}
+
+/** Move `id` to the front of the recent list (ids + use time only, max 5). */
+export function pushRecent(config: KitConfig, id: string, nowSec = 0): KitConfig {
+  const keep = config.recent.ids.map((x, i) => [x, config.recent.used[i] ?? 0] as const).filter(([x]) => x !== id);
+  const list = [[id, nowSec] as const, ...keep].slice(0, RECENT_MAX);
+  return { ...config, recent: { ids: list.map(([x]) => x), used: list.map(([, t]) => t) } };
 }
 
 /**
