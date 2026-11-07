@@ -71,6 +71,7 @@
   "kind.hash": "text",
   "kind.url-parse": "a URL",
   "kind.color": "a color",
+  "kind.html-entity": "HTML entities",
   "cli.usage": "Usage: kotilo kit <tool> [--option value …] < input\n       kotilo kit list\n       kotilo kit detect < input\n       kotilo kit <tool> --help",
   "cli.unknownTool": "Unknown tool: {id}. Run `kotilo kit list`.",
   "cli.unknownOption": "Unknown option for {tool}: --{key}",
@@ -302,5 +303,11 @@
   "tool.color.value": "Value",
   "tool.color.contrast": "Contrast vs {other}",
   "tool.color.aaLarge": "AA large text",
-  "error.color.invalid": "Not a color: {input}"
+  "error.color.invalid": "Not a color: {input}",
+  "tool.html-entity.name": "HTML entities",
+  "tool.html-entity.description": "Encode or decode HTML entities",
+  "tool.html-entity.opt.mode": "Mode",
+  "tool.html-entity.opt.mode.encode": "Encode",
+  "tool.html-entity.opt.mode.decode": "Decode",
+  "tool.html-entity.opt.nonAscii": "Escape non-ASCII"
 }

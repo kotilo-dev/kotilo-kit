@@ -71,6 +71,7 @@
   "kind.hash": "metin",
   "kind.url-parse": "URL",
   "kind.color": "renk",
+  "kind.html-entity": "HTML entity",
   "cli.usage": "Kullanım: kotilo kit <araç> [--seçenek değer …] < giriş\n          kotilo kit list\n          kotilo kit detect < giriş\n          kotilo kit <araç> --help",
   "cli.unknownTool": "Bilinmeyen araç: {id}. `kotilo kit list` ile listele.",
   "cli.unknownOption": "{tool} için bilinmeyen seçenek: --{key}",
@@ -302,5 +303,11 @@
   "tool.color.value": "Değer",
   "tool.color.contrast": "{other} ile kontrast",
   "tool.color.aaLarge": "AA büyük metin",
-  "error.color.invalid": "Renk değil: {input}"
+  "error.color.invalid": "Renk değil: {input}",
+  "tool.html-entity.name": "HTML entity",
+  "tool.html-entity.description": "HTML entity kodla veya çöz",
+  "tool.html-entity.opt.mode": "Mod",
+  "tool.html-entity.opt.mode.encode": "Kodla",
+  "tool.html-entity.opt.mode.decode": "Çöz",
+  "tool.html-entity.opt.nonAscii": "ASCII dışını kaçır"
 }

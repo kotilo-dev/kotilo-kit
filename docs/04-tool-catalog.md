@@ -9,7 +9,7 @@
 |---|---|---|---|---|
 | base64 | Base64 encode/decode | metin ve dosya; URL-safe; satır sarma | P1 | 1.0 ✓ K0 |
 | url | URL encode/decode | tam URL / yalnızca bileşen modu | P1 | 1.0 ✓ K0 |
-| html-entity | HTML entity encode/decode | | P2 | 1.0 |
+| html-entity | HTML entity encode/decode | | P2 | 1.0 ✓ K2 |
 | jwt | JWT decode | header/payload/imza; `exp`/`iat` okunur tarih, kalan süre; imza doğrulama (HS256 secret ile, yerel) | P1 | 1.0 ✓ K0 |
 | radix | Hex ⇄ metin ⇄ ikili ⇄ ondalık | sayı tabanı dönüştürücü | P2 | 1.0 |
 | unicode | Unicode inceleme | kod noktası, kategori, görünmez karakter tespiti, NFC/NFD | P2 | 1.0 |

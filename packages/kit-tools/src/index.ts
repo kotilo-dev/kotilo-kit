@@ -1,5 +1,6 @@
 import type { Tool } from '@kotilo/kit-core';
 import base64 from './encoding/base64.js';
+import htmlEntity from './encoding/html-entity.js';
 import jwt from './encoding/jwt.js';
 import url from './encoding/url.js';
 import csv from './format/csv.js';
@@ -21,6 +22,7 @@ export const builtinTools: Tool<any>[] = [
   base64,
   url,
   jwt,
+  htmlEntity,
   json,
   jsonConvert,
   csv,
@@ -36,4 +38,4 @@ export const builtinTools: Tool<any>[] = [
   color,
 ];
 
-export { base64, url, jwt, json, jsonConvert, csv, caseTool, lines, diff, regex, timestamp, cron, uuid, hash, urlParse, color };
+export { base64, url, jwt, htmlEntity, json, jsonConvert, csv, caseTool, lines, diff, regex, timestamp, cron, uuid, hash, urlParse, color };
