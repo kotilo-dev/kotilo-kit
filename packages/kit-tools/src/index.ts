@@ -23,6 +23,7 @@ import regex from './text/regex.js';
 import cron from './time/cron.js';
 import duration from './time/duration.js';
 import timestamp from './time/timestamp.js';
+import units from './time/units.js';
 import color from './visual/color.js';
 import urlParse from './web/url-parse.js';
 
@@ -50,10 +51,11 @@ export const builtinTools: Tool<any>[] = [
   timestamp,
   cron,
   duration,
+  units,
   uuid,
   hash,
   urlParse,
   color,
 ];
 
-export { base64, url, jwt, htmlEntity, radix, unicode, json, jsonConvert, csv, jsonTypes, xml, sql, caseTool, lines, diff, regex, escape, fake, count, timestamp, cron, duration, uuid, hash, urlParse, color };
+export { base64, url, jwt, htmlEntity, radix, unicode, json, jsonConvert, csv, jsonTypes, xml, sql, caseTool, lines, diff, regex, escape, fake, count, timestamp, cron, duration, units, uuid, hash, urlParse, color };
