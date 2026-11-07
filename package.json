@@ -15,7 +15,8 @@
     "kit": "tsx --import ./apps/cli/raw-hook.mjs apps/cli/src/main.ts",
     "build": "pnpm -r build",
     "build:desktop": "pnpm --filter @kotilo/kit-desktop tauri build",
-    "check-tool": "tsx --import ./apps/cli/raw-hook.mjs packages/kit-tools/scripts/check-tool.ts"
+    "check-tool": "tsx --import ./apps/cli/raw-hook.mjs packages/kit-tools/scripts/check-tool.ts",
+    "test:contrast": "vitest run packages/kit-themes/test/contrast.test.ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

@@ -79,6 +79,19 @@ export async function createTauriHost(): Promise<Host> {
       const unlisten = listen('palette:show', () => cb());
       return () => void unlisten.then((f) => f());
     },
+    // Settings › Appearance › Import: themes.toml next to config.toml; every window reloads on change
+    userThemes: {
+      read: () => invoke<string>('themes_read'),
+      async write(contents) {
+        await invoke('themes_write', { contents });
+        await emit('themes:changed');
+      },
+      subscribe(cb) {
+        const unlisten = listen('themes:changed', () => cb());
+        return () => void unlisten.then((f) => f());
+      },
+    },
+    configPath: await invoke<string>('config_path_display').catch(() => undefined),
     onOpenFull(cb) {
       void invoke<FullPayload | null>('pending_full').then((p) => p && cb(p.toolId, p.input));
       const unlisten = listen<FullPayload>('open-full', (e) => cb(e.payload.toolId, e.payload.input));

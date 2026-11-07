@@ -542,3 +542,239 @@
   border-radius: 50%;
   background: var(--kit-green);
 }
+
+/* ---------- appearance preferences (Settings › Appearance; set by applyAppearance) ---------- */
+:root {
+  --kp-mono: 'JetBrains Mono', monospace;
+  --kp-mono-size: 13px;
+  --kp-ligatures: normal;
+  --kp-radius: 12px;
+}
+.kf-panel {
+  border-radius: calc(var(--kp-radius) * 0.84);
+}
+.kf-suggest,
+.kf-search {
+  border-radius: calc(var(--kp-radius) * 0.67);
+}
+.kf-tool,
+.kf-btn {
+  border-radius: calc(var(--kp-radius) * 0.58);
+}
+[data-density='compact'] .kf-tool {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+[data-density='compact'] .kf-main {
+  padding: 14px 18px;
+  gap: 10px;
+}
+[data-density='compact'] .kf-grid,
+[data-density='compact'] .kf-col {
+  gap: 10px;
+}
+
+/* ---------- settings (mockup Themes.dc.html) ---------- */
+.kf-crumbs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+}
+.kf-crumb-home {
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--kit-text);
+  cursor: pointer;
+}
+.kf-crumb-home:hover {
+  color: var(--kit-blue);
+}
+.kf-crumb-sep {
+  color: var(--kit-overlay);
+}
+.kf-crumb {
+  color: var(--kit-subtext);
+}
+.kf-crumb-current {
+  color: var(--kit-text);
+}
+.kf-tool-off {
+  cursor: default;
+}
+.kf-tool-off:hover {
+  color: var(--kit-subtext);
+}
+.kf-settings {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 28px;
+  gap: 20px;
+  overflow-y: auto;
+}
+.kf-settings-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.kf-settings-head h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+.kf-notice {
+  font-size: 12px;
+  margin-top: -8px;
+}
+.kf-notice-ok {
+  color: var(--kit-green);
+}
+.kf-notice-error {
+  color: var(--kit-red);
+}
+.kf-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+.kf-card {
+  text-align: left;
+  padding: 0;
+  border: 2px solid var(--kit-s0);
+  border-radius: var(--kp-radius);
+  background: var(--kit-mantle);
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font: inherit;
+}
+.kf-card:hover {
+  border-color: var(--kit-s1);
+}
+.kf-card.kf-card-on {
+  border-color: var(--kit-blue);
+}
+.kf-card-preview {
+  display: block;
+  padding: 12px;
+  background: var(--kit-base);
+  border-bottom: 1px solid var(--kit-s0);
+}
+.kf-card-lines {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.kf-card-line {
+  height: 6px;
+  border-radius: 3px;
+}
+.kf-card-line-text {
+  width: 36px;
+  background: var(--kit-text);
+}
+.kf-card-line-sub {
+  width: 56px;
+  background: var(--kit-subtext);
+}
+.kf-card-swatches {
+  display: flex;
+  gap: 5px;
+}
+.kf-swatch {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+.kf-card-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--kit-text);
+  font-weight: 500;
+}
+.kf-card-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.kf-card-id {
+  font: 400 11px 'JetBrains Mono', monospace;
+  color: var(--kit-overlay);
+  white-space: nowrap;
+}
+.kf-card-add {
+  border: 2px dashed var(--kit-s1);
+  border-radius: var(--kp-radius);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 104px;
+  font: inherit;
+  font-size: 13px;
+  color: var(--kit-overlay);
+  cursor: pointer;
+}
+.kf-card-add:hover:not(:disabled) {
+  color: var(--kit-text);
+  border-color: var(--kit-overlay);
+}
+.kf-settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.kf-settings-card {
+  border: 1px solid var(--kit-s0);
+  border-radius: calc(var(--kp-radius) * 0.84);
+  background: var(--kit-mantle);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.kf-settings-card h2 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+.kf-setting {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--kit-subtext);
+}
+.kf-setting-label {
+  width: 110px;
+  flex: none;
+}
+.kf-setting select {
+  flex: 1;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--kit-s1);
+  background: var(--kit-base);
+  color: var(--kit-text);
+  font-size: 12px;
+}
+.kf-setting input[type='range'] {
+  flex: 1;
+  accent-color: var(--kit-blue);
+}
+.kf-setting-value {
+  font: 400 12px 'JetBrains Mono', monospace;
+  color: var(--kit-text);
+  width: 28px;
+}

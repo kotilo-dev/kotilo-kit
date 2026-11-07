@@ -7,9 +7,10 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: var(--kit-base);
+  /* Settings › Window: palette opacity 60–100 and corner radius (14 px at the default 12) */
+  background: color-mix(in srgb, var(--kit-base) var(--kp-palette-opacity, 96%), transparent);
   border: 1px solid var(--kit-s1);
-  border-radius: 14px;
+  border-radius: calc(var(--kp-radius, 12px) + 2px);
   font-family: Inter, system-ui, sans-serif;
   color: var(--kit-text);
   user-select: none;
@@ -298,4 +299,18 @@
   font: 500 13px Inter, system-ui, sans-serif;
   color: var(--kit-text);
   white-space: nowrap;
+}
+
+/* Settings › Font + Window › compact density */
+.kp-input {
+  font-family: var(--kp-mono, 'JetBrains Mono', monospace);
+  font-variant-ligatures: var(--kp-ligatures, normal);
+}
+[data-density='compact'] .kp-row {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+[data-density='compact'] .kp-row.is-compact {
+  padding-top: 5px;
+  padding-bottom: 5px;
 }

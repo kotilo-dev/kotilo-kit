@@ -12,11 +12,12 @@ import {
   type Registry,
   type Tool,
 } from '@kotilo/kit-core';
-import { getTheme } from '@kotilo/kit-themes';
+import { getTheme, themes, type Theme } from '@kotilo/kit-themes';
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import type { Host } from './host.js';
 import { ClipboardIcon, SearchIcon, ToolIcon } from './icons.js';
 import { CATEGORY_ACCENT, buildItems, clipboardPreview, formatUsed, type Section } from './model.js';
+import { syncAppearance } from './theme.js';
 
 export interface PaletteProps {
   host: Host;
@@ -56,6 +57,9 @@ export function Palette({ host, registry }: PaletteProps) {
   const mac = host.platform === 'mac';
 
   useEffect(() => host.config.subscribe(setConfig), [host]);
+  const [appliedTheme, setAppliedTheme] = useState(config.theme.id);
+  const [themeList, setThemeList] = useState<readonly Theme[]>(themes);
+  useEffect(() => syncAppearance(host, { onList: setThemeList, onApplied: setAppliedTheme }), [host]);
 
   const activate = useCallback(async () => {
     setQuery('');
@@ -172,7 +176,7 @@ export function Palette({ host, registry }: PaletteProps) {
   };
 
   const detected = detections[0];
-  const themeName = getTheme(host.theme.id()).name;
+  const themeName = getTheme(appliedTheme, themeList).name;
 
   return (
     <div className="kp" onKeyDown={onKeyDown}>

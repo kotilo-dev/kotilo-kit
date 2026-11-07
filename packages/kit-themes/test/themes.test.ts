@@ -1,5 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { TOKENS, getTheme, parseThemes, primaryThemes, themes, themesCss } from '../src/index.js';
+import {
+  TOKENS,
+  getTheme,
+  parseThemes,
+  primaryThemes,
+  resolveThemeId,
+  themes,
+  themesCss,
+  themesToToml,
+  withUserThemes,
+} from '../src/index.js';
 
 describe('themes.toml', () => {
   it('has the 7 built-in dark themes in spec order', () => {
@@ -35,5 +45,29 @@ describe('themes.toml', () => {
     expect(user[0]!.colors.base).toBe('#101010');
     expect(user[0]!.colors.red).toBe('#f38ba8');
     expect(warnings).toContain('mine: missing or invalid "red"');
+  });
+});
+
+describe('system light/dark + user themes', () => {
+  it('follow system switches to the pair only when the scheme differs', () => {
+    expect(resolveThemeId('catppuccin-mocha', true, true)).toBe('catppuccin-latte');
+    expect(resolveThemeId('catppuccin-mocha', true, false)).toBe('catppuccin-mocha');
+    expect(resolveThemeId('catppuccin-latte', true, false)).toBe('catppuccin-mocha');
+    expect(resolveThemeId('catppuccin-mocha', false, true)).toBe('catppuccin-mocha');
+    // Nord and Dracula have no light pair: they stay
+    expect(resolveThemeId('nord', true, true)).toBe('nord');
+    expect(resolveThemeId('dracula', true, true)).toBe('dracula');
+    expect(resolveThemeId('nope', false, false)).toBe('catppuccin-mocha');
+  });
+
+  it('user themes are appended, cannot replace built-ins, and round-trip through TOML', () => {
+    const { themes: user } = parseThemes(themesToToml([{ ...getTheme('nord'), id: 'my-nord', name: 'My "Nord"' }]));
+    expect(user[0]!.name).toBe('My "Nord"');
+    expect(user[0]!.colors).toEqual(getTheme('nord').colors);
+    const { list, skipped } = withUserThemes([...user, getTheme('dracula'), user[0]!]);
+    expect(list.map((t) => t.id).slice(themes.length)).toEqual(['my-nord']);
+    expect(skipped).toEqual(['dracula']);
+    expect(getTheme('my-nord', list).name).toBe('My "Nord"');
+    expect(themesToToml([])).toBe('');
   });
 });

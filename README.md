@@ -4,7 +4,7 @@
 
 Goal: **clipboard → result in two keystrokes.** Copy a JWT, press `Ctrl+Shift+K`, hit `Enter` — the decoded payload is on your clipboard.
 
-> **Status: pre-alpha (phase K2).** The core library, 16 tools, the CLI, the desktop palette (global shortcut → palette → Enter → clipboard) and the full window work today. The remaining 1.0 tools are landing one PR at a time. See the [roadmap](#roadmap).
+> **Status: pre-alpha (phase K3).** The core library, all 31 1.0 tools, the CLI, the desktop palette (global shortcut → palette → Enter → clipboard), the full window and Settings › Appearance (7 themes + light pairs, system light/dark, .toml theme import, bundled mono fonts, opacity/radius/density, contrast CI) work today. See the [roadmap](#roadmap).
 
 Part of [Kotilo](https://kotilo.dev) · Türkçe: [aşağıda](#türkçe)
 
