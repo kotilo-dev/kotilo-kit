@@ -122,7 +122,10 @@ export function isoDuration(ms: number): string {
   return out === `${sign}P` ? 'PT0S' : out;
 }
 
-/** "1 yr, 2 mths, 3 days, 4 hr" / "1 yıl 2 ay 3 gün 4 sa." — Intl.DurationFormat, unit list as fallback. */
+/**
+ * "1 yr 2 mth 3 days 4 hr" / "1 yıl 2 ay 3 gün 4 sa." — per-unit Intl.NumberFormat.
+ * Not Intl.DurationFormat: it is missing in Node 22 and some webviews, and output must not depend on the engine.
+ */
 type HumanUnit = 'years' | 'months' | 'days' | 'hours' | 'minutes' | 'seconds' | 'milliseconds';
 function humanParts(p: Partial<Record<HumanUnit, number>>, locale: Locale): string {
   const lang = locale === 'tr' ? 'tr-TR' : 'en-US';
@@ -130,8 +133,6 @@ function humanParts(p: Partial<Record<HumanUnit, number>>, locale: Locale): stri
   if (entries.length === 0) {
     return new Intl.NumberFormat(lang, { style: 'unit', unit: 'second', unitDisplay: 'short' }).format(0);
   }
-  const DF = (Intl as unknown as { DurationFormat?: new (l: string, o: object) => { format(d: object): string } }).DurationFormat;
-  if (DF) return new DF(lang, { style: 'short' }).format(Object.fromEntries(entries));
   return entries
     .map(([u, v]) => new Intl.NumberFormat(lang, { style: 'unit', unit: u.replace(/s$/, ''), unitDisplay: 'short' }).format(v))
     .join(' ');
@@ -372,7 +373,7 @@ export default defineTool<Opts>({
       input: '90061s',
       opts: { mode: 'convert' },
       output:
-        'Unit                Value\n──────────────────  ─────────────────────────\nReadable            1 day, 1 hr, 1 min, 1 sec\nClock (h:mm:ss)     25:01:01\nISO 8601            P1DT1H1M1S\nTotal milliseconds  90,061,000\nTotal seconds       90,061\nTotal minutes       1,501.0167\nTotal hours         25.0169\nTotal days          1.0424\nTotal weeks         0.1489',
+        'Unit                Value\n──────────────────  ──────────────────────\nReadable            1 day 1 hr 1 min 1 sec\nClock (h:mm:ss)     25:01:01\nISO 8601            P1DT1H1M1S\nTotal milliseconds  90,061,000\nTotal seconds       90,061\nTotal minutes       1,501.0167\nTotal hours         25.0169\nTotal days          1.0424\nTotal weeks         0.1489',
     },
   ],
 });

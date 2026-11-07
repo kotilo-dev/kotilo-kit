@@ -48,7 +48,7 @@
         "rows": [
           [
             "Difference",
-            "1 mth, 1 day"
+            "1 mth 1 day"
           ],
           [
             "Total days",
@@ -68,7 +68,7 @@
         "rows": [
           [
             "Difference",
-            "1 yr, 23 hr, 30 min, 15 sec"
+            "1 yr 23 hr 30 min 15 sec"
           ],
           [
             "Total hours",
@@ -88,7 +88,7 @@
         "rows": [
           [
             "Difference",
-            "−1 mth, 1 day"
+            "−1 mth 1 day"
           ],
           [
             "Total days",
@@ -253,7 +253,7 @@
         "rows": [
           [
             "Readable",
-            "1 day, 2 hr"
+            "1 day 2 hr"
           ],
           [
             "ISO 8601",
