@@ -1,0 +1,19 @@
+{
+  "name": "@kotilo/kit-core",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./i18n/*": "./i18n/*"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "fuse.js": "^7.5.0",
+    "smol-toml": "^1.9.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kotilo-dev/kotilo-kit.git",
+    "directory": "packages/kit-core"
+  }
+}

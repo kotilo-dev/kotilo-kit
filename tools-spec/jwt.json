@@ -1,0 +1,15 @@
+{
+  "tool": "jwt",
+  "cases": [
+    { "name": "çöz, süresi geçerli", "input": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiIsIm5hbWUiOiLDh2HEn3LEsSIsImlhdCI6MTcwMDAwMDAwMCwiZXhwIjoxNzAwMDAzNjAwfQ.2uI2kSHB-vc1nK7YbgY-78eLxa2XDjivHfQ0tdjbcmw", "ctx": { "now": "2023-11-14T22:30:00Z", "tz": "UTC" },
+      "expect": { "contains": ["\"alg\": \"HS256\"", "\"name\": \"Çağrı\"", "✓ valid", "HS256 — enter the secret"], "meta": { "alg": "HS256", "expired": false } } },
+    { "name": "süresi dolmuş", "input": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiIsIm5hbWUiOiLDh2HEn3LEsSIsImlhdCI6MTcwMDAwMDAwMCwiZXhwIjoxNzAwMDAzNjAwfQ.2uI2kSHB-vc1nK7YbgY-78eLxa2XDjivHfQ0tdjbcmw", "ctx": { "now": "2024-01-01T00:00:00Z" }, "expect": { "contains": ["✗ expired"], "meta": { "expired": true } } },
+    { "name": "Bearer öneki", "input": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiIsIm5hbWUiOiLDh2HEn3LEsSIsImlhdCI6MTcwMDAwMDAwMCwiZXhwIjoxNzAwMDAzNjAwfQ.2uI2kSHB-vc1nK7YbgY-78eLxa2XDjivHfQ0tdjbcmw", "ctx": { "now": "2023-11-14T22:30:00Z" }, "expect": { "meta": { "alg": "HS256" } } },
+    { "name": "imza doğru", "input": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiIsIm5hbWUiOiLDh2HEn3LEsSIsImlhdCI6MTcwMDAwMDAwMCwiZXhwIjoxNzAwMDAzNjAwfQ.2uI2kSHB-vc1nK7YbgY-78eLxa2XDjivHfQ0tdjbcmw", "opts": { "secret": "kotilo" }, "expect": { "contains": ["✓ HS256 signature valid"], "meta": { "verified": true } } },
+    { "name": "imza yanlış", "input": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiIsIm5hbWUiOiLDh2HEn3LEsSIsImlhdCI6MTcwMDAwMDAwMCwiZXhwIjoxNzAwMDAzNjAwfQ.2uI2kSHB-vc1nK7YbgY-78eLxa2XDjivHfQ0tdjbcmw", "opts": { "secret": "yanlis" }, "expect": { "contains": ["✗ HS256 signature does NOT match"], "meta": { "verified": false } } },
+    { "name": "base64 anahtar", "input": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiIsIm5hbWUiOiLDh2HEn3LEsSIsImlhdCI6MTcwMDAwMDAwMCwiZXhwIjoxNzAwMDAzNjAwfQ.2uI2kSHB-vc1nK7YbgY-78eLxa2XDjivHfQ0tdjbcmw", "opts": { "secret": "a290aWxv", "secretEncoding": "base64" }, "expect": { "meta": { "verified": true } } },
+    { "name": "TR etiketler", "input": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiIsIm5hbWUiOiLDh2HEn3LEsSIsImlhdCI6MTcwMDAwMDAwMCwiZXhwIjoxNzAwMDAzNjAwfQ.2uI2kSHB-vc1nK7YbgY-78eLxa2XDjivHfQ0tdjbcmw", "ctx": { "now": "2023-11-14T22:30:00Z", "locale": "tr" }, "expect": { "contains": ["// Yük", "✓ geçerli"] } },
+    { "name": "JWT değil", "input": "abc.def", "expect": { "error": "error.jwt.format" } },
+    { "name": "bozuk başlık", "input": "bm90anNvbg.eyJhIjoxfQ.sig", "expect": { "error": "error.jwt.header" } }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "tool": "url",
+  "cases": [
+    { "name": "TR bileşen", "input": "ğüşıöç İ", "expect": { "output": "%C4%9F%C3%BC%C5%9F%C4%B1%C3%B6%C3%A7%20%C4%B0" } },
+    { "name": "boşluk +", "input": "a b", "opts": { "plusSpace": true }, "expect": { "output": "a+b" } },
+    { "name": "hatalı yüzde", "input": "100%", "opts": { "mode": "decode" }, "expect": { "error": "error.url.malformed" } }
+  ]
+}

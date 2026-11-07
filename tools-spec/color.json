@@ -1,0 +1,13 @@
+{
+  "tool": "color",
+  "cases": [
+    { "name": "hex", "input": "#89b4fa", "expect": { "rows": [["HEX", "#89b4fa"], ["RGB", "rgb(137 180 250)"], ["HSL", "hsl(217.2 91.9% 75.9%)"]] } },
+    { "name": "kısa hex", "input": "#fff", "expect": { "rows": [["HEX", "#ffffff"], ["OKLCH", "oklch(100% 0 0)"], ["Contrast vs #000000", "21:1  AAA"]] } },
+    { "name": "rgb virgül + alfa", "input": "rgba(255, 0, 0, 0.5)", "expect": { "rows": [["HEX", "#ff000080"], ["RGB", "rgb(255 0 0 / 0.5)"]] } },
+    { "name": "hsl", "input": "hsl(120 100% 25%)", "expect": { "rows": [["HEX", "#008000"]] } },
+    { "name": "oklch → hex", "input": "oklch(62.8% 0.2577 29.23)", "expect": { "rows": [["HEX", "#ff0000"]] } },
+    { "name": "kontrast hedefi", "input": "#cdd6f4", "opts": { "against": "#1e1e2e" }, "expect": { "rows": [["Contrast vs #1e1e2e", "11.34:1  AAA"]] } },
+    { "name": "TR etiket", "input": "#777", "ctx": { "locale": "tr" }, "expect": { "rows": [["#ffffff ile kontrast", "4.48:1  AA büyük metin"]] } },
+    { "name": "geçersiz", "input": "mavimsi", "expect": { "error": "error.color.invalid" } }
+  ]
+}

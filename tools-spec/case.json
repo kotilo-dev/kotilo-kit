@@ -1,0 +1,17 @@
+{
+  "tool": "case",
+  "cases": [
+    { "name": "otomatik TR (ş içerir)", "input": "şirin iğde", "opts": { "mode": "upper" }, "expect": { "output": "ŞİRİN İĞDE" } },
+    { "name": "otomatik EN arayüz", "input": "file list", "opts": { "mode": "upper" }, "ctx": { "locale": "en" }, "expect": { "output": "FILE LIST" } },
+    { "name": "otomatik TR arayüz", "input": "file list", "opts": { "mode": "upper" }, "ctx": { "locale": "tr" }, "expect": { "output": "FİLE LİST" } },
+    { "name": "TR başlık", "input": "ılgaz ve iznik", "opts": { "mode": "title", "lang": "tr" }, "expect": { "output": "Ilgaz Ve İznik" } },
+    { "name": "EN başlık", "input": "ilgaz and iznik", "opts": { "mode": "title", "lang": "en" }, "expect": { "output": "Ilgaz And Iznik" } },
+    { "name": "TR küçük I", "input": "IŞIK İŞİ", "opts": { "mode": "lower", "lang": "tr" }, "expect": { "output": "ışık işi" } },
+    { "name": "EN küçük I", "input": "LIGHT", "opts": { "mode": "lower", "lang": "en" }, "expect": { "output": "light" } },
+    { "name": "pascal TR (açık tr: i→İ)", "input": "user_id-ılık", "opts": { "mode": "pascal", "lang": "tr" }, "expect": { "output": "UserİdIlık" } },
+    { "name": "pascal EN", "input": "user_id-name", "opts": { "mode": "pascal", "lang": "en" }, "expect": { "output": "UserIdName" } },
+    { "name": "kebab", "input": "XMLHttpRequest", "opts": { "mode": "kebab", "lang": "en" }, "expect": { "output": "xml-http-request" } },
+    { "name": "constant TR", "input": "iğne ipliği", "opts": { "mode": "constant", "lang": "tr" }, "expect": { "output": "İĞNE_İPLİĞİ" } },
+    { "name": "çok satır", "input": "a b\nc d", "opts": { "mode": "camel" }, "expect": { "output": "aB\ncD" } }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "tool": "regex",
+  "cases": [
+    { "name": "gruplar", "input": "2026-11-07 ve 2025-01-02", "opts": { "pattern": "(?<y>\\d{4})-(\\d{2})" },
+      "expect": { "contains": ["2 match(es)", "#1  [0–7]  \"2026-11\"", "$<y> = \"2026\"", "#2  [14–21]"], "meta": { "matches": 2 } } },
+    { "name": "eşleşme yok", "input": "abc", "opts": { "pattern": "\\d" }, "expect": { "output": "No matches", "meta": { "matches": 0 } } },
+    { "name": "TR arayüz", "input": "abc", "opts": { "pattern": "\\d" }, "ctx": { "locale": "tr" }, "expect": { "output": "Eşleşme yok" } },
+    { "name": "değiştir sayısı", "input": "a-b-c", "opts": { "pattern": "-", "mode": "replace", "replacement": "+" }, "expect": { "output": "a+b+c", "meta": { "replacements": 2 } } },
+    { "name": "lookbehind replace", "input": "x1 y2", "opts": { "pattern": "(?<=x)\\d", "mode": "replace", "replacement": "#" }, "expect": { "output": "x# y2" } },
+    { "name": "geçersiz", "input": "a", "opts": { "pattern": "(" }, "expect": { "error": "error.regex.invalid" } },
+    { "name": "desen yok", "input": "a", "expect": { "error": "error.regex.empty" } }
+  ]
+}

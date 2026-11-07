@@ -1,0 +1,10 @@
+{
+  "tool": "url-parse",
+  "cases": [
+    { "name": "tam URL", "input": "https://ali:gizli@kotilo.dev:8443/araç/yol?q=%C5%9Fehir&tag=a&tag=b#bölüm",
+      "expect": { "rows": [["Scheme", "https"], ["Username", "ali"], ["Password", "gizli"], ["Host", "kotilo.dev"], ["Port", "8443"], ["Path", "/araç/yol"], ["Fragment", "#bölüm"], ["Origin", "https://kotilo.dev:8443"], ["?q", "şehir"], ["?tag", "a"], ["?tag", "b"]], "meta": { "params": 3 } } },
+    { "name": "IDN host", "input": "https://çay.dev/", "expect": { "rows": [["Host", "xn--ay-3ia.dev"]] } },
+    { "name": "çözmeden", "input": "https://x.dev/?q=a%20b", "opts": { "decode": false }, "expect": { "rows": [["?q", "a%20b"]] } },
+    { "name": "göreli URL", "input": "/sadece/yol", "expect": { "error": "error.urlParse.invalid" } }
+  ]
+}

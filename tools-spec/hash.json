@@ -1,0 +1,11 @@
+{
+  "tool": "hash",
+  "cases": [
+    { "name": "boş sha256", "input": "", "opts": { "algorithm": "sha256" }, "expect": { "output": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" } },
+    { "name": "sha1 base64", "input": "abc", "opts": { "algorithm": "sha1", "encoding": "base64" }, "expect": { "output": "qZk+NkcGgWq6PiVxeFDCbJzQ2J0=" } },
+    { "name": "büyük harf", "input": "abc", "opts": { "algorithm": "md5", "uppercase": true }, "expect": { "output": "900150983CD24FB0D6963F7D28E17F72" } },
+    { "name": "tümü", "input": "abc", "expect": { "contains": ["MD5           900150983cd24fb0d6963f7d28e17f72", "CRC32         352441c2"] } },
+    { "name": "hmac tümü", "input": "abc", "opts": { "hmacKey": "k" }, "expect": { "contains": ["HMAC-SHA-256"] } },
+    { "name": "hmac crc", "input": "abc", "opts": { "algorithm": "crc32", "hmacKey": "k" }, "expect": { "error": "error.hash.hmacCrc" } }
+  ]
+}

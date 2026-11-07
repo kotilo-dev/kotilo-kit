@@ -1,0 +1,10 @@
+{
+  "tool": "csv",
+  "cases": [
+    { "name": "noktalı virgül algıla", "input": "ad;yaş\nAli;30", "expect": { "output": "[\n  {\n    \"ad\": \"Ali\",\n    \"yaş\": \"30\"\n  }\n]", "meta": { "delimiter": ";", "rows": 1 } } },
+    { "name": "başlıksız", "input": "1,2\n3,4", "opts": { "header": false, "mode": "csv-md" }, "expect": { "output": "| 1 | 2 |\n| --- | --- |\n| 1 | 2 |\n| 3 | 4 |" } },
+    { "name": "md kaçış", "input": "a,b\nx|y,z", "opts": { "mode": "csv-md" }, "expect": { "output": "| a | b |\n| --- | --- |\n| x\\|y | z |" } },
+    { "name": "json dizi değil", "input": "{\"a\":1}", "opts": { "mode": "json-csv" }, "expect": { "error": "error.csv.jsonArray" } },
+    { "name": "tab ayırıcı", "input": "[{\"a\":1,\"b\":2}]", "opts": { "mode": "json-csv", "delimiter": "tab" }, "expect": { "output": "a\tb\n1\t2" } }
+  ]
+}

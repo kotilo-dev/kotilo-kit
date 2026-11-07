@@ -1,0 +1,11 @@
+{
+  "tool": "lines",
+  "cases": [
+    { "name": "TR collation ö/ü/ğ", "input": "üzüm\nzeytin\nöğle\nuçak\nodun\nğ", "opts": { "lang": "tr" }, "expect": { "output": "ğ\nodun\nöğle\nuçak\nüzüm\nzeytin" } },
+    { "name": "TR collation I/İ", "input": "İzmir\nIğdır\nHatay\nJapon", "opts": { "lang": "tr" }, "expect": { "output": "Hatay\nIğdır\nİzmir\nJapon" } },
+    { "name": "TR tekil (İ/i)", "input": "İSTANBUL\nistanbul\nIRMAK\nırmak", "opts": { "op": "unique", "ignoreCase": true, "lang": "tr" }, "expect": { "output": "İSTANBUL\nIRMAK", "meta": { "removed": 2 } } },
+    { "name": "azalan", "input": "a\nc\nb", "opts": { "op": "sort-desc" }, "expect": { "output": "c\nb\na" } },
+    { "name": "ters", "input": "1\n2\n3\n", "opts": { "op": "reverse" }, "expect": { "output": "3\n2\n1" } },
+    { "name": "kırp", "input": "  a \n\tb", "opts": { "op": "trim" }, "expect": { "output": "a\nb" } }
+  ]
+}

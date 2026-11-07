@@ -1,0 +1,12 @@
+{
+  "tool": "json-convert",
+  "cases": [
+    { "name": "json → xml", "input": "{\"note\":{\"to\":\"Ayşe\",\"@lang\":\"tr\"}}", "opts": { "to": "xml" }, "expect": { "output": "<note lang=\"tr\">\n  <to>Ayşe</to>\n</note>" } },
+    { "name": "xml → json", "input": "<a><b>1</b><b>2</b></a>", "opts": { "to": "json" }, "expect": { "output": "{\n  \"a\": {\n    \"b\": [\n      1,\n      2\n    ]\n  }\n}", "meta": { "from": "xml" } } },
+    { "name": "yaml → toml", "input": "db:\n  host: localhost\n  port: 5432", "opts": { "to": "toml" }, "expect": { "output": "[db]\nhost = \"localhost\"\nport = 5432" } },
+    { "name": "toml kökü dizi", "input": "[1,2]", "opts": { "to": "toml" }, "expect": { "error": "error.convert.tomlRoot" } },
+    { "name": "bozuk yaml", "input": "a: [1, 2", "opts": { "from": "yaml", "to": "json" }, "expect": { "error": "error.convert.parse" } },
+    { "name": "bozuk xml", "input": "<a><b></a>", "opts": { "to": "json" }, "expect": { "error": "error.convert.xml" } },
+    { "name": "bilinmeyen", "input": "sadece metin", "expect": { "error": "error.convert.unknown" } }
+  ]
+}

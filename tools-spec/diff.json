@@ -1,0 +1,9 @@
+{
+  "tool": "diff",
+  "cases": [
+    { "name": "satır tablosu", "input": "a\nb\nc", "opts": { "other": "a\nB\nc\nd" },
+      "expect": { "rows": [[" ", "1", "1", "a"], ["-", "2", "", "b"], ["+", "", "2", "B"], [" ", "3", "3", "c"], ["+", "", "4", "d"]], "meta": { "added": 2, "removed": 1, "equal": false } } },
+    { "name": "aynı", "input": "x\ny", "opts": { "other": "x\ny" }, "expect": { "meta": { "equal": true } } },
+    { "name": "boşluk yok say", "input": "a  b", "opts": { "other": "a b", "ignoreWhitespace": true }, "expect": { "meta": { "equal": true } } }
+  ]
+}
