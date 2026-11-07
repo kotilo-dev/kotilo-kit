@@ -10,7 +10,7 @@ Part of [Kotilo](https://kotilo.dev) · Türkçe: [aşağıda](#türkçe)
 
 ## Install
 
-Installers for Windows (MSI / setup.exe), macOS (universal .dmg) and Linux (.AppImage / .deb) are attached to every [GitHub release](https://github.com/kotilo-dev/kotilo-kit/releases). Each one is ≤ 25 MB and works offline. After 1.0 the package managers follow:
+Installers for Windows (MSI / setup.exe), macOS (universal .dmg) and Linux (.AppImage / .deb) are attached to every [GitHub release](https://github.com/kotilo-dev/kotilo-kit/releases). The MSI, setup.exe, dmg and deb are each ≤ 25 MB (the AppImage embeds WebKitGTK and is ~80 MB). All of them work offline. After 1.0 the package managers follow:
 
 ```sh
 winget install Kotilo.KotiloKit              # Windows

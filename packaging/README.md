@@ -13,7 +13,7 @@ git tag v1.0.0 && git push origin v1.0.0
 
 - checks that the tag matches every version field;
 - builds on Windows (MSI + NSIS `.exe`), macOS (universal `.dmg`) and Linux (`.AppImage` + `.deb`);
-- runs the tests and fails if any installer is larger than **25 MB**;
+- runs the tests and fails if an MSI, setup.exe, dmg or deb is larger than **25 MB** (the AppImage embeds WebKitGTK, ~80 MB, and is only reported);
 - attaches everything, plus the single-file CLI (`kotilo-kit-cli-v1.0.0.cjs`), to a **draft** release.
 
 GitHub shows a sha256 digest next to every asset.
