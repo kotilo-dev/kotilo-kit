@@ -3,6 +3,7 @@ import base64 from './encoding/base64.js';
 import htmlEntity from './encoding/html-entity.js';
 import jwt from './encoding/jwt.js';
 import radix from './encoding/radix.js';
+import unicode from './encoding/unicode.js';
 import url from './encoding/url.js';
 import csv from './format/csv.js';
 import jsonConvert from './format/json-convert.js';
@@ -25,6 +26,7 @@ export const builtinTools: Tool<any>[] = [
   jwt,
   htmlEntity,
   radix,
+  unicode,
   json,
   jsonConvert,
   csv,
@@ -40,4 +42,4 @@ export const builtinTools: Tool<any>[] = [
   color,
 ];
 
-export { base64, url, jwt, htmlEntity, radix, json, jsonConvert, csv, caseTool, lines, diff, regex, timestamp, cron, uuid, hash, urlParse, color };
+export { base64, url, jwt, htmlEntity, radix, unicode, json, jsonConvert, csv, caseTool, lines, diff, regex, timestamp, cron, uuid, hash, urlParse, color };

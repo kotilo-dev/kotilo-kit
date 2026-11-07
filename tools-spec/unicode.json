@@ -1,0 +1,15 @@
+{
+  "tool": "unicode",
+  "cases": [
+    { "name": "boş", "input": "", "expect": { "meta": { "codePoints": 0, "invisible": 0 } } },
+    { "name": "Türkçe İ/ı ve ğ", "input": "İığ", "expect": { "rows": [["İ", "U+0130", "Lu", "C4 B0", "Turkish · LATIN CAPITAL LETTER I WITH DOT ABOVE"], ["ı", "U+0131", "Ll", "C4 B1", "Turkish · LATIN SMALL LETTER DOTLESS I"], ["ğ", "U+011F", "Ll", "C4 9F", ""]], "meta": { "codePoints": 3, "invisible": 0 } } },
+    { "name": "görünmezler: BOM, NBSP, SHY", "input": "\ufeffa\u00a0b\u00adc", "expect": { "rows": [["[BOM]", "U+FEFF", "Cf", "EF BB BF", "Invisible · ZERO WIDTH NO-BREAK SPACE (BOM)"], ["[NBSP]", "U+00A0", "Zs", "C2 A0", "Invisible · NO-BREAK SPACE"], ["[SHY]", "U+00AD", "Cf", "C2 AD", "Invisible · SOFT HYPHEN"]], "meta": { "codePoints": 6, "invisible": 3 } } },
+    { "name": "bidi denetimi", "input": "x\u202ey", "expect": { "rows": [["[RLO]", "U+202E", "Cf", "E2 80 AE", "Bidi control · RIGHT-TO-LEFT OVERRIDE"]], "meta": { "invisible": 1 } } },
+    { "name": "Kiril benzer harf", "input": "pаypal", "expect": { "rows": [["а", "U+0430", "Ll", "D0 B0", "Looks like Latin “a”"]] } },
+    { "name": "emoji ZWJ dizisi, 4 bayt", "input": "👩\u200d💻", "expect": { "rows": [["👩", "U+1F469", "So", "F0 9F 91 A9", ""], ["[ZWJ]", "U+200D", "Cf", "E2 80 8D", "Invisible · ZERO WIDTH JOINER"]], "meta": { "codePoints": 3, "graphemes": 1 } } },
+    { "name": "boşluk, sekme, rakam, noktalama", "input": "1 \t.", "expect": { "rows": [["1", "U+0031", "Nd", "31", ""], ["␠", "U+0020", "Zs", "20", ""], ["␉", "U+0009", "Cc", "09", ""], [".", "U+002E", "Po", "2E", ""]] } },
+    { "name": "NFC birleştirir", "input": "ş", "opts": { "normalize": "NFC" }, "expect": { "rows": [["ş", "U+015F", "Ll", "C5 9F", ""]], "meta": { "codePoints": 1 } } },
+    { "name": "NFKC uyumluluk", "input": "ﬁ", "opts": { "normalize": "NFKC" }, "expect": { "rows": [["f", "U+0066", "Ll", "66", ""], ["i", "U+0069", "Ll", "69", ""]] } },
+    { "name": "TR arayüz", "input": "ı", "ctx": { "locale": "tr" }, "expect": { "rows": [["ı", "U+0131", "Ll", "C4 B1", "Türkçe · LATIN SMALL LETTER DOTLESS I"]] } }
+  ]
+}
