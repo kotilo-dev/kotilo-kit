@@ -74,6 +74,7 @@
   "kind.html-entity": "HTML entities",
   "kind.radix": "Binary bytes",
   "kind.unicode": "Hidden characters",
+  "kind.xml": "XML",
   "cli.usage": "Usage: kotilo kit <tool> [--option value …] < input\n       kotilo kit list\n       kotilo kit detect < input\n       kotilo kit <tool> --help",
   "cli.unknownTool": "Unknown tool: {id}. Run `kotilo kit list`.",
   "cli.unknownOption": "Unknown option for {tool}: --{key}",
@@ -362,5 +363,15 @@
   "tool.json-types.opt.root": "Root type name",
   "tool.json-types.opt.tsStyle": "TS style",
   "tool.json-types.opt.tsStyle.interface": "interface",
-  "tool.json-types.opt.tsStyle.type": "type"
+  "tool.json-types.opt.tsStyle.type": "type",
+  "tool.xml.name": "XML format",
+  "tool.xml.description": "Format, minify, validate and query XML with XPath",
+  "tool.xml.opt.mode": "Mode",
+  "tool.xml.opt.mode.format": "Format",
+  "tool.xml.opt.mode.minify": "Minify",
+  "tool.xml.opt.indent": "Indent",
+  "tool.xml.opt.xpath": "XPath",
+  "error.xml.empty": "Input is empty",
+  "error.xml.invalid": "Invalid XML at line {line}, column {column}: {detail}",
+  "error.xml.xpath": "Invalid XPath: {query}"
 }

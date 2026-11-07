@@ -74,6 +74,7 @@
   "kind.html-entity": "HTML entity",
   "kind.radix": "İkili bayt",
   "kind.unicode": "Görünmez karakter",
+  "kind.xml": "XML",
   "cli.usage": "Kullanım: kotilo kit <araç> [--seçenek değer …] < giriş\n          kotilo kit list\n          kotilo kit detect < giriş\n          kotilo kit <araç> --help",
   "cli.unknownTool": "Bilinmeyen araç: {id}. `kotilo kit list` ile listele.",
   "cli.unknownOption": "{tool} için bilinmeyen seçenek: --{key}",
@@ -362,5 +363,15 @@
   "tool.json-types.opt.root": "Kök tip adı",
   "tool.json-types.opt.tsStyle": "TS biçimi",
   "tool.json-types.opt.tsStyle.interface": "interface",
-  "tool.json-types.opt.tsStyle.type": "type"
+  "tool.json-types.opt.tsStyle.type": "type",
+  "tool.xml.name": "XML biçimlendir",
+  "tool.xml.description": "XML biçimlendir, küçült, doğrula ve XPath ile sorgula",
+  "tool.xml.opt.mode": "Mod",
+  "tool.xml.opt.mode.format": "Biçimlendir",
+  "tool.xml.opt.mode.minify": "Küçült",
+  "tool.xml.opt.indent": "Girinti",
+  "tool.xml.opt.xpath": "XPath",
+  "error.xml.empty": "Girdi boş",
+  "error.xml.invalid": "Geçersiz XML, satır {line}, sütun {column}: {detail}",
+  "error.xml.xpath": "Geçersiz XPath: {query}"
 }

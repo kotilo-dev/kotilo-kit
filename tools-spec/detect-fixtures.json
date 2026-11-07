@@ -22,6 +22,8 @@
   { "input": "01001011 01101001 01110100", "top": "radix" },
   { "input": "merhaba​dünya", "top": "unicode" },
   { "input": "﻿const x = 1;", "top": "unicode" },
+  { "input": "<?xml version=\"1.0\"?>\n<config><port>8080</port></config>", "top": "xml" },
+  { "input": "<note>\n  <to>Ayşe</to>\n  <body>Merhaba</body>\n</note>", "top": "xml" },
   { "input": "merhaba dünya", "top": null },
   { "input": "Password", "top": null },
   { "input": "deadbeefcafebabe", "top": null },

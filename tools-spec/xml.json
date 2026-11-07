@@ -1,0 +1,18 @@
+{
+  "tool": "xml",
+  "cases": [
+    { "name": "biçimlendir, bildirim ve yorum korunur", "input": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!-- kök --><r><i id=\"1\">x</i></r>", "expect": { "output": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- kök -->\n<r>\n  <i id=\"1\">x</i>\n</r>", "meta": { "valid": true } } },
+    { "name": "CDATA korunur", "input": "<a><s><![CDATA[ if (a < b) ]]></s></a>", "opts": { "indent": 4 }, "expect": { "output": "<a>\n    <s><![CDATA[ if (a < b) ]]></s>\n</a>" } },
+    { "name": "karışık içerik olduğu gibi", "input": "<p><q>Merhaba <b>dünya</b>!</q></p>", "expect": { "output": "<p>\n  <q>Merhaba <b>dünya</b>!</q>\n</p>" } },
+    { "name": "küçült", "input": "<a>\n  <b>1</b>\n  <c x=\"&amp;\"/>\n</a>", "opts": { "mode": "minify" }, "expect": { "output": "<a><b>1</b><c x=\"&amp;\"/></a>" } },
+    { "name": "TR karakterli XPath metin", "input": "<kişiler><kişi>Işıl</kişi><kişi>İlkay</kişi></kişiler>", "opts": { "xpath": "//kişi/text()" }, "expect": { "output": "Işıl\nİlkay", "meta": { "matches": 2 } } },
+    { "name": "XPath eleman", "input": "<r><i id=\"1\"><n>a</n></i><i id=\"2\"/></r>", "opts": { "xpath": "/r/i[@id='1']" }, "expect": { "output": "<i id=\"1\">\n  <n>a</n>\n</i>", "meta": { "matches": 1 } } },
+    { "name": "XPath count", "input": "<r><i/><i/><i/></r>", "opts": { "xpath": "count(//i)" }, "expect": { "output": "3" } },
+    { "name": "XPath eşleşme yok", "input": "<r/>", "opts": { "xpath": "//yok" }, "expect": { "output": "", "meta": { "matches": 0 } } },
+    { "name": "namespace önekli XPath", "input": "<r xmlns:k=\"urn:kotilo\"><k:i>1</k:i></r>", "opts": { "xpath": "//k:i" }, "expect": { "output": "<k:i>1</k:i>" } },
+    { "name": "boş", "input": "", "expect": { "error": "error.xml.empty" } },
+    { "name": "etiket uyuşmazlığı", "input": "<a>\n<b></a>", "expect": { "error": "error.xml.invalid" } },
+    { "name": "tırnaksız öznitelik", "input": "<a x=1/>", "expect": { "error": "error.xml.invalid" } },
+    { "name": "geçersiz XPath", "input": "<a/>", "opts": { "xpath": "//[" }, "expect": { "error": "error.xml.xpath" } }
+  ]
+}
