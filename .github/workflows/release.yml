@@ -71,12 +71,18 @@ jobs:
           args: ${{ matrix.args }}
       - name: Installer size budget (≤ 25 MB, docs/01-requirements.md)
         shell: bash
+        # MSI / setup.exe / dmg / deb must stay ≤ 25 MB. The AppImage embeds WebKitGTK (~80 MB) and is
+        # exempt by decision (docs/01-requirements.md › Boyut): reported, never failing.
         run: |
           status=0
           while IFS= read -r -d '' f; do
             size=$(wc -c < "$f")
-            printf '%8.1f MB  %s\n' "$(echo "$size / 1048576" | bc -l)" "$f"
-            if [ "$size" -gt 26214400 ]; then echo "::error file=$f::installer is larger than 25 MB"; status=1; fi
+            mb=$(awk -v s="$size" 'BEGIN { printf "%.1f", s / 1048576 }')
+            echo "$mb MB  $f"
+            case "$f" in
+              *.AppImage) echo "::notice file=$f::AppImage $mb MB (exempt from the 25 MB budget)" ;;
+              *) if [ "$size" -gt 26214400 ]; then echo "::error file=$f::installer is $mb MB, larger than 25 MB"; status=1; fi ;;
+            esac
           done < <(find apps/desktop/src-tauri/target -path '*/bundle/*' -type f \( -name '*.msi' -o -name '*.exe' -o -name '*.dmg' -o -name '*.AppImage' -o -name '*.deb' \) -print0)
           exit $status
 

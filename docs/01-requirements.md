@@ -60,7 +60,7 @@ Bu repo 1.0 kabuğunu ve çekirdeği içerir; Shell ve Launcher entegrasyonu `ki
 ## Fonksiyonel olmayan
 - **Gizlilik:** çekirdekte ağ API'si yok (lint kuralıyla engellenir), telemetri yok, pano geçmişi yok.
 - **Başlangıç:** palette kısayoldan 150 ms içinde görünür (önceden yüklü, gizli pencere).
-- **Boyut:** kurulum ≤ 25 MB; tek binary/AppImage/MSI/dmg; winget, AUR, Homebrew.
+- **Boyut:** kurulum ≤ 25 MB (MSI, setup.exe, dmg, deb; `release.yml` denetler); tek binary/AppImage/MSI/dmg; winget, AUR, Homebrew. AppImage, WebKitGTK’yi gömdüğü için (~80 MB) bütçeden muaftır (1.0.1 kararı).
 - **Erişilebilirlik:** tüm araçlar klavyeyle; seçenekler `Alt+harf`; her temada metin kontrastı ≥ 4.5:1 (CI'da kontrol).
 - **Dil:** EN/TR, sistem dilinden otomatik, ayarlardan değiştirilebilir.
 - **Test:** her aracın `run` fonksiyonu için tablo testleri; TR karakter testleri; her tema için kontrast testi.
