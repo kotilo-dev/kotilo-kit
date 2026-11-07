@@ -1,0 +1,17 @@
+{
+  "tool": "http-ref",
+  "cases": [
+    { "name": "empty query lists all status codes", "input": "", "expect": { "rows": [["100", "Continue", "Server got the headers; the client may send the body"], ["511", "Network Authentication Required", "Network access needs authentication (captive portal)"]], "meta": { "table": "status", "count": 62 } } },
+    { "name": "empty query, mime table", "input": "", "opts": { "table": "mime" }, "expect": { "rows": [[".json", "application/json"], [".wasm", "application/wasm"]], "meta": { "table": "mime" } } },
+    { "name": "one digit lists the class", "input": "4", "expect": { "rows": [["400", "Bad Request", "Malformed request syntax or invalid parameters"], ["451", "Unavailable For Legal Reasons", "Unavailable for legal reasons, such as censorship"]], "meta": { "count": 29 } } },
+    { "name": "two digit prefix", "input": "42", "expect": { "rows": [["421", "Misdirected Request", "Request went to a server that cannot answer for this host"], ["429", "Too Many Requests", "Too many requests; rate limit hit"]], "meta": { "count": 8 } } },
+    { "name": "code auto-picks status even when mime is selected", "input": "429", "opts": { "table": "mime" }, "expect": { "rows": [["429", "Too Many Requests", "Too many requests; rate limit hit"]], "meta": { "table": "status", "count": 1 } } },
+    { "name": "extension auto-picks mime", "input": "avif", "expect": { "rows": [[".avif", "image/avif"]], "meta": { "table": "mime", "count": 1 } } },
+    { "name": "dotted extension", "input": ".ndjson", "expect": { "rows": [[".ndjson", "application/x-ndjson"]], "meta": { "table": "mime", "count": 1 } } },
+    { "name": "phrase search is case-insensitive", "input": "TEAPOT", "expect": { "rows": [["418", "I'm a teapot", "The server refuses to brew coffee because it is a teapot"]], "meta": { "count": 1 } } },
+    { "name": "TR description search with İ/ı", "input": "KİMLİK", "ctx": { "locale": "tr" }, "expect": { "rows": [["401", "Unauthorized", "Kimlik doğrulama gerekli ya da başarısız"], ["511", "Network Authentication Required", "Ağ erişimi için kimlik doğrulama gerekli (giriş portalı)"]] } },
+    { "name": "TR dotless ı search", "input": "sınır", "ctx": { "locale": "tr" }, "expect": { "rows": [["429", "Too Many Requests", "Çok fazla istek; hız sınırına takıldı"]], "meta": { "count": 1 } } },
+    { "name": "mime substring over type", "input": "font", "opts": { "table": "mime" }, "expect": { "rows": [[".woff", "font/woff"], [".woff2", "font/woff2"], [".eot", "application/vnd.ms-fontobject"]] } },
+    { "name": "no match yields empty rows", "input": "zzqx", "expect": { "meta": { "count": 0 } } }
+  ]
+}

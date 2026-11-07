@@ -1,0 +1,18 @@
+{
+  "tool": "radix",
+  "cases": [
+    { "name": "metin → hepsi (TR)", "input": "ış", "expect": { "rows": [["Text (UTF-8)", "ış"], ["Hex", "c4 b1 c5 9f"], ["Binary", "11000100 10110001 11000101 10011111"], ["Decimal", "196 177 197 159"], ["Base64", "xLHFnw=="]], "meta": { "bytes": 4, "from": "text", "validUtf8": true } } },
+    { "name": "boşluklu hex çiftleri", "input": "48 65 6c 6c 6f", "expect": { "rows": [["Text (UTF-8)", "Hello"]], "meta": { "from": "hex" } } },
+    { "name": "0x önekli hex", "input": "0x4B 0x69 0x74", "expect": { "rows": [["Text (UTF-8)", "Kit"]], "meta": { "from": "hex" } } },
+    { "name": "ondalık baytlar", "input": "72 101 108 108 111", "expect": { "rows": [["Text (UTF-8)", "Hello"], ["Hex", "48 65 6c 6c 6f"]], "meta": { "from": "decimal" } } },
+    { "name": "bitişik ikili", "input": "0100101101101001", "expect": { "rows": [["Text (UTF-8)", "Ki"]], "meta": { "from": "binary" } } },
+    { "name": "düz kelime metin kalır", "input": "cafe", "expect": { "rows": [["Hex", "63 61 66 65"]], "meta": { "from": "text" } } },
+    { "name": "zorla metin", "input": "48 69", "opts": { "from": "text" }, "expect": { "rows": [["Decimal", "52 56 32 54 57"]] } },
+    { "name": "geçersiz UTF-8", "input": "ff fe 41", "expect": { "rows": [["Text (UTF-8)", "��A"], ["Note", "Not valid UTF-8; invalid bytes shown as �"]], "meta": { "validUtf8": false } } },
+    { "name": "boş", "input": "", "expect": { "rows": [["Text (UTF-8)", ""], ["Base64", ""]], "meta": { "bytes": 0 } } },
+    { "name": "tek sayıda hex hanesi", "input": "abc", "opts": { "from": "hex" }, "expect": { "error": "error.radix.hexOdd" } },
+    { "name": "geçersiz hex karakteri", "input": "4g", "opts": { "from": "hex" }, "expect": { "error": "error.radix.invalidHex" } },
+    { "name": "geçersiz ikili grup", "input": "0101", "opts": { "from": "binary" }, "expect": { "error": "error.radix.invalidBinary" } },
+    { "name": "aralık dışı ondalık", "input": "72 300", "opts": { "from": "decimal" }, "expect": { "error": "error.radix.invalidDecimal" } }
+  ]
+}

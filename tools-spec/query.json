@@ -1,0 +1,20 @@
+{
+  "tool": "query",
+  "cases": [
+    { "name": "düz", "input": "a=1&b=2", "expect": { "output": "{\n  \"a\": \"1\",\n  \"b\": \"2\"\n}", "meta": { "params": 2 } } },
+    { "name": "tekrarlanan anahtar dizi olur", "input": "tag=a&tag=b&tag=c", "expect": { "output": "{\n  \"tag\": [\n    \"a\",\n    \"b\",\n    \"c\"\n  ]\n}" } },
+    { "name": "+ boşluk, TR karakter", "input": "ad=I%C4%9F%C4%B1l+%C5%9Eahin&il=%C4%B0zmir", "expect": { "output": "{\n  \"ad\": \"Iğıl Şahin\",\n  \"il\": \"İzmir\"\n}" } },
+    { "name": "tam URL, fragment atılır", "input": "https://kotilo.dev/kit?x=1&y=2#top", "expect": { "output": "{\n  \"x\": \"1\",\n  \"y\": \"2\"\n}" } },
+    { "name": "değersiz anahtar", "input": "?debug&page=", "expect": { "output": "{\n  \"debug\": \"\",\n  \"page\": \"\"\n}" } },
+    { "name": "köşeli parantez iç içe", "input": "user[name]=Ayşe&user[roles][]=admin&user[roles][]=dev", "expect": { "output": "{\n  \"user\": {\n    \"name\": \"Ayşe\",\n    \"roles\": [\n      \"admin\",\n      \"dev\"\n    ]\n  }\n}" } },
+    { "name": "indeksli dizi", "input": "a[0]=x&a[1]=y", "expect": { "output": "{\n  \"a\": [\n    \"x\",\n    \"y\"\n  ]\n}" } },
+    { "name": "iç içe kapalı", "input": "a[b]=1", "opts": { "nested": false }, "expect": { "output": "{\n  \"a[b]\": \"1\"\n}" } },
+    { "name": "JSON → query, TR kodlama", "input": "{\"q\":\"çağrı ışık\",\"n\":3,\"ok\":true,\"x\":null}", "opts": { "mode": "toQuery" }, "expect": { "output": "q=%C3%A7a%C4%9Fr%C4%B1%20%C4%B1%C5%9F%C4%B1k&n=3&ok=true&x=", "meta": { "params": 4 } } },
+    { "name": "JSON → query iç içe", "input": "{\"user\":{\"name\":\"a\",\"roles\":[\"x\",\"y\"]},\"items\":[{\"id\":1}]}", "opts": { "mode": "toQuery" }, "expect": { "output": "user[name]=a&user[roles]=x&user[roles]=y&items[0][id]=1" } },
+    { "name": "JSON → query düz mod nesne", "input": "{\"f\":{\"a\":1}}", "opts": { "mode": "toQuery", "nested": false }, "expect": { "output": "f=%7B%22a%22%3A1%7D" } },
+    { "name": "bozuk yüzde kodu", "input": "a=%E0%A4%A", "expect": { "error": "error.query.malformed" } },
+    { "name": "çakışma", "input": "a=1&a[b]=2", "expect": { "error": "error.query.conflict" } },
+    { "name": "geçersiz JSON", "input": "{\"a\":}", "opts": { "mode": "toQuery" }, "expect": { "error": "error.query.json" } },
+    { "name": "nesne değil", "input": "[1,2]", "opts": { "mode": "toQuery" }, "expect": { "error": "error.query.notObject" } }
+  ]
+}

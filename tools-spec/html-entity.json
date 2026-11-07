@@ -1,0 +1,14 @@
+{
+  "tool": "html-entity",
+  "cases": [
+    { "name": "boş", "input": "", "expect": { "output": "" } },
+    { "name": "beş temel karakter", "input": "& < > \" '", "expect": { "output": "&amp; &lt; &gt; &quot; &#39;" } },
+    { "name": "TR karakterler varsayılanda korunur", "input": "İğdır & Işıl", "expect": { "output": "İğdır &amp; Işıl" } },
+    { "name": "ASCII dışı sayısal", "input": "İı ğ €", "opts": { "nonAscii": true }, "expect": { "output": "&#x130;&#x131; &#x11F; &#x20AC;" } },
+    { "name": "TR adlı entity'ler", "input": "&Ccedil;&ouml;z&uuml;m &Idot;zmir &scedil;ehir &gbreve;", "opts": { "mode": "decode" }, "expect": { "output": "Çözüm İzmir şehir ğ", "meta": { "entities": 6 } } },
+    { "name": "yaygın adlı entity'ler", "input": "&nbsp;&reg;&trade;&hellip;&ndash;&lsquo;&rsquo;&ldquo;&rdquo;&euro;&pound;&yen;&laquo;&raquo;&deg;&plusmn;&times;&divide;&middot;&bull;", "opts": { "mode": "decode" }, "expect": { "output": "\u00a0®™…–‘’“”€£¥«»°±×÷·•" } },
+    { "name": "ondalık ve hex", "input": "&#65;&#x42;&#X43;&#150;&#0;", "opts": { "mode": "decode" }, "expect": { "output": "ABC–�" } },
+    { "name": "bilinmeyen ve eksik ;", "input": "&foo; &amp &lt;b&gt;", "opts": { "mode": "decode" }, "expect": { "output": "&foo; &amp <b>", "meta": { "entities": 2 } } },
+    { "name": "gidiş-dönüş", "input": "&lt;p class=&quot;x&quot;&gt;Ayşe&#39;nin &amp; Işıl&#39;ın&lt;/p&gt;", "opts": { "mode": "decode" }, "expect": { "output": "<p class=\"x\">Ayşe'nin & Işıl'ın</p>" } }
+  ]
+}

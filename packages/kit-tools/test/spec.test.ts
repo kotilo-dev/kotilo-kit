@@ -6,6 +6,7 @@ import {
   createRegistry,
   isToolError,
   messages,
+  resultText,
   runTool,
   type Locale,
   type TableOutput,
@@ -51,8 +52,8 @@ describe.each(builtinTools.map((t) => [t.id, t] as const))('%s', (id, tool) => {
   });
 
   it.each(tool.examples.map((ex, i) => [i, ex] as const))('example %i', (_, ex) => {
-    const result = runTool(tool, ex.input, ex.opts, fixedCtx());
-    expect(result.output).toBe(ex.output);
+    // table results compare as the aligned text the CLI prints (and `kotilo <tool> --help` shows)
+    expect(resultText(runTool(tool, ex.input, ex.opts, fixedCtx()))).toBe(ex.output);
   });
 
   let spec: { tool: string; cases: SpecCase[] } | null = null;

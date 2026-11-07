@@ -1,0 +1,13 @@
+{
+  "tool": "theme-palette",
+  "cases": [
+    { "name": "boş giriş: tüm temalar", "input": "", "expect": { "meta": { "themes": 12 } } },
+    { "name": "id ile tek tema, token satırı", "input": "nord blue", "opts": { "color": "rgb" }, "expect": { "meta": { "themes": 1 }, "rows": [["blue", "rgb(129 161 193)"]] } },
+    { "name": "ad parçası iki varyantı bulur", "input": "gruvbox", "expect": { "meta": { "themes": 2 } } },
+    { "name": "boşluklu ad id'ye eşlenir", "input": "rose pine moon", "expect": { "meta": { "themes": 1 } } },
+    { "name": "büyük harfli sorgu", "input": "DRACULA TEXT", "opts": { "as": "css", "color": "hsl" }, "expect": { "contains": ["--kit-text: hsl(60 30% 96%);"] } },
+    { "name": "hsl biçimi", "input": "dracula base", "opts": { "as": "toml", "color": "hsl" }, "expect": { "contains": ["base = \"hsl(231 15% 18%)\""] } },
+    { "name": "CSS'te --kit- token adları", "input": "nord", "opts": { "as": "css", "color": "rgb" }, "expect": { "contains": ["[data-theme=\"nord\"]", "--kit-crust:", "--kit-teal:"] } },
+    { "name": "bulunamadı", "input": "solarized", "expect": { "error": "error.theme-palette.notFound" } }
+  ]
+}

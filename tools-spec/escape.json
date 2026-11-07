@@ -1,0 +1,19 @@
+{
+  "tool": "escape",
+  "cases": [
+    { "name": "boş", "input": "", "expect": { "output": "" } },
+    { "name": "JSON denetim karakterleri", "input": "a\\b\u0001ğ", "expect": { "output": "a\\\\b\\u0001ğ" } },
+    { "name": "JSON unescape, tırnaksız, TR", "input": "\\u015eule \\\"Iğdır\\\" \\/ \\ud83d\\ude00", "opts": { "mode": "unescape" }, "expect": { "output": "Şule \"Iğdır\" / 😀" } },
+    { "name": "JS escape", "input": "it's\n\u2028ş", "opts": { "lang": "js" }, "expect": { "output": "it\\'s\\n\\u2028ş" } },
+    { "name": "JS unescape", "input": "'\\x41\\u{1F600}\\'\\u0131\\0'", "opts": { "mode": "unescape", "lang": "js" }, "expect": { "output": "A😀'ı\u0000" } },
+    { "name": "SQL unescape tırnaklı", "input": "'İstanbul''un ışıkları'", "opts": { "mode": "unescape", "lang": "sql" }, "expect": { "output": "İstanbul'un ışıkları" } },
+    { "name": "regex tüm metakarakterler", "input": "^[a-z]+$ {2} | / \\ ç", "opts": { "lang": "regex" }, "expect": { "output": "\\^\\[a-z\\]\\+\\$ \\{2\\} \\| \\/ \\\\ ç" } },
+    { "name": "regex unescape \\d korunur", "input": "\\d+\\.\\(ş\\)", "opts": { "mode": "unescape", "lang": "regex" }, "expect": { "output": "\\d+.(ş)" } },
+    { "name": "shell unescape karışık", "input": "'it'\\''s' \"ş\\$HOME\" a\\ b", "opts": { "mode": "unescape", "lang": "shell" }, "expect": { "output": "it's ş$HOME a b" } },
+    { "name": "shell boş", "input": "", "opts": { "lang": "shell" }, "expect": { "output": "''" } },
+    { "name": "geçersiz JSON kaçışı", "input": "a\\qb", "opts": { "mode": "unescape" }, "expect": { "error": "error.escape.invalidEscape" } },
+    { "name": "sondaki ters bölü", "input": "abc\\", "opts": { "mode": "unescape", "lang": "regex" }, "expect": { "error": "error.escape.trailingBackslash" } },
+    { "name": "SQL tek tırnak", "input": "O'Reilly", "opts": { "mode": "unescape", "lang": "sql" }, "expect": { "error": "error.escape.sqlQuote" } },
+    { "name": "kapanmamış tırnak", "input": "'açık", "opts": { "mode": "unescape", "lang": "shell" }, "expect": { "error": "error.escape.unterminated" } }
+  ]
+}

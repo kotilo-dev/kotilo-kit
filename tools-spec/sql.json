@@ -1,0 +1,16 @@
+{
+  "tool": "sql",
+  "cases": [
+    { "name": "basit select", "input": "select a, b from t where x = 1", "expect": { "output": "SELECT\n  a,\n  b\nFROM\n  t\nWHERE\n  x = 1" } },
+    { "name": "küçük harf, 4 boşluk", "input": "SELECT id FROM users", "opts": { "keywordCase": "lower", "indent": 4 }, "expect": { "output": "select\n    id\nfrom\n    users" } },
+    { "name": "büyük/küçük korunur", "input": "Select id From users", "opts": { "keywordCase": "preserve" }, "expect": { "output": "Select\n  id\nFrom\n  users" } },
+    { "name": "TR karakterli değer", "input": "select ad from kişi where şehir = 'Iğdır' and il = 'İzmir'", "expect": { "contains": ["'Iğdır'", "'İzmir'", "kişi", "şehir"] } },
+    { "name": "join", "input": "select u.id, o.total from users u join orders o on o.user_id = u.id", "expect": { "contains": ["JOIN orders o ON o.user_id = u.id"] } },
+    { "name": "postgresql cast", "input": "select '1'::int", "opts": { "dialect": "postgresql" }, "expect": { "output": "SELECT\n  '1'::int" } },
+    { "name": "t-sql köşeli parantez", "input": "select [ad soyad] from [kişiler]", "opts": { "dialect": "transactsql" }, "expect": { "contains": ["[ad soyad]", "[kişiler]"] } },
+    { "name": "satır sayısı", "input": "select 1", "expect": { "meta": { "lines": 2 } } },
+    { "name": "boş", "input": "  ", "expect": { "error": "error.sql.empty" } },
+    { "name": "kapanmamış parantez", "input": "SELECT (a FROM t", "expect": { "error": "error.sql.parse" } },
+    { "name": "kapanmamış string", "input": "select 'abc", "expect": { "error": "error.sql.parse" } }
+  ]
+}

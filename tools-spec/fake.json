@@ -1,0 +1,16 @@
+{
+  "tool": "fake",
+  "cases": [
+    { "name": "lorem varsayılan: 3 paragraf, klasik açılış", "input": "", "expect": { "contains": ["Lorem ipsum dolor sit amet, consectetur adipiscing elit. ", "\n\n"], "meta": { "count": 3, "kind": "lorem" } } },
+    { "name": "TR isimler (Ş, Ü, Ö, ç)", "input": "", "opts": { "kind": "name", "locale": "tr", "count": 3 }, "expect": { "output": "Şükrü Özkan\nHüseyin Demir\nEce Koç" } },
+    { "name": "TR e-posta ASCII'ye katlanır (Ilgın → ilgin, İrem → irem, Işık → isik)", "input": "", "opts": { "kind": "email", "locale": "tr", "count": 60 }, "expect": { "contains": ["ilgin_kaya74@ornek.com.tr", "iremarslan83@ornek.com.tr", "muge.isik@example.com"], "meta": { "count": 60 } } },
+    { "name": "TR IBAN: TR + mod-97 geçerli kontrol hanesi + 5 hane banka + 0 + 16 hane hesap (TR060020508529634185296741 mod 97 = 1)", "input": "", "opts": { "kind": "iban", "locale": "tr", "count": 2 }, "expect": { "output": "TR060020508529634185296741\nTR190006705290741852307418" } },
+    { "name": "GB IBAN geçerli (GB43MONZ85296341852967 mod 97 = 1)", "input": "", "opts": { "kind": "iban", "locale": "en", "count": 1 }, "expect": { "output": "GB43MONZ85296341852967" } },
+    { "name": "TR adres: mahalle, sokak/cadde, plaka kodlu posta kodu", "input": "", "opts": { "kind": "address", "locale": "tr", "count": 1 }, "expect": { "output": "Bahçelievler Mahallesi, Değirmen Caddesi No: 86/16, 06185 Çankaya/Ankara" } },
+    { "name": "TR cep telefonu", "input": "", "opts": { "kind": "phone", "locale": "tr", "count": 1 }, "expect": { "output": "+90 542 852 96 34" } },
+    { "name": "EN telefon 555-01xx kurgusal aralıkta", "input": "", "opts": { "kind": "phone", "locale": "en", "count": 2 }, "expect": { "output": "+1 (503) 555-0185\n+1 (512) 555-0196" } },
+    { "name": "TR şirket", "input": "", "opts": { "kind": "company", "locale": "tr", "count": 2 }, "expect": { "output": "Doğan Enerji Ltd. Şti.\nDemir Tasarım A.Ş." } },
+    { "name": "UUID v4 biçimli kimlik", "input": "", "opts": { "kind": "id", "count": 1 }, "expect": { "output": "0b30557a-9fc4-490e-b358-7da2c7ec1136" } },
+    { "name": "giriş yok sayılır, adet en az 1", "input": "yok sayılan metin", "opts": { "kind": "name", "locale": "en", "count": 0 }, "expect": { "output": "Barbara Clark", "meta": { "count": 1 } } }
+  ]
+}

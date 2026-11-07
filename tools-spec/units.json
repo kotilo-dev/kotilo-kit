@@ -1,0 +1,211 @@
+{
+  "tool": "units",
+  "cases": [
+    {
+      "name": "hex",
+      "input": "0x1F",
+      "expect": {
+        "rows": [
+          [
+            "Decimal",
+            "31"
+          ],
+          [
+            "Hexadecimal",
+            "0x1f"
+          ],
+          [
+            "Octal",
+            "0o37"
+          ],
+          [
+            "Binary",
+            "0b11111"
+          ],
+          [
+            "Bit length",
+            "5"
+          ]
+        ],
+        "meta": {
+          "kind": "base"
+        }
+      }
+    },
+    {
+      "name": "oct ve bin",
+      "input": "0o17",
+      "expect": {
+        "rows": [
+          [
+            "Decimal",
+            "15"
+          ],
+          [
+            "Binary",
+            "0b1111"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "negatif ondalık işaretli gösterilir",
+      "input": "-255",
+      "expect": {
+        "rows": [
+          [
+            "Decimal",
+            "-255"
+          ],
+          [
+            "Hexadecimal",
+            "-0xff"
+          ],
+          [
+            "Binary",
+            "-0b11111111"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "BigInt ve _ ayırıcı",
+      "input": "0xFFFF_FFFF_FFFF_FFFF_FF",
+      "expect": {
+        "rows": [
+          [
+            "Decimal",
+            "4722366482869645213695"
+          ],
+          [
+            "Bit length",
+            "72"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "bayt SI önce",
+      "input": "1.5 GB",
+      "expect": {
+        "rows": [
+          [
+            "B",
+            "1,500,000,000"
+          ],
+          [
+            "MB",
+            "1,500"
+          ],
+          [
+            "GB",
+            "1.5"
+          ],
+          [
+            "KiB",
+            "1,464,843.75"
+          ],
+          [
+            "GiB",
+            "1.397"
+          ]
+        ],
+        "meta": {
+          "kind": "bytes"
+        }
+      }
+    },
+    {
+      "name": "bayt IEC önce, TR biçim, ondalık virgül",
+      "input": "1,5 GB",
+      "opts": {
+        "bytes": "iec"
+      },
+      "ctx": {
+        "locale": "tr"
+      },
+      "expect": {
+        "rows": [
+          [
+            "B",
+            "1.500.000.000"
+          ],
+          [
+            "KiB",
+            "1.464.843,75"
+          ],
+          [
+            "GiB",
+            "1,397"
+          ],
+          [
+            "GB",
+            "1,5"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "512MiB boşluksuz",
+      "input": "512MiB",
+      "expect": {
+        "rows": [
+          [
+            "MiB",
+            "512"
+          ],
+          [
+            "GiB",
+            "0.5"
+          ]
+        ],
+        "meta": {
+          "bytes": 536870912
+        }
+      }
+    },
+    {
+      "name": "zaman birimi, Türkçe 'saat'",
+      "input": "2 saat",
+      "ctx": {
+        "locale": "tr"
+      },
+      "expect": {
+        "rows": [
+          [
+            "Dakika",
+            "120"
+          ],
+          [
+            "Saat",
+            "2"
+          ]
+        ],
+        "meta": {
+          "kind": "time"
+        }
+      }
+    },
+    {
+      "name": "hata: bilinmeyen birim",
+      "input": "3 parsec",
+      "expect": {
+        "error": "error.units.unit"
+      }
+    },
+    {
+      "name": "hata: sayı değil",
+      "input": "İki yüz",
+      "expect": {
+        "error": "error.units.invalid"
+      }
+    },
+    {
+      "name": "hata: geçersiz ikilik",
+      "input": "0b102",
+      "expect": {
+        "error": "error.units.invalid"
+      }
+    }
+  ]
+}

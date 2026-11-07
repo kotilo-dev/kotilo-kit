@@ -1,0 +1,212 @@
+{
+  "tool": "count",
+  "cases": [
+    {
+      "name": "boş giriş sıfırlar",
+      "input": "",
+      "expect": {
+        "rows": [
+          [
+            "Characters",
+            "0"
+          ],
+          [
+            "Words",
+            "0"
+          ],
+          [
+            "Lines",
+            "0"
+          ],
+          [
+            "Reading time",
+            "0s"
+          ]
+        ],
+        "meta": {
+          "characters": 0,
+          "words": 0
+        }
+      }
+    },
+    {
+      "name": "TR metin: İ/ı/ğ/ş çok baytlı, kelime tr-TR ile",
+      "input": "İSTANBUL ılık, ŞİŞLİ'de ğ.\n",
+      "ctx": {
+        "locale": "tr"
+      },
+      "expect": {
+        "rows": [
+          [
+            "Karakter",
+            "27"
+          ],
+          [
+            "UTF-8 bayt",
+            "35"
+          ],
+          [
+            "Kelime",
+            "4"
+          ],
+          [
+            "Satır",
+            "1"
+          ],
+          [
+            "Okuma süresi",
+            "1 sn"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "grapheme ≠ kod noktası ≠ UTF-16",
+      "input": "👍🏽 ok",
+      "expect": {
+        "rows": [
+          [
+            "Characters",
+            "4"
+          ],
+          [
+            "Code points",
+            "5"
+          ],
+          [
+            "UTF-16 units",
+            "7"
+          ],
+          [
+            "UTF-8 bytes",
+            "11"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "birleşik aksan ve CRLF tek karakter",
+      "input": "é \t\r\n",
+      "expect": {
+        "rows": [
+          [
+            "Characters",
+            "4"
+          ],
+          [
+            "Code points",
+            "6"
+          ],
+          [
+            "Lines",
+            "1"
+          ],
+          [
+            "Whitespace",
+            "4"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "cümle, satır, paragraf",
+      "input": "One. Two! Three?\n\nFour",
+      "opts": {
+        "lang": "en"
+      },
+      "expect": {
+        "rows": [
+          [
+            "Words",
+            "4"
+          ],
+          [
+            "Lines",
+            "3"
+          ],
+          [
+            "Non-empty lines",
+            "2"
+          ],
+          [
+            "Sentences",
+            "4"
+          ],
+          [
+            "Paragraphs",
+            "2"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "sondaki satır sonu yeni satır sayılmaz",
+      "input": "a\nb\n",
+      "expect": {
+        "rows": [
+          [
+            "Lines",
+            "2"
+          ],
+          [
+            "Non-empty lines",
+            "2"
+          ]
+        ],
+        "meta": {
+          "lines": 2
+        }
+      }
+    },
+    {
+      "name": "tr-TR sayı biçimi ve okuma süresi (1000 kelime ≈ 5 dk)",
+      "input": "kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime",
+      "ctx": {
+        "locale": "tr"
+      },
+      "expect": {
+        "rows": [
+          [
+            "Karakter",
+            "6.999"
+          ],
+          [
+            "Kelime",
+            "1.000"
+          ],
+          [
+            "Boşluk",
+            "999"
+          ],
+          [
+            "Okuma süresi",
+            "5 dk"
+          ]
+        ],
+        "meta": {
+          "words": 1000
+        }
+      }
+    },
+    {
+      "name": "en-US sayı biçimi",
+      "input": "kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime kelime",
+      "expect": {
+        "rows": [
+          [
+            "Characters",
+            "6,999"
+          ],
+          [
+            "Words",
+            "1,000"
+          ],
+          [
+            "Reading time",
+            "5m"
+          ]
+        ]
+      }
+    }
+  ]
+}
