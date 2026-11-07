@@ -11,7 +11,7 @@
 | url | URL encode/decode | tam URL / yalnızca bileşen modu | P1 | 1.0 ✓ K0 |
 | html-entity | HTML entity encode/decode | | P2 | 1.0 ✓ K2 |
 | jwt | JWT decode | header/payload/imza; `exp`/`iat` okunur tarih, kalan süre; imza doğrulama (HS256 secret ile, yerel) | P1 | 1.0 ✓ K0 |
-| radix | Hex ⇄ metin ⇄ ikili ⇄ ondalık | sayı tabanı dönüştürücü | P2 | 1.0 |
+| radix | Hex ⇄ metin ⇄ ikili ⇄ ondalık | sayı tabanı dönüştürücü | P2 | 1.0 ✓ K2 |
 | unicode | Unicode inceleme | kod noktası, kategori, görünmez karakter tespiti, NFC/NFD | P2 | 1.0 |
 | punycode | Punycode / IDN | | P3 | 1.1 |
 | gzip | Gzip/Deflate/Brotli | sıkıştır/aç, base64 ile | P3 | 1.1 |

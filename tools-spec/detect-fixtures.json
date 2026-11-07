@@ -18,6 +18,8 @@
   { "input": "rgb(137 180 250)", "top": "color" },
   { "input": "&lt;div class=&quot;kart&quot;&gt;Merhaba&lt;/div&gt;", "top": "html-entity" },
   { "input": "Tom &amp; Jerry&#39;s", "top": "html-entity" },
+  { "input": "01001000 01101001", "top": "radix" },
+  { "input": "01001011 01101001 01110100", "top": "radix" },
   { "input": "merhaba dünya", "top": null },
   { "input": "Password", "top": null },
   { "input": "deadbeefcafebabe", "top": null },
