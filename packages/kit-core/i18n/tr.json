@@ -78,6 +78,7 @@
   "kind.sql": "SQL",
   "kind.duration": "ISO 8601 süresi",
   "kind.units": "Sayı veya boyut",
+  "kind.query": "query string",
   "cli.usage": "Kullanım: kotilo kit <araç> [--seçenek değer …] < giriş\n          kotilo kit list\n          kotilo kit detect < giriş\n          kotilo kit <araç> --help",
   "cli.unknownTool": "Bilinmeyen araç: {id}. `kotilo kit list` ile listele.",
   "cli.unknownOption": "{tool} için bilinmeyen seçenek: --{key}",
@@ -517,5 +518,15 @@
   "tool.password.strength.strong": "Güçlü",
   "tool.password.strength.veryStrong": "Çok güçlü",
   "error.password.noClass": "En az bir karakter kümesini aç",
-  "error.password.tooShort": "Uzunluk en az {min} olmalı; seçili her küme için bir karakter"
+  "error.password.tooShort": "Uzunluk en az {min} olmalı; seçili her küme için bir karakter",
+  "tool.query.name": "Query string",
+  "tool.query.description": "URL query string’i JSON’a ve geri dönüştür",
+  "tool.query.opt.mode": "Yön",
+  "tool.query.opt.mode.toJson": "Query → JSON",
+  "tool.query.opt.mode.toQuery": "JSON → Query",
+  "tool.query.opt.nested": "Köşeli parantezle iç içe (a[b]=1)",
+  "error.query.malformed": "“{part}” içinde bozuk yüzde kodlaması",
+  "error.query.conflict": "“{key}”, farklı yapıdaki önceki bir anahtarla çakışıyor",
+  "error.query.json": "Geçersiz JSON: satır {line}, sütun {column}",
+  "error.query.notObject": "JSON bir nesne olmalı, örn. {\"a\": 1}"
 }

@@ -78,6 +78,7 @@
   "kind.sql": "SQL",
   "kind.duration": "ISO 8601 duration",
   "kind.units": "Number or size",
+  "kind.query": "query string",
   "cli.usage": "Usage: kotilo kit <tool> [--option value …] < input\n       kotilo kit list\n       kotilo kit detect < input\n       kotilo kit <tool> --help",
   "cli.unknownTool": "Unknown tool: {id}. Run `kotilo kit list`.",
   "cli.unknownOption": "Unknown option for {tool}: --{key}",
@@ -517,5 +518,15 @@
   "tool.password.strength.strong": "Strong",
   "tool.password.strength.veryStrong": "Very strong",
   "error.password.noClass": "Turn on at least one character set",
-  "error.password.tooShort": "Length must be at least {min}, one per selected character set"
+  "error.password.tooShort": "Length must be at least {min}, one per selected character set",
+  "tool.query.name": "Query string",
+  "tool.query.description": "Convert a URL query string to JSON and back",
+  "tool.query.opt.mode": "Direction",
+  "tool.query.opt.mode.toJson": "Query → JSON",
+  "tool.query.opt.mode.toQuery": "JSON → Query",
+  "tool.query.opt.nested": "Bracket nesting (a[b]=1)",
+  "error.query.malformed": "Malformed percent-encoding in “{part}”",
+  "error.query.conflict": "“{key}” clashes with an earlier key of a different shape",
+  "error.query.json": "Invalid JSON at line {line}, column {column}",
+  "error.query.notObject": "JSON must be an object, like {\"a\": 1}"
 }
