@@ -1,0 +1,17 @@
+{
+  "tool": "json-types",
+  "cases": [
+    { "name": "düz nesne", "input": "{\"id\":1,\"ok\":true,\"name\":\"a\"}", "expect": { "output": "export interface Root {\n  id: number;\n  ok: boolean;\n  name: string;\n}", "meta": { "types": 1 } } },
+    { "name": "nesne dizisi birleşir, eksik anahtar opsiyonel", "input": "{\"users\":[{\"id\":1,\"name\":\"a\"},{\"id\":2,\"email\":null}]}", "expect": { "output": "export interface Root {\n  users: User[];\n}\n\nexport interface User {\n  id: number;\n  name?: string;\n  email?: null;\n}" } },
+    { "name": "karışık dizi birleşim olur", "input": "{\"v\":[1,\"a\",null]}", "expect": { "output": "export interface Root {\n  v: (number | string | null)[];\n}" } },
+    { "name": "null alan nullable", "input": "[{\"a\":\"x\"},{\"a\":null}]", "expect": { "output": "export type Root = RootItem[];\n\nexport interface RootItem {\n  a: string | null;\n}" } },
+    { "name": "TR anahtar adları", "input": "{\"ilişkiler\":[{\"ad\":\"Işık\"}],\"ışık\":{\"açık\":true}}", "expect": { "output": "export interface Root {\n  ilişkiler: İlişki[];\n  ışık: Işık;\n}\n\nexport interface İlişki {\n  ad: string;\n}\n\nexport interface Işık {\n  açık: boolean;\n}" } },
+    { "name": "kök adı", "input": "{\"a\":1}", "opts": { "root": "api response", "tsStyle": "type" }, "expect": { "output": "export type ApiResponse = {\n  a: number;\n};" } },
+    { "name": "kotlin: Long, nullable, backtick", "input": "{\"big\":3000000000,\"class\":\"x\",\"e-mail\":\"y\",\"n\":null,\"list\":[]}", "opts": { "lang": "kotlin" }, "expect": { "output": "data class Root(\n    val big: Long,\n    val `class`: String,\n    val `e-mail`: String,\n    val n: Any? = null,\n    val list: List<Any>\n)" } },
+    { "name": "kotlin: opsiyonel alan", "input": "{\"cities\":[{\"name\":\"İzmir\",\"pop\":1},{\"name\":\"Iğdır\"}]}", "opts": { "lang": "kotlin" }, "expect": { "output": "data class Root(\n    val cities: List<City>\n)\n\ndata class City(\n    val name: String,\n    val pop: Int? = null\n)" } },
+    { "name": "aynı yapı tek tip", "input": "{\"from\":{\"x\":1},\"to\":{\"x\":2}}", "expect": { "output": "export interface Root {\n  from: From;\n  to: From;\n}\n\nexport interface From {\n  x: number;\n}" } },
+    { "name": "ilkel kök", "input": "\"merhaba\"", "opts": { "lang": "kotlin" }, "expect": { "output": "typealias Root = String" } },
+    { "name": "boş", "input": "", "expect": { "error": "error.json.empty" } },
+    { "name": "bozuk JSON", "input": "{\"a\":1,}", "expect": { "error": "error.json.trailingComma" } }
+  ]
+}

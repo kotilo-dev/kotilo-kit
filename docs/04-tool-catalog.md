@@ -22,7 +22,7 @@
 |---|---|---|---|---|
 | json | JSON format/minify/doğrula | hata satırı, JSONPath sorgusu, anahtar sıralama | P1 | 1.0 ✓ K0 |
 | json-convert | JSON ⇄ YAML ⇄ TOML ⇄ XML | | P1 | 1.0 ✓ K0 |
-| json-types | JSON → TypeScript / Kotlin tipi | tip üretici | P2 | 1.0 |
+| json-types | JSON → TypeScript / Kotlin tipi | tip üretici | P2 | 1.0 ✓ K2 |
 | xml | XML format/doğrula + XPath | | P2 | 1.0 |
 | sql | SQL format | lehçe seçimi | P2 | 1.0 |
 | csv | CSV ⇄ JSON ⇄ Markdown tablo | ayırıcı algılama | P1 | 1.0 ✓ K0 |

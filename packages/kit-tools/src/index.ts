@@ -7,6 +7,7 @@ import unicode from './encoding/unicode.js';
 import url from './encoding/url.js';
 import csv from './format/csv.js';
 import jsonConvert from './format/json-convert.js';
+import jsonTypes from './format/json-types.js';
 import json from './format/json.js';
 import hash from './generate/hash.js';
 import uuid from './generate/uuid.js';
@@ -30,6 +31,7 @@ export const builtinTools: Tool<any>[] = [
   json,
   jsonConvert,
   csv,
+  jsonTypes,
   caseTool,
   lines,
   diff,
@@ -42,4 +44,4 @@ export const builtinTools: Tool<any>[] = [
   color,
 ];
 
-export { base64, url, jwt, htmlEntity, radix, unicode, json, jsonConvert, csv, caseTool, lines, diff, regex, timestamp, cron, uuid, hash, urlParse, color };
+export { base64, url, jwt, htmlEntity, radix, unicode, json, jsonConvert, csv, jsonTypes, caseTool, lines, diff, regex, timestamp, cron, uuid, hash, urlParse, color };

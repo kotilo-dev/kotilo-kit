@@ -353,5 +353,14 @@
   "tool.unicode.flag.format": "Görünmez biçim karakteri",
   "tool.unicode.flag.surrogate": "Eşsiz vekil",
   "tool.unicode.flag.confusable": "Latin “{latin}” harfine benziyor",
-  "tool.unicode.truncated": "{total} kod noktasının ilk {shown} tanesi gösteriliyor"
+  "tool.unicode.truncated": "{total} kod noktasının ilk {shown} tanesi gösteriliyor",
+  "tool.json-types.name": "JSON’dan tip",
+  "tool.json-types.description": "JSON’dan TypeScript veya Kotlin tipleri üret",
+  "tool.json-types.opt.lang": "Dil",
+  "tool.json-types.opt.lang.typescript": "TypeScript",
+  "tool.json-types.opt.lang.kotlin": "Kotlin",
+  "tool.json-types.opt.root": "Kök tip adı",
+  "tool.json-types.opt.tsStyle": "TS biçimi",
+  "tool.json-types.opt.tsStyle.interface": "interface",
+  "tool.json-types.opt.tsStyle.type": "type"
 }

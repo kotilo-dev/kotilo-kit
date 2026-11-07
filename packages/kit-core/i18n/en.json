@@ -353,5 +353,14 @@
   "tool.unicode.flag.format": "Invisible format character",
   "tool.unicode.flag.surrogate": "Unpaired surrogate",
   "tool.unicode.flag.confusable": "Looks like Latin “{latin}”",
-  "tool.unicode.truncated": "Showing first {shown} of {total} code points"
+  "tool.unicode.truncated": "Showing first {shown} of {total} code points",
+  "tool.json-types.name": "JSON to types",
+  "tool.json-types.description": "Generate TypeScript or Kotlin types from JSON",
+  "tool.json-types.opt.lang": "Language",
+  "tool.json-types.opt.lang.typescript": "TypeScript",
+  "tool.json-types.opt.lang.kotlin": "Kotlin",
+  "tool.json-types.opt.root": "Root type name",
+  "tool.json-types.opt.tsStyle": "TS style",
+  "tool.json-types.opt.tsStyle.interface": "interface",
+  "tool.json-types.opt.tsStyle.type": "type"
 }
