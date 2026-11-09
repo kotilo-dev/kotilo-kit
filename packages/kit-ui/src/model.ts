@@ -77,7 +77,7 @@ export function clipboardPreview(text: string): string {
   return text.replace(/\s+/g, ' ').trim().slice(0, 200);
 }
 
-/** Sidebar groups in catalog order; `query` filters by name/id/keyword (tr-TR aware). Empty groups are dropped. */
+/** Sidebar groups: pipelines, then catalog order; `query` filters by name/id/keyword (tr-TR aware). Empty groups are dropped. */
 export function groupTools(
   tools: readonly Tool<any>[],
   locale: Locale,
@@ -89,7 +89,8 @@ export function groupTools(
     [tool.id, tool.name[locale], tool.name.en, ...tool.keywords].some((s) =>
       s.toLocaleLowerCase(intlLocale(locale)).includes(q),
     );
-  return CATEGORIES.map((category) => ({ category, tools: tools.filter((t) => t.category === category && match(t)) })).filter(
+  // pipelines first (docs/02-design.md › 1.1: "PIPELINE" above the categories)
+  return (['pipeline', ...CATEGORIES] as Category[]).map((category) => ({ category, tools: tools.filter((t) => t.category === category && match(t)) })).filter(
     (g) => g.tools.length > 0,
   );
 }

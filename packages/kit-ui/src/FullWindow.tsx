@@ -8,6 +8,7 @@ import {
   t,
   type OptionDef,
   type OptionValues,
+  type PipelineDef,
   type Registry,
   type TableOutput,
   type Tool,
@@ -36,7 +37,12 @@ import {
   ThemeIcon,
 } from './icons.js';
 import { CATEGORY_ACCENT, groupTools, intlLocale, summarizeOutput, utf8Length } from './model.js';
-import { SettingsAppearance, SettingsNav } from './Settings.js';
+import { OptionControl } from './OptionControl.js';
+import { PipelineEditor, type EditorSeed } from './PipelineEditor.js';
+import { PipelineMenu } from './PipelineMenu.js';
+import { changedOptions, uniqueName, usePipelines } from './pipelines.js';
+import { SettingsAppearance, SettingsNav, type SettingsSection } from './Settings.js';
+import { SettingsPipelines } from './SettingsPipelines.js';
 import { syncAppearance } from './theme.js';
 
 export interface FullWindowProps {
@@ -65,18 +71,23 @@ function isEmptyResult(r: ToolResult): boolean {
   return typeof r.output === 'string' ? r.output === '' : r.output.rows.length === 0;
 }
 
-export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWindowProps) {
+export function FullWindow({ host, registry: baseRegistry, version, pluginCount = 0 }: FullWindowProps) {
   const [config, setConfig] = useState(() => host.config.get());
   const locale = config.general.locale;
   const tr = useCallback((key: string, params?: Record<string, string | number>) => t(locale, key, params), [locale]);
   const nf = useMemo(() => new Intl.NumberFormat(intlLocale(locale)), [locale]);
   const upper = (s: string) => s.toLocaleUpperCase(intlLocale(locale));
 
+  // base tools + <config>/pipelines/*.toml (kept in sync with the files)
+  const pipelines = usePipelines(host, baseRegistry);
+  const { registry } = pipelines;
+
   const [toolId, setToolId] = useState(() => {
-    const first = config.recent.ids.find((id) => registry.get(id));
-    return first ?? registry.tools[0]!.id;
+    const first = config.recent.ids.find((id) => baseRegistry.get(id));
+    return first ?? baseRegistry.tools[0]!.id;
   });
-  const tool = registry.get(toolId) ?? registry.tools[0]!;
+  // the tool panel only shows real tools; pipelines open in the editor
+  const tool = baseRegistry.get(toolId) ?? baseRegistry.tools[0]!;
   const [input, setInput] = useState('');
   const [file, setFile] = useState<LoadedFile | null>(null);
   const [overrides, setOverrides] = useState<Record<string, OptionValues>>({});
@@ -87,7 +98,30 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
   useEffect(() => host.config.subscribe(setConfig), [host]);
 
   // Settings › Appearance lives in this window; theme list includes user themes
-  const [view, setView] = useState<'tools' | 'settings'>('tools');
+  const [view, setView] = useState<'tools' | 'settings' | 'pipeline'>('tools');
+  const [settingsSection, setSettingsSection] = useState<SettingsSection>('appearance');
+  const [editor, setEditor] = useState<EditorSeed | null>(null);
+  const [editorKey, setEditorKey] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const pipelinesRef = useRef(pipelines);
+  pipelinesRef.current = pipelines;
+
+  /** Open the pipeline editor (a saved pipeline, or a new one). */
+  const openEditor = useCallback((seed: EditorSeed) => {
+    setEditor(seed);
+    setEditorKey((k) => k + 1);
+    setMenuOpen(false);
+    setView('pipeline');
+  }, []);
+  const editPipeline = useCallback(
+    (id: string, text?: string) => {
+      const def = pipelinesRef.current.loaded.find((p) => p.def?.name === id)?.def;
+      if (!def) return false;
+      openEditor({ def, previousName: id, ...(text !== undefined ? { input: text } : {}) });
+      return true;
+    },
+    [openEditor],
+  );
   const [themeList, setThemeList] = useState<readonly Theme[]>(themes);
   const [appliedTheme, setAppliedTheme] = useState(config.theme.id);
   useEffect(() => syncAppearance(host, { onList: setThemeList, onApplied: setAppliedTheme }), [host]);
@@ -98,7 +132,13 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
   /** Switching tools starts from a blank input unless the input is meant for the new tool. */
   const selectTool = useCallback(
     (id: string, keepInput = false) => {
+      if (registry.get(id)?.category === 'pipeline') {
+        editPipeline(id, keepInput || carryInput.current ? input : undefined);
+        carryInput.current = false;
+        return;
+      }
       if (!registry.get(id)) return;
+      setView('tools');
       if (id !== toolId && !keepInput && !carryInput.current) {
         setFile(null);
         setInput('');
@@ -108,18 +148,20 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
       const nowSec = Math.floor(host.now().getTime() / 1000);
       void host.config.update((c) => pushRecent(c, id, nowSec));
     },
-    [host, registry, toolId],
+    [host, registry, toolId, editPipeline, input],
   );
 
   // palette ctrl+Enter hand-off
   useEffect(
     () =>
       host.onOpenFull?.((id, text) => {
-        if (registry.get(id)) setToolId(id);
+        if (editPipeline(id, text)) return;
+        if (baseRegistry.get(id)) setToolId(id);
+        setView('tools');
         setFile(null);
         setInput(text);
       }),
-    [host, registry],
+    [host, baseRegistry, editPipeline],
   );
 
   const opts = resolveOptions(tool.options, overrides[tool.id]);
@@ -218,6 +260,7 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
         if (e.key === 'Escape') setView('tools');
         return;
       }
+      if (view === 'pipeline' || menuOpen) return;
       if (mod && !e.shiftKey && letterOf(e) === 'k') {
         e.preventDefault();
         searchRef.current?.focus();
@@ -293,6 +336,8 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
   }
 
   const headerOptions = tool.options.filter((o) => !isPaneOption(o));
+  const pipelineCount = registry.tools.length - baseRegistry.tools.length;
+  const nameTaken = (n: string) => Boolean(registry.get(n)) || pipelines.loaded.some((p) => p.name === n);
   const paneOptions = tool.options.filter(isPaneOption);
   const controls = host.windowControls;
 
@@ -310,7 +355,7 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
             <span className="kf-crumb">{tr('settings.title')}</span>
             <span className="kf-crumb-sep">/</span>
             <span className="kf-crumb kf-crumb-current" aria-current="page">
-              {tr('settings.nav.appearance')}
+              {tr(`settings.nav.${settingsSection}`)}
             </span>
           </nav>
         ) : (
@@ -322,7 +367,7 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
           </span>
         )}
         {view === 'settings' && <span className="kf-spacer" data-tauri-drag-region />}
-        {view === 'tools' && (
+        {view !== 'settings' && (
         <div className="kf-search-wrap" data-tauri-drag-region>
           <div className="kf-search">
             <SmallSearchIcon />
@@ -340,7 +385,7 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
           </div>
         </div>
         )}
-        {view === 'tools' && (
+        {view !== 'settings' && (
           <>
             <button className="kf-icon-btn" aria-label={tr('ui.theme')} title={tr('ui.themeNext')} onClick={nextTheme}>
               <ThemeIcon />
@@ -367,8 +412,30 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
 
       {view === 'settings' ? (
         <div className="kf-body">
-          <SettingsNav tr={tr} />
-          <SettingsAppearance host={host} config={config} list={themeList} tr={tr} />
+          <SettingsNav
+            tr={tr}
+            section={settingsSection}
+            enabled={pipelines.available ? ['appearance', 'pipelines'] : ['appearance']}
+            onSection={setSettingsSection}
+          />
+          {settingsSection === 'pipelines' ? (
+            <SettingsPipelines
+              host={host}
+              pipelines={pipelines}
+              locale={locale}
+              tr={tr}
+              monoFamily={mono.fontFamily}
+              onEdit={(def) =>
+                openEditor(
+                  def
+                    ? { def, previousName: def.name }
+                    : { def: { name: uniqueName('pipeline', nameTaken), palette: true, steps: [] } },
+                )
+              }
+            />
+          ) : (
+            <SettingsAppearance host={host} config={config} list={themeList} tr={tr} />
+          )}
         </div>
       ) : (
       <div className="kf-body">
@@ -377,112 +444,103 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
           {groups.map((g, gi) => (
             <div key={g.category} role="group" aria-labelledby={`kf-cat-${g.category}`}>
               <div id={`kf-cat-${g.category}`} className={`kf-cat${gi === 0 ? ' kf-cat-first' : ''}`}>
-                {upper(tr(`category.${g.category}`))}
+                {g.category === 'pipeline' ? tr('ui.pipelineSection') : upper(tr(`category.${g.category}`))}
               </div>
-              {g.tools.map((item) => (
+              {g.tools.map((item) => {
+                const on = view === 'pipeline' ? item.id === editor?.previousName : view === 'tools' && item.id === tool.id;
+                return (
                 <a
                   key={item.id}
-                  title={item.name[locale]}
+                  title={item.category === 'pipeline' ? item.description[locale] : item.name[locale]}
                   href={`#${item.id}`}
-                  className={`kf-tool${item.id === tool.id ? ' kf-tool-on' : ''}`}
-                  aria-current={item.id === tool.id ? 'page' : undefined}
+                  className={`kf-tool${on ? ' kf-tool-on' : ''}`}
+                  aria-current={on ? 'page' : undefined}
                   onClick={(e) => {
                     e.preventDefault();
                     selectTool(item.id);
                   }}
                 >
-                  <span className="kf-dot" style={{ background: accent(item.category) }} />
-                  <span className="kf-tool-name">{item.name[locale]}</span>
+                  {item.category === 'pipeline' ? (
+                    <span className="kf-dot kf-dot-pipe" />
+                  ) : (
+                    <span className="kf-dot" style={{ background: accent(item.category) }} />
+                  )}
+                  <span className={`kf-tool-name${item.category === 'pipeline' ? ' kf-mono' : ''}`}>{item.name[locale]}</span>
                 </a>
-              ))}
+                );
+              })}
             </div>
           ))}
           {groups.length === 0 && <div className="kf-nav-empty">{tr('ui.noResults')}</div>}
         </nav>
 
-        {/* ---------- tool panel ---------- */}
+        {view === 'pipeline' && editor ? (
+          <PipelineEditor
+            key={editorKey}
+            host={host}
+            pipelines={pipelines}
+            seed={editor}
+            locale={locale}
+            tr={tr}
+            mono={mono}
+            nf={nf}
+            onClose={() => setView('tools')}
+          />
+        ) : (
+        /* ---------- tool panel ---------- */
         <main className="kf-main">
           <div className="kf-head">
             <h1>{tool.name[locale]}</h1>
-            {headerOptions.map((o) => {
-              const value = opts[o.key];
-              const hint = o.hotkey ? `alt ${o.hotkey}` : undefined;
-              switch (o.type) {
-                case 'segmented':
-                  return (
-                    <div key={o.key} className="kf-seg" role="group" aria-label={optLabel(o.key)} title={hint}>
-                      {o.values.map((v) => (
-                        <button
-                          key={v}
-                          aria-pressed={value === v}
-                          className={value === v ? 'kf-seg-on' : ''}
-                          onClick={() => setOption(o.key, v)}
-                        >
-                          {valueLabel(o.key, v)}
-                        </button>
-                      ))}
-                    </div>
-                  );
-                case 'toggle':
-                  return (
-                    <label key={o.key} className="kf-check" title={hint}>
-                      <input type="checkbox" checked={Boolean(value)} onChange={(e) => setOption(o.key, e.target.checked)} />
-                      {optLabel(o.key)}
-                    </label>
-                  );
-                case 'select':
-                  return (
-                    <label key={o.key} className="kf-field" title={hint}>
-                      {optLabel(o.key)}
-                      <select id={`kf-opt-${o.key}`} value={String(value)} onChange={(e) => setOption(o.key, e.target.value)}>
-                        {o.values.map((v) => (
-                          <option key={v} value={v}>
-                            {valueLabel(o.key, v)}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-                  );
-                case 'number':
-                  return (
-                    <label key={o.key} className="kf-field" title={hint}>
-                      {optLabel(o.key)}
-                      <input
-                        id={`kf-opt-${o.key}`}
-                        type="number"
-                        className="kf-num"
-                        value={Number(value)}
-                        min={o.min}
-                        max={o.max}
-                        step={o.step ?? 1}
-                        onChange={(e) => {
-                          const n = e.target.valueAsNumber;
-                          if (!Number.isNaN(n)) setOption(o.key, n);
-                        }}
-                      />
-                    </label>
-                  );
-                case 'text':
-                  return (
-                    <label key={o.key} className="kf-field" title={hint}>
-                      {optLabel(o.key)}
-                      <input
-                        id={`kf-opt-${o.key}`}
-                        className="kf-text"
-                        style={{ fontFamily: mono.fontFamily }}
-                        value={String(value)}
-                        spellCheck={false}
-                        onChange={(e) => setOption(o.key, e.target.value)}
-                      />
-                    </label>
-                  );
-              }
-            })}
+            {headerOptions.map((o) => (
+              <OptionControl
+                key={o.key}
+                id={`kf-opt-${o.key}`}
+                option={o}
+                value={opts[o.key]!}
+                onChange={(v) => setOption(o.key, v)}
+                label={optLabel(o.key)}
+                valueLabel={(v) => valueLabel(o.key, v)}
+                monoFamily={mono.fontFamily}
+              />
+            ))}
             <span className="kf-spacer" />
-            <button className="kf-btn" disabled title={tr('ui.pipelineSoon')}>
-              <PipelineIcon />
-              {tr('ui.addToPipeline')}
-            </button>
+            <span className="kf-menu-anchor">
+              <button
+                className={`kf-btn${menuOpen ? ' kf-btn-open' : ''}`}
+                disabled={!pipelines.available}
+                aria-haspopup="menu"
+                aria-expanded={menuOpen}
+                onClick={() => setMenuOpen((o) => !o)}
+              >
+                <PipelineIcon />
+                {tr('ui.addToPipeline')}
+              </button>
+              {menuOpen && (
+                <PipelineMenu
+                  tool={tool}
+                  pipelines={pipelines}
+                  locale={locale}
+                  tr={tr}
+                  onClose={() => setMenuOpen(false)}
+                  onNew={() =>
+                    openEditor({
+                      def: {
+                        name: uniqueName(tool.id, nameTaken),
+                        palette: true,
+                        steps: [{ tool: tool.id, opts: changedOptions(tool, opts) }],
+                      },
+                      input,
+                    })
+                  }
+                  onAppend={(def: PipelineDef) => {
+                    setMenuOpen(false);
+                    void pipelines
+                      .save({ ...def, steps: [...def.steps, { tool: tool.id, opts: changedOptions(tool, opts) }] })
+                      .then(() => host.notify(tr('pipeline.appended', { name: def.name })));
+                  }}
+                />
+              )}
+            </span>
           </div>
 
           <div className="kf-grid">
@@ -589,6 +647,7 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
             </div>
           )}
         </main>
+        )}
       </div>
       )}
 
@@ -610,7 +669,15 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
               {config.theme.font} {config.theme.size}
             </span>
             <span className="kf-spacer" />
-            <span>{tr('ui.toolCount', { tools: nf.format(registry.tools.length), plugins: nf.format(pluginCount) })}</span>
+            <span>
+              {pipelineCount
+                ? tr('ui.toolCountPipelines', {
+                    tools: nf.format(registry.tools.length - pipelineCount),
+                    pipelines: nf.format(pipelineCount),
+                    plugins: nf.format(pluginCount),
+                  })
+                : tr('ui.toolCount', { tools: nf.format(registry.tools.length), plugins: nf.format(pluginCount) })}
+            </span>
             <span>v{version}</span>
           </>
         )}

@@ -9,6 +9,20 @@ export interface ConfigStore {
   subscribe(cb: (config: KitConfig) => void): () => void;
 }
 
+/** `<config>/pipelines/*.toml`. The shell does the file I/O; kit-ui parses and validates. */
+export interface PipelineStore {
+  list(): Promise<{ file: string; source: string }[]>;
+  /** Write `<dir>/<name>.toml` (name is a tool-id-shaped pipeline name). */
+  write(name: string, toml: string): Promise<void>;
+  remove(name: string): Promise<void>;
+  /** Another window (or this one) changed a pipeline file. */
+  subscribe(cb: () => void): () => void;
+  /** Reveal the folder in the OS file manager (Settings › Pipelines › Open folder). */
+  openFolder?(): void;
+  /** Display path of the folder, e.g. `~/.config/kotilo/kit/pipelines`. */
+  dir?: string;
+}
+
 export interface ThemeStore {
   id(): string;
   set(id: string): Promise<void>;
@@ -45,6 +59,8 @@ export interface Host {
     /** Another window imported a theme. */
     subscribe(cb: () => void): () => void;
   };
+  /** Pipelines folder. Absent = pipelines are not available in this shell. */
+  pipelines?: PipelineStore;
   /** Shown in the settings status bar, e.g. `%APPDATA%\kotilo\kit\config.toml`. */
   configPath?: string;
   /** Frameless window controls (Windows/Linux full window). Absent = native title bar. */
@@ -77,4 +93,32 @@ export function configThemeStore(config: ConfigStore): ThemeStore {
     set: (id) => config.update((c) => ({ ...c, theme: { ...c.theme, id } })),
     subscribe: (cb) => config.subscribe((c) => cb(c.theme.id)),
   };
+}
+
+/** In-memory PipelineStore — tests and previews. `files` maps name → TOML source. */
+export function memoryPipelineStore(files: Record<string, string> = {}, dir = '/cfg/pipelines'): PipelineStore & { files: Record<string, string> } {
+  const subs = new Set<() => void>();
+  const changed = () => subs.forEach((cb) => cb());
+  const store = {
+    files: { ...files },
+    dir,
+    async list() {
+      return Object.keys(store.files)
+        .sort()
+        .map((name) => ({ file: `${dir}/${name}.toml`, source: store.files[name]! }));
+    },
+    async write(name: string, toml: string) {
+      store.files[name] = toml;
+      changed();
+    },
+    async remove(name: string) {
+      delete store.files[name];
+      changed();
+    },
+    subscribe(cb: () => void) {
+      subs.add(cb);
+      return () => void subs.delete(cb);
+    },
+  };
+  return store;
 }
