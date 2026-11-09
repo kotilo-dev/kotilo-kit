@@ -13,7 +13,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Tag matches the app version
         run: |
           tag="${GITHUB_REF_NAME#v}"
@@ -39,9 +39,9 @@ jobs:
             args: '--bundles appimage,deb'
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm
@@ -69,6 +69,15 @@ jobs:
           releaseDraft: true
           prerelease: false
           args: ${{ matrix.args }}
+      - name: Drop the macOS .app archive (updater-only; Kit has no updater)
+        if: runner.os == 'macOS'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for a in $(gh release view "$GITHUB_REF_NAME" --json assets -q '.assets[].name' | grep '\.app\.tar\.gz$'); do
+            gh release delete-asset "$GITHUB_REF_NAME" "$a" --yes
+          done
       - name: Installer size budget (≤ 25 MB, docs/01-requirements.md)
         shell: bash
         # MSI / setup.exe / dmg / deb must stay ≤ 25 MB. The AppImage embeds WebKitGTK (~80 MB) and is
@@ -90,9 +99,9 @@ jobs:
     needs: check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm

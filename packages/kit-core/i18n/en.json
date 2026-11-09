@@ -518,7 +518,6 @@
   "tool.password.strength.strong": "Strong",
   "tool.password.strength.veryStrong": "Very strong",
   "error.password.noClass": "Turn on at least one character set",
-  "error.password.tooShort": "Length must be at least {min}, one per selected character set",
   "tool.query.name": "Query string",
   "tool.query.description": "Convert a URL query string to JSON and back",
   "tool.query.opt.mode": "Direction",

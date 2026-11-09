@@ -518,7 +518,6 @@
   "tool.password.strength.strong": "Güçlü",
   "tool.password.strength.veryStrong": "Çok güçlü",
   "error.password.noClass": "En az bir karakter kümesini aç",
-  "error.password.tooShort": "Uzunluk en az {min} olmalı; seçili her küme için bir karakter",
   "tool.query.name": "Query string",
   "tool.query.description": "URL query string’i JSON’a ve geri dönüştür",
   "tool.query.opt.mode": "Yön",

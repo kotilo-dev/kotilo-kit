@@ -83,7 +83,7 @@
 | favicon | Favicon/ikon seti | | P3 | 1.2 |
 
 ## Özet
-1.0: 40 araç (tüm P1 + P2'lerin çoğu). 1.1: +20. 1.2: görsel araçlar. SAP/ABAP kategorisi ayrı spec ile eklenir; bu katalogda yer almaz.
+1.0: 31 araç (tüm P1 + P2'lerin çoğu). 1.1: +15. 1.2: +4 görsel araç. SAP/ABAP kategorisi ayrı spec ile eklenir; bu katalogda yer almaz.
 
 ## Araç ekleme kontrol listesi
 - [ ] `src/<category>/<id>.ts` `defineTool` ile; `examples` en az 3

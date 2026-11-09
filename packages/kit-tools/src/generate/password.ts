@@ -103,7 +103,7 @@ export default defineTool<Opts>({
         .filter((k) => opts[k])
         .map((k) => [...CLASSES[k]].filter((c) => !opts.exclude || !AMBIGUOUS.has(c)));
       if (sets.length === 0) fail('error.password.noClass');
-      if (opts.length < sets.length) fail('error.password.tooShort', { min: sets.length });
+      // length is clamped to ≥ 4 (option spec) and there are 4 classes, so one-of-each always fits
       const all = sets.flat();
       bits = opts.length * Math.log2(all.length);
       for (let n = 0; n < opts.count; n++) {

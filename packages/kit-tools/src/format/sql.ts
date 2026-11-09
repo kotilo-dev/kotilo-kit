@@ -28,23 +28,39 @@ type Opts = {
 
 const START_RE = /^(?:--[^\n]*\n\s*)*(select|insert|update|delete|with|create)\b/i;
 
+// identifier: bare, "quoted", `quoted` or [quoted], optionally schema-qualified
+const ID = String.raw`(?:[\w$]+|"[^"]+"|\x60[^\x60]+\x60|\[[^\]]+\])(?:\.(?:[\w$*]+|"[^"]+"|\x60[^\x60]+\x60|\[[^\]]+\]))*`;
+const re = (src: string) => new RegExp(src, 'i');
+
+/** Statement shapes; prose like "Select the file from the menu" or "Insert into the slot…" must not match. */
+const STRUCTURE: Record<string, RegExp> = {
+  select: re(String.raw`^select\s+(?!from\b)[\s\S]+?\bfrom\s+${ID}`),
+  insert: re(String.raw`^insert\s+into\s+${ID}\s*(?:\(|values\b|select\b|default\s+values\b|;|$)`),
+  update: re(String.raw`^update\s+${ID}\s+set\s+${ID}\s*=`),
+  delete: re(String.raw`^delete\s+from\s+${ID}\s*(?:where\b|using\b|returning\b|;|$)`),
+  with: re(String.raw`^with\s+(?:recursive\s+)?${ID}\s*(?:\([^)]*\)\s*)?as\s*(?:(?:not\s+)?materialized\s*)?\(`),
+  create: re(
+    String.raw`^create\s+(?:or\s+replace\s+)?(?:temporary\s+|temp\s+|unique\s+)?(?:table|view|index|database|schema|function|procedure|trigger|sequence|type)\s+(?:if\s+not\s+exists\s+)?${ID}\s*(?:\(|as\b|on\b|;|$)`,
+  ),
+};
+
+// words that read as English prose and never appear bare in a query
+const PROSE_RE = /\b(?:the|your|my|our|their|this|these|those|please|click)\b/i;
+
 export function looksLikeSql(input: string): number {
-  const s = input.trim();
+  const s = input.trim().replace(/^(?:--[^\n]*\n\s*)+/, '');
   const m = START_RE.exec(s);
   if (!m) return 0;
   const kw = m[1]!.toLowerCase();
-  const structure: Record<string, RegExp> = {
-    select: /\bfrom\b|^select\s+[\w'"(*@-]/i,
-    insert: /\binsert\s+into\b/i,
-    update: /^update\s+\S+\s+set\b/i,
-    delete: /\bdelete\s+from\b/i,
-    with: /\bas\s*\(/i,
-    create: /\bcreate\s+(?:or\s+replace\s+)?(?:temporary\s+|temp\s+|unique\s+)?(?:table|view|index|database|schema|function|procedure|trigger|sequence|type)\b/i,
-  };
-  if (!structure[kw]!.test(s)) return 0;
-  // "select a few items" style prose: SELECT without FROM and with many plain words
-  if (kw === 'select' && !/\bfrom\b/i.test(s) && !/[(),=*'"0-9]/.test(s)) return 0;
-  return /\bfrom\b|\binto\b|\bset\b|\btable\b|\bas\s*\(/i.test(s) ? 0.7 : 0.4;
+  // ignore string literals and comments when looking for prose
+  const bare = s.replace(/'(?:[^']|'')*'/g, "''").replace(/--[^\n]*/g, '');
+  if (PROSE_RE.test(bare)) return 0;
+  // a sentence ends with . ! or ?; a query ends with ; or nothing
+  if (/[.!?]$/.test(bare.trim())) return 0;
+  if (STRUCTURE[kw]!.test(s)) return 0.7;
+  // "select 1", "select now()": SELECT without FROM, recognised only with expression syntax
+  if (kw === 'select' && /^select\s+[^\s]/i.test(s) && /[(),=*'"0-9]/.test(s.slice(6))) return 0.4;
+  return 0;
 }
 
 export default defineTool<Opts>({
