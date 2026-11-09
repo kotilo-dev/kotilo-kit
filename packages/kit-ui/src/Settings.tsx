@@ -4,8 +4,9 @@ import { useState } from 'react';
 import type { Host } from './host.js';
 import { MONO_FONTS, parseUserThemes } from './theme.js';
 
-/** Settings sidebar (docs/02-design.md › Ayarlar). Only Appearance has a screen in the mockup so far. */
+/** Settings sidebar (docs/02-design.md › Ayarlar). Sections without a mockup screen stay disabled. */
 export const SETTINGS_SECTIONS = ['general', 'appearance', 'shortcuts', 'clipboard', 'plugins', 'pipelines', 'privacy', 'about'] as const;
+export type SettingsSection = (typeof SETTINGS_SECTIONS)[number];
 const ACCENTS = ['blue', 'mauve', 'green', 'yellow', 'peach', 'red', 'teal'] as const;
 
 export interface SettingsProps {
@@ -18,12 +19,31 @@ export interface SettingsProps {
 
 type Notice = { kind: 'ok' | 'error'; text: string } | null;
 
-export function SettingsNav({ tr }: { tr: SettingsProps['tr'] }) {
+export function SettingsNav({
+  tr,
+  section = 'appearance',
+  enabled = ['appearance'],
+  onSection,
+}: {
+  tr: SettingsProps['tr'];
+  section?: SettingsSection;
+  enabled?: readonly SettingsSection[];
+  onSection?: (s: SettingsSection) => void;
+}) {
   return (
     <nav className="kf-nav kf-settings-nav" aria-label={tr('settings.title')}>
       {SETTINGS_SECTIONS.map((s) =>
-        s === 'appearance' ? (
-          <a key={s} href="#appearance" className="kf-tool kf-tool-on" aria-current="page" onClick={(e) => e.preventDefault()}>
+        enabled.includes(s) ? (
+          <a
+            key={s}
+            href={`#${s}`}
+            className={`kf-tool${s === section ? ' kf-tool-on' : ''}`}
+            aria-current={s === section ? 'page' : undefined}
+            onClick={(e) => {
+              e.preventDefault();
+              onSection?.(s);
+            }}
+          >
             <span className="kf-tool-name">{tr(`settings.nav.${s}`)}</span>
           </a>
         ) : (

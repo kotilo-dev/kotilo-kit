@@ -127,23 +127,31 @@ function tableToTsv(table: TableOutput): string {
   return [table.columns, ...table.rows].map((r) => r.join('\t')).join('\n');
 }
 
+export interface PipelineSteps {
+  /** Results of the steps that ran, in order. */
+  steps: StepResult[];
+  /** Why the run stopped early: an invalid pipeline (step 0 or the bad step) or a failing step. */
+  error?: PipelineIssue;
+}
+
 /**
- * Run every step; returns the last result plus each intermediate one (the editor shows them).
- * A failing step throws `error.pipeline.step` naming the step and carrying the tool's own message.
+ * Run steps until one fails, keeping every result so far (the editor shows intermediate outputs).
+ * Never throws: problems come back as `error` (`error.pipeline.*`).
  */
-export function runPipeline(
+export function runPipelineSteps(
   def: PipelineDef,
   registry: Registry,
   input: string,
   ctx: RunContext,
   clock: () => number = () => performance.now(),
-): PipelineRun {
-  const issues = validatePipeline(def, registry);
-  if (issues.length) throw new ToolError(issues[0]!.code, issues[0]!.params);
+): PipelineSteps {
   const steps: StepResult[] = [];
+  const issues = validatePipeline(def, registry);
+  if (issues.length) return { steps, error: issues[0]! };
   let text = input;
   let bytes = ctx.bytes;
-  def.steps.forEach((s, i) => {
+  for (let i = 0; i < def.steps.length; i++) {
+    const s = def.steps[i]!;
     const tool = registry.get(s.tool)!;
     const stepCtx: RunContext = { ...ctx };
     if (bytes && tool.accepts.includes('file')) stepCtx.bytes = bytes;
@@ -153,16 +161,31 @@ export function runPipeline(
     try {
       result = tool.run(text, resolveOptions(tool.options, s.opts), stepCtx);
     } catch (e) {
-      throw new ToolError('error.pipeline.step', {
-        step: i + 1,
-        tool: tool.name[ctx.locale],
-        detail: errorMessage(ctx.locale, e),
-      });
+      return {
+        steps,
+        error: { step: i + 1, code: 'error.pipeline.step', params: { step: i + 1, tool: tool.name[ctx.locale], detail: errorMessage(ctx.locale, e) } },
+      };
     }
     steps.push({ tool: s.tool, result, ms: clock() - start });
     bytes = result.bytes;
     text = typeof result.output === 'string' ? result.output : tableToTsv(result.output);
-  });
+  }
+  return { steps };
+}
+
+/**
+ * Run every step; returns the last result plus each intermediate one.
+ * Throws a ToolError for an invalid pipeline or a failing step (`error.pipeline.step` names the step).
+ */
+export function runPipeline(
+  def: PipelineDef,
+  registry: Registry,
+  input: string,
+  ctx: RunContext,
+  clock?: () => number,
+): PipelineRun {
+  const { steps, error } = runPipelineSteps(def, registry, input, ctx, clock);
+  if (error) throw new ToolError(error.code, error.params);
   return { result: steps[steps.length - 1]!.result, steps };
 }
 

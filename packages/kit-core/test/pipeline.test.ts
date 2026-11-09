@@ -10,6 +10,7 @@ import {
   pipelineTool,
   registryWithPipelines,
   runPipeline,
+  runPipelineSteps,
   runTool,
   stringifyPipeline,
   validatePipeline,
@@ -162,6 +163,15 @@ describe('runPipeline', () => {
       expect(errorMessage('tr', e)).toBe('2. adım (Ters çevir): Giriş boş');
       expect(errorMessage('en', new ToolError((e as ToolError).code, (e as ToolError).params))).toMatch(/^Step 2 \(Ters çevir\): /);
     }
+  });
+
+  it('runPipelineSteps keeps results up to the failing step and never throws', () => {
+    const def: PipelineDef = { name: 'f', palette: true, steps: [{ tool: 'upper', opts: {} }, { tool: 'rev', opts: {} }] };
+    const run = runPipelineSteps(def, registry, '', ctx());
+    expect(run.steps.map((s) => s.result.output)).toEqual(['']);
+    expect(run.error).toMatchObject({ step: 2, code: 'error.pipeline.step' });
+    const bad: PipelineDef = { name: 'g', palette: true, steps: [{ tool: 'gzip', opts: {} }] };
+    expect(runPipelineSteps(bad, registry, 'a', ctx())).toMatchObject({ steps: [], error: { step: 1, code: 'error.pipeline.unknownTool' } });
   });
 
   it('refuses to run an invalid pipeline', () => {

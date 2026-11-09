@@ -17,6 +17,7 @@ import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type Keybo
 import type { Host } from './host.js';
 import { ClipboardIcon, SearchIcon, ToolIcon } from './icons.js';
 import { CATEGORY_ACCENT, buildItems, clipboardPreview, formatUsed, type Section } from './model.js';
+import { usePipelines } from './pipelines.js';
 import { syncAppearance } from './theme.js';
 
 export interface PaletteProps {
@@ -38,7 +39,9 @@ const SECTION_LABEL: Record<Section, string> = {
 /** Letter from a KeyboardEvent independent of Alt-layer characters (macOS Alt+M = µ). */
 const letterOf = (e: KeyboardEvent) => (e.code.startsWith('Key') ? e.code.slice(3).toLowerCase() : e.key.toLowerCase());
 
-export function Palette({ host, registry }: PaletteProps) {
+export function Palette({ host, registry: baseRegistry }: PaletteProps) {
+  // pipelines with `palette = true` are listed like tools
+  const registry = usePipelines(host, baseRegistry).paletteRegistry;
   const [config, setConfig] = useState(() => host.config.get());
   const [query, setQuery] = useState('');
   const [clip, setClip] = useState('');

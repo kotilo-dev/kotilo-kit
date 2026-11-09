@@ -91,6 +91,24 @@ export async function createTauriHost(): Promise<Host> {
         return () => void unlisten.then((f) => f());
       },
     },
+    // <config>/pipelines/*.toml — kit-core parses them, Rust only reads/writes the files
+    pipelines: {
+      list: () => invoke<{ file: string; source: string }[]>('pipelines_list'),
+      async write(name, contents) {
+        await invoke('pipeline_write', { name, contents });
+        await emit('pipelines:changed');
+      },
+      async remove(name) {
+        await invoke('pipeline_delete', { name });
+        await emit('pipelines:changed');
+      },
+      subscribe(cb) {
+        const unlisten = listen('pipelines:changed', () => cb());
+        return () => void unlisten.then((f) => f());
+      },
+      openFolder: () => void invoke('open_config_folder', { sub: 'pipelines' }),
+      dir: await invoke<string>('pipelines_dir_display').catch(() => undefined),
+    },
     configPath: await invoke<string>('config_path_display').catch(() => undefined),
     onOpenFull(cb) {
       void invoke<FullPayload | null>('pending_full').then((p) => p && cb(p.toolId, p.input));

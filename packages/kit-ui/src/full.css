@@ -778,3 +778,429 @@
   color: var(--kit-text);
   width: 28px;
 }
+
+/* ---------- 1.1 pipelines — docs/02-design.md › 1.1, docs/mockup/Pipeline*.dc.html, SettingsPipelines.dc.html ---------- */
+.kf-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.kf-mono {
+  font-family: var(--kp-mono);
+}
+.kf-btn-primary {
+  border-color: transparent;
+  background: var(--kit-blue);
+  color: var(--kit-crust);
+  font-weight: 600;
+}
+.kf-btn-open {
+  border-color: var(--kit-blue);
+  background: var(--kit-s0);
+  color: var(--kit-text);
+}
+.kf-link-btn {
+  margin-left: 8px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--kit-blue);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+.kf-dot-pipe {
+  box-sizing: border-box;
+  background: transparent;
+  border: 1.5px solid var(--kit-subtext);
+}
+.kf-tool-on .kf-dot-pipe {
+  border-color: var(--kit-text);
+}
+.kf-dot-pipe-off,
+.kf-dot-missing {
+  background: var(--kit-overlay);
+  border-color: var(--kit-overlay);
+}
+
+/* add-to-pipeline menu */
+.kf-menu-anchor {
+  position: relative;
+}
+.kf-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 20;
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--kit-s1);
+  border-radius: 10px;
+  background: var(--kit-mantle);
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--kit-crust) 60%, transparent);
+  overflow: hidden;
+}
+.kf-menu-search,
+.kf-pick-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--kit-s0);
+}
+.kf-menu-search input,
+.kf-pick-search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--kit-text);
+  font-size: 12px;
+}
+.kf-menu-list {
+  padding: 6px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+.kf-menu-item,
+.kf-pick-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--kit-text);
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+.kf-menu-on,
+.kf-pick-on {
+  background: var(--kit-s0);
+}
+.kf-menu-plus,
+.kf-step-add-plus {
+  width: 12px;
+  font: 500 13px var(--kp-mono);
+  color: var(--kit-blue);
+}
+.kf-menu-item .kf-dot-pipe {
+  margin: 0 2px;
+}
+.kf-menu-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.kf-menu-name {
+  font-weight: 500;
+}
+.kf-menu-name.kf-mono {
+  font-size: 12px;
+  font-weight: 400;
+}
+.kf-menu-desc {
+  font-size: 11px;
+  color: var(--kit-subtext);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.kf-menu-enter {
+  font: 500 10px var(--kp-mono);
+  color: var(--kit-crust);
+  background: var(--kit-blue);
+  padding: 2px 6px;
+  border-radius: 5px;
+}
+.kf-menu-section {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--kit-overlay);
+  padding: 10px 10px 4px;
+}
+.kf-menu-foot {
+  padding: 8px 12px;
+  background: var(--kit-crust);
+  border-top: 1px solid var(--kit-s0);
+  font: 400 11px var(--kp-mono);
+  color: var(--kit-overlay);
+}
+
+/* editor */
+.kf-pipe-crumb {
+  font-size: 13px;
+  color: var(--kit-overlay);
+}
+.kf-pipe-name {
+  width: 220px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--kit-s0);
+  background: var(--kit-mantle);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--kit-text);
+  outline: none;
+}
+.kf-pipe-name:focus {
+  border-color: var(--kit-blue);
+}
+.kf-pipe-name[aria-invalid='true'] {
+  border-color: var(--kit-red);
+}
+.kf-pipe-grid {
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+}
+.kf-pipe-io {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  min-height: 0;
+}
+.kf-steps {
+  list-style: none;
+  margin: 0;
+  padding: 12px;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.kf-steps-empty {
+  padding: 8px 2px 12px;
+  font-size: 12px;
+  color: var(--kit-overlay);
+}
+.kf-step {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--kit-s0);
+  background: var(--kit-base);
+}
+.kf-step-on {
+  border: 2px solid var(--kit-blue);
+  padding: 9px 11px;
+}
+.kf-step-error {
+  border-color: color-mix(in srgb, var(--kit-red) 40%, transparent);
+}
+.kf-step-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.kf-step-num {
+  width: 14px;
+  font: 500 11px var(--kp-mono);
+  color: var(--kit-overlay);
+}
+.kf-step-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+.kf-step-missing {
+  font-family: var(--kp-mono);
+  font-weight: 400;
+  color: var(--kit-red);
+  text-decoration: line-through;
+}
+.kf-step-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--kit-subtext);
+  cursor: pointer;
+}
+.kf-step-btn:hover:not(:disabled) {
+  background: var(--kit-s0);
+  color: var(--kit-text);
+}
+.kf-step-btn:disabled {
+  color: var(--kit-s1);
+  cursor: default;
+}
+.kf-step-opts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding-left: 24px;
+}
+.kf-step-msg {
+  padding-left: 24px;
+  font-size: 12px;
+  color: var(--kit-red);
+}
+.kf-flow {
+  padding: 4px 0 4px 30px;
+  font: 400 11px var(--kp-mono);
+  color: var(--kit-overlay);
+}
+.kf-step-add-wrap {
+  margin-top: 12px;
+}
+.kf-step-add {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1.5px dashed var(--kit-s1);
+  background: transparent;
+  color: var(--kit-subtext);
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+.kf-pick {
+  border: 1px solid var(--kit-s1);
+  border-radius: 8px;
+  background: var(--kit-base);
+  overflow: hidden;
+}
+.kf-pick-list {
+  padding: 4px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+.kf-pick-name {
+  font-weight: 500;
+  white-space: nowrap;
+}
+.kf-pick-desc {
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  color: var(--kit-subtext);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.kf-pick-empty {
+  padding: 8px 10px;
+  font-size: 12px;
+  color: var(--kit-overlay);
+}
+.kf-steps-foot {
+  padding: 8px 12px;
+  border-top: 1px solid var(--kit-s0);
+  font-size: 11px;
+  color: var(--kit-overlay);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Settings › Pipelines */
+.kf-settings-intro {
+  margin: -8px 0 0;
+  font-size: 12px;
+  color: var(--kit-subtext);
+}
+.kf-settings-intro code {
+  color: var(--kit-text);
+}
+.kf-settings-empty {
+  margin: 0;
+  font-size: 13px;
+  color: var(--kit-overlay);
+}
+.kf-pipe-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.kf-pipe-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 16px;
+  border: 1px solid var(--kit-s0);
+  border-radius: 10px;
+  background: var(--kit-mantle);
+}
+.kf-pipe-row-error {
+  border-color: color-mix(in srgb, var(--kit-red) 40%, transparent);
+}
+.kf-pipe-row-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.kf-pipe-row-name {
+  width: 150px;
+  flex: none;
+  font-size: 13px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.kf-pipe-row-error .kf-pipe-row-name {
+  color: var(--kit-subtext);
+}
+.kf-pipe-chain {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--kit-subtext);
+}
+.kf-pipe-chain-step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.kf-pipe-chain-step .kf-sep {
+  margin-right: 2px;
+}
+.kf-pipe-chain-missing {
+  font-size: 11px;
+  color: var(--kit-red);
+  text-decoration: line-through;
+}
+.kf-pipe-row-msg {
+  padding-left: 22px;
+  font-size: 12px;
+  color: var(--kit-red);
+}
+.kf-pipe-format {
+  flex: none;
+}
+.kf-pipe-toml {
+  margin: 0;
+  padding: 12px 14px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--kit-text);
+  overflow-x: auto;
+}

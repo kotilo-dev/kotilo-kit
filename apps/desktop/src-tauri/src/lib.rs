@@ -149,6 +149,84 @@ fn config_write(app: AppHandle, contents: String) -> Result<(), String> {
     Ok(())
 }
 
+// ---------- pipelines/*.toml (kit-core parses them; Rust only moves bytes) ----------
+
+fn pipelines_dir() -> PathBuf {
+    config_dir().join("pipelines")
+}
+
+/// Same shape as a tool id (`^[a-z][a-z0-9-]*$`): no separators, so a name can never leave the folder.
+fn valid_pipeline_name(name: &str) -> bool {
+    let mut chars = name.chars();
+    name.len() <= 64
+        && chars.next().is_some_and(|c| c.is_ascii_lowercase())
+        && chars.all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-')
+}
+
+#[derive(Serialize)]
+struct PipelineFile {
+    file: String,
+    source: String,
+}
+
+#[tauri::command]
+fn pipelines_list() -> Vec<PipelineFile> {
+    let Ok(entries) = fs::read_dir(pipelines_dir()) else { return Vec::new() };
+    let mut files: Vec<PathBuf> = entries
+        .filter_map(|e| e.ok().map(|e| e.path()))
+        .filter(|p| p.is_file() && p.extension().is_some_and(|x| x.eq_ignore_ascii_case("toml")))
+        .collect();
+    files.sort();
+    files
+        .into_iter()
+        .filter_map(|p| Some(PipelineFile { source: fs::read_to_string(&p).ok()?, file: p.to_string_lossy().into_owned() }))
+        .collect()
+}
+
+#[tauri::command]
+fn pipeline_write(name: String, contents: String) -> Result<(), String> {
+    if !valid_pipeline_name(&name) {
+        return Err(format!("invalid pipeline name: {name}"));
+    }
+    let dir = pipelines_dir();
+    fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
+    let tmp = dir.join(format!("{name}.toml.tmp"));
+    fs::write(&tmp, contents.as_bytes()).map_err(|e| e.to_string())?;
+    fs::rename(&tmp, dir.join(format!("{name}.toml"))).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+fn pipeline_delete(name: String) -> Result<(), String> {
+    if !valid_pipeline_name(&name) {
+        return Err(format!("invalid pipeline name: {name}"));
+    }
+    match fs::remove_file(pipelines_dir().join(format!("{name}.toml"))) {
+        Err(e) if e.kind() != std::io::ErrorKind::NotFound => Err(e.to_string()),
+        _ => Ok(()),
+    }
+}
+
+#[tauri::command]
+fn pipelines_dir_display() -> String {
+    if cfg!(windows) {
+        "%APPDATA%\\kotilo\\kit\\pipelines".into()
+    } else {
+        "~/.config/kotilo/kit/pipelines".into()
+    }
+}
+
+/// Settings › "Open folder": reveal `pipelines/` or `tools/` in the OS file manager.
+#[tauri::command]
+fn open_config_folder(sub: String) -> Result<(), String> {
+    if sub != "pipelines" && sub != "tools" {
+        return Err(format!("unknown folder: {sub}"));
+    }
+    let dir = config_dir().join(&sub);
+    fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
+    let opener = if cfg!(windows) { "explorer" } else if cfg!(target_os = "macos") { "open" } else { "xdg-open" };
+    std::process::Command::new(opener).arg(&dir).spawn().map(|_| ()).map_err(|e| e.to_string())
+}
+
 #[tauri::command]
 fn hide_window(window: WebviewWindow) {
     let _ = window.hide();
@@ -351,7 +429,7 @@ pub fn run() {
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_dialog::init())
         .manage(AppState::default())
-        .invoke_handler(tauri::generate_handler![config_read, config_write, config_path_display, themes_read, themes_write, hide_window, notify, open_full, pending_full, save_file])
+        .invoke_handler(tauri::generate_handler![config_read, config_write, config_path_display, themes_read, themes_write, pipelines_list, pipeline_write, pipeline_delete, pipelines_dir_display, open_config_folder, hide_window, notify, open_full, pending_full, save_file])
         .setup(|app| {
             #[cfg(target_os = "macos")]
             app.set_activation_policy(tauri::ActivationPolicy::Accessory);
