@@ -11,9 +11,28 @@ export function messages(locale: Locale): Messages {
   return bundles[locale];
 }
 
+/** Strings shipped by plugins, by tool id. Only `tool.<id>.*` / `error.<id>.*`; built-in keys always win. */
+const pluginMessages = new Map<string, Partial<Record<Locale, Messages>>>();
+
+export function setPluginMessages(id: string, table: Partial<Record<Locale, Messages>> | undefined): void {
+  if (table) pluginMessages.set(id, table);
+  else pluginMessages.delete(id);
+}
+
+/** Drop `table` for `id` — unless a newer load has replaced it meanwhile. */
+export function clearPluginMessages(id: string, table: Partial<Record<Locale, Messages>> | undefined): void {
+  if (table && pluginMessages.get(id) === table) pluginMessages.delete(id);
+}
+
+function pluginMessage(locale: Locale, key: string): string | undefined {
+  const id = /^(?:tool|error)\.([a-z][a-z0-9-]*)\./.exec(key)?.[1];
+  const table = id ? pluginMessages.get(id) : undefined;
+  return table ? (table[locale]?.[key] ?? table.en?.[key]) : undefined;
+}
+
 /** Translate `key`; falls back to English, then to the key itself. `{name}` placeholders are filled from `params`. */
 export function t(locale: Locale, key: string, params?: Record<string, string | number>): string {
-  const template = bundles[locale][key] ?? bundles.en[key] ?? key;
+  const template = bundles[locale][key] ?? bundles.en[key] ?? pluginMessage(locale, key) ?? key;
   if (!params) return template;
   return template.replace(/\{(\w+)\}/g, (m, name: string) =>
     name in params ? String(params[name]) : m,

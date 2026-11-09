@@ -13,6 +13,8 @@ export default defineConfig({
   clean: true,
   splitting: false,
   noExternal: [/.*/],
+  // import.meta.url for ESM deps (the QuickJS wasm variant calls createRequire(import.meta.url))
+  shims: true,
   banner: { js: '#!/usr/bin/env node' },
   // `import x from 'file?raw'` (kit-themes → docs/05-themes.toml) inlined as a string, like Vite
   esbuildPlugins: [

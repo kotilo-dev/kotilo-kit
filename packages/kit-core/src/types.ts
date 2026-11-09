@@ -111,8 +111,13 @@ export interface ToolDef<O extends OptionValues = OptionValues> {
   accepts?: InputSource[];
   run: (input: string, opts: O, ctx: RunContext) => ToolResult;
   examples?: ToolExample<O>[];
+  /**
+   * Plugins only: their own strings (`tool.<id>.opt.<key>`, `error.<id>.<reason>` …) per locale,
+   * since a plugin cannot add to `packages/kit-core/i18n`. Built-in tools leave this out.
+   */
+  messages?: Partial<Record<Locale, Record<string, string>>>;
 }
 
-export interface Tool<O extends OptionValues = OptionValues> extends Required<Omit<ToolDef<O>, 'detect'>> {
+export interface Tool<O extends OptionValues = OptionValues> extends Required<Omit<ToolDef<O>, 'detect' | 'messages'>> {
   detect?: (input: string) => number;
 }

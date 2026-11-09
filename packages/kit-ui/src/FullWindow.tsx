@@ -43,6 +43,8 @@ import { PipelineMenu } from './PipelineMenu.js';
 import { changedOptions, uniqueName, usePipelines } from './pipelines.js';
 import { SettingsAppearance, SettingsNav, type SettingsSection } from './Settings.js';
 import { SettingsPipelines } from './SettingsPipelines.js';
+import { SettingsPlugins } from './SettingsPlugins.js';
+import { usePlugins } from './plugins.js';
 import { syncAppearance } from './theme.js';
 
 export interface FullWindowProps {
@@ -50,8 +52,6 @@ export interface FullWindowProps {
   registry: Registry;
   /** App version for the status bar. */
   version: string;
-  /** Installed plugins (status bar count). Plugins arrive in 1.1. */
-  pluginCount?: number;
 }
 
 type Outcome = { kind: 'empty' } | { kind: 'ok'; result: ToolResult } | { kind: 'error'; message: string };
@@ -71,7 +71,7 @@ function isEmptyResult(r: ToolResult): boolean {
   return typeof r.output === 'string' ? r.output === '' : r.output.rows.length === 0;
 }
 
-export function FullWindow({ host, registry: baseRegistry, version, pluginCount = 0 }: FullWindowProps) {
+export function FullWindow({ host, registry: builtinRegistry, version }: FullWindowProps) {
   const [config, setConfig] = useState(() => host.config.get());
   const locale = config.general.locale;
   const tr = useCallback((key: string, params?: Record<string, string | number>) => t(locale, key, params), [locale]);
@@ -79,6 +79,9 @@ export function FullWindow({ host, registry: baseRegistry, version, pluginCount 
   const upper = (s: string) => s.toLocaleUpperCase(intlLocale(locale));
 
   // base tools + <config>/pipelines/*.toml (kept in sync with the files)
+  // built-ins + enabled tools/*.ts plugins (sandboxed), then pipelines on top
+  const plugins = usePlugins(host, builtinRegistry);
+  const baseRegistry = plugins.registry;
   const pipelines = usePipelines(host, baseRegistry);
   const { registry } = pipelines;
 
@@ -337,6 +340,7 @@ export function FullWindow({ host, registry: baseRegistry, version, pluginCount 
 
   const headerOptions = tool.options.filter((o) => !isPaneOption(o));
   const pipelineCount = registry.tools.length - baseRegistry.tools.length;
+  const pluginCount = plugins.tools.length;
   const nameTaken = (n: string) => Boolean(registry.get(n)) || pipelines.loaded.some((p) => p.name === n);
   const paneOptions = tool.options.filter(isPaneOption);
   const controls = host.windowControls;
@@ -415,10 +419,12 @@ export function FullWindow({ host, registry: baseRegistry, version, pluginCount 
           <SettingsNav
             tr={tr}
             section={settingsSection}
-            enabled={pipelines.available ? ['appearance', 'pipelines'] : ['appearance']}
+            enabled={['appearance', ...(plugins.available ? (['plugins'] as const) : []), ...(pipelines.available ? (['pipelines'] as const) : [])]}
             onSection={setSettingsSection}
           />
-          {settingsSection === 'pipelines' ? (
+          {settingsSection === 'plugins' ? (
+            <SettingsPlugins host={host} plugins={plugins} locale={locale} tr={tr} monoFamily={mono.fontFamily} />
+          ) : settingsSection === 'pipelines' ? (
             <SettingsPipelines
               host={host}
               pipelines={pipelines}
@@ -672,11 +678,11 @@ export function FullWindow({ host, registry: baseRegistry, version, pluginCount 
             <span>
               {pipelineCount
                 ? tr('ui.toolCountPipelines', {
-                    tools: nf.format(registry.tools.length - pipelineCount),
+                    tools: nf.format(builtinRegistry.tools.length),
                     pipelines: nf.format(pipelineCount),
                     plugins: nf.format(pluginCount),
                   })
-                : tr('ui.toolCount', { tools: nf.format(registry.tools.length), plugins: nf.format(pluginCount) })}
+                : tr('ui.toolCount', { tools: nf.format(builtinRegistry.tools.length), plugins: nf.format(pluginCount) })}
             </span>
             <span>v{version}</span>
           </>

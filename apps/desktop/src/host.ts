@@ -109,6 +109,24 @@ export async function createTauriHost(): Promise<Host> {
       openFolder: () => void invoke('open_config_folder', { sub: 'pipelines' }),
       dir: await invoke<string>('pipelines_dir_display').catch(() => undefined),
     },
+    // <config>/tools/*.ts — compiled and run in kit-core's QuickJS sandbox, never in this realm
+    plugins: {
+      list: () => invoke<{ file: string; source: string }[]>('plugins_list'),
+      async write(name, contents) {
+        await invoke('plugin_write', { name, contents });
+        await emit('plugins:changed');
+      },
+      async remove(name) {
+        await invoke('plugin_delete', { name });
+        await emit('plugins:changed');
+      },
+      subscribe(cb) {
+        const unlisten = listen('plugins:changed', () => cb());
+        return () => void unlisten.then((f) => f());
+      },
+      openFolder: () => void invoke('open_config_folder', { sub: 'tools' }),
+      dir: await invoke<string>('plugins_dir_display').catch(() => undefined),
+    },
     configPath: await invoke<string>('config_path_display').catch(() => undefined),
     onOpenFull(cb) {
       void invoke<FullPayload | null>('pending_full').then((p) => p && cb(p.toolId, p.input));

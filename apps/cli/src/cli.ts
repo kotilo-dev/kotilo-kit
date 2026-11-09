@@ -7,6 +7,7 @@ import {
   resolveOptions,
   resultText,
   t,
+  type LoadedPlugin,
   type Locale,
   type OptionDef,
   type Tool,
@@ -26,6 +27,10 @@ export interface CliIO {
   now?: Date;
   /** `<config>/pipelines/*.toml` files, read by main.ts (cli.ts stays free of fs). */
   pipelines?: { file: string; source: string }[];
+  /** `<config>/tools/*.ts`, already loaded into the sandbox by main.ts (`loadPlugins` is async). */
+  plugins?: LoadedPlugin[];
+  /** `[plugins] disabled` from config.toml. */
+  disabledPlugins?: string[];
 }
 
 export interface CliResult {
@@ -152,10 +157,20 @@ export function runCli(argv: string[], io: CliIO): CliResult {
   const { positionals, flags } = parseArgs(argv);
   const langFlag = flags.get('lang');
   const locale = typeof langFlag === 'string' ? localeFromTag(langFlag) : detectLocale(io.env, io.systemLocale);
-  const { registry, pipelines } = registryWithPipelines(builtinTools, io.pipelines ?? []);
-  const skipped = pipelines
-    .filter((p) => p.issues.length)
-    .map((p) => t(locale, 'cli.pipelineSkipped', { file: p.file, reason: t(locale, p.issues[0]!.code, p.issues[0]!.params) }));
+  const disabled = new Set(io.disabledPlugins ?? []);
+  const plugins = io.plugins ?? [];
+  const pluginTools = plugins.flatMap((p) => (p.tool && !disabled.has(p.tool.id) ? [p.tool] : []));
+  const { registry, pipelines } = registryWithPipelines([...builtinTools, ...pluginTools], io.pipelines ?? []);
+  const skipped = [
+    ...plugins.flatMap((p) =>
+      p.error
+        ? [t(locale, 'cli.pluginSkipped', { file: p.file, reason: `${p.error.loc ? `${p.error.loc} ` : ''}${t(locale, p.error.code, p.error.params)}` })]
+        : [],
+    ),
+    ...pipelines
+      .filter((p) => p.issues.length)
+      .map((p) => t(locale, 'cli.pipelineSkipped', { file: p.file, reason: t(locale, p.issues[0]!.code, p.issues[0]!.params) })),
+  ];
   const ok = (stdout: string | Uint8Array): CliResult => ({ stdout, stderr: '', code: 0 });
   const err = (msg: string, code = 1): CliResult => ({ stdout: '', stderr: msg.endsWith('\n') ? msg : msg + '\n', code });
 
