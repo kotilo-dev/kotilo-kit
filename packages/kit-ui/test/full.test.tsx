@@ -144,6 +144,25 @@ describe('FullWindow', () => {
     expect(document.querySelector('.kf-suggest a[href="#json"]')).toBeNull();
   });
 
+  it('suggestion keeps the input; sidebar and search switches clear it', async () => {
+    const w = setup();
+    await w.type(w.input(), '{"a":1}');
+    await settle();
+    await act(async () => void fireEvent.click(within(document.querySelector('.kf-suggest') as HTMLElement).getByText('JSON format')));
+    expect(w.input().value).toBe('{"a":1}');
+    // re-selecting the current tool keeps it
+    await act(async () => void fireEvent.click(screen.getByRole('link', { name: 'JSON format' })));
+    expect(w.input().value).toBe('{"a":1}');
+    await act(async () => void fireEvent.click(screen.getByRole('link', { name: 'URL parser' })));
+    expect(w.input().value).toBe('');
+    await w.type(w.input(), 'https://kotilo.dev');
+    const search = screen.getByRole('textbox', { name: 'Search tools' });
+    await w.type(search, 'cron');
+    await act(async () => void fireEvent.keyDown(search, { key: 'Enter' }));
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Cron expression');
+    expect(w.input().value).toBe('');
+  });
+
   it('renders table layouts as a table', async () => {
     const w = setup();
     await act(async () => void fireEvent.click(screen.getByRole('link', { name: 'URL parser' })));
@@ -185,6 +204,12 @@ describe('FullWindow', () => {
     await w.type(w.input(), 'hi');
     await act(async () => void fireEvent.click(screen.getByRole('button', { name: 'Send to tool ›' })));
     expect(w.input().value).toBe('aGk=');
+    // the next tool picked receives it
+    await act(async () => void fireEvent.click(screen.getByRole('link', { name: 'URL parser' })));
+    expect(w.input().value).toBe('aGk=');
+    // only once: a further switch starts blank
+    await act(async () => void fireEvent.click(screen.getByRole('link', { name: 'Cron expression' })));
+    expect(w.input().value).toBe('');
   });
 
   it('theme button cycles to the next theme; caption buttons call the host', async () => {
