@@ -22,9 +22,9 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       TAG: ${{ github.event.release.tag_name || inputs.tag }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm
@@ -34,7 +34,7 @@ jobs:
           gh release view "$TAG" --json assets > assets.json
           pnpm exec tsx packaging/render.ts "${TAG#v}" assets.json out
           tar -czf "kotilo-kit-manifests-${TAG}.tar.gz" -C out .
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: manifests-${{ env.TAG }}
           path: out
