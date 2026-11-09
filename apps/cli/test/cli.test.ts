@@ -88,4 +88,50 @@ describe('runCli', () => {
   it('--tz overrides TZ', () => {
     expect(runCli(['timestamp', '--tz', 'Europe/Istanbul'], io('0')).stdout).toContain('1970-01-01 02:00:00 +02:00');
   });
+
+  describe('pipelines', () => {
+    const JWT_SCOPES = [
+      'name = "jwt-scopes"',
+      '[[steps]]',
+      'tool = "base64"',
+      'opts = { mode = "decode", urlSafe = true }',
+      '[[steps]]',
+      'tool = "json"',
+      'opts = { query = "$.scopes[*]" }',
+      '[[steps]]',
+      'tool = "case"',
+      'opts = { mode = "upper" }',
+    ].join('\n');
+    const payload = Buffer.from(JSON.stringify({ sub: '1', scopes: ['read', 'write', 'deploy'] })).toString('base64url');
+    const files = [
+      { file: '/cfg/pipelines/jwt-scopes.toml', source: JWT_SCOPES },
+      { file: '/cfg/pipelines/gz.toml', source: '[[steps]]\ntool = "gzip"' },
+    ];
+
+    it('runs a pipeline by name, like a tool', () => {
+      const r = runCli(['jwt-scopes'], io(payload + '\n', { pipelines: files }));
+      expect(r.stderr).toBe('');
+      expect(r.code).toBe(0);
+      expect(JSON.parse(r.stdout as string)).toEqual(['READ', 'WRITE', 'DEPLOY']);
+    });
+
+    it('list shows pipelines and reports skipped files on stderr', () => {
+      const r = runCli(['list'], io('', { stdinIsTTY: true, pipelines: files }));
+      expect(r.stdout).toContain('PIPELINES');
+      expect(r.stdout).toMatch(/jwt-scopes\s+Base64 → JSON format → Case/);
+      expect(r.stderr).toContain('Skipped pipeline /cfg/pipelines/gz.toml: Step 1: no tool named “gzip” is installed');
+    });
+
+    it('a broken pipeline explains itself instead of "unknown tool"', () => {
+      const r = runCli(['gz'], io('x', { pipelines: files, env: { KOTILO_LANG: 'tr' } }));
+      expect(r.code).toBe(1);
+      expect(r.stderr).toBe('1. adım: “gzip” adlı araç yüklü değil\n');
+    });
+
+    it('a failing step names the step', () => {
+      const r = runCli(['jwt-scopes'], io('bm90IGpzb24', { pipelines: files }));
+      expect(r.code).toBe(1);
+      expect(r.stderr).toMatch(/^Step 2 \(JSON format\): Invalid JSON/);
+    });
+  });
 });

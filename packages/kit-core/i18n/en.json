@@ -642,5 +642,14 @@
   "settings.importFailed": "Could not import the theme: {detail}",
   "settings.noThemes": "no [themes.<id>] block found",
   "settings.importBuiltin": "Built-in theme ids cannot be replaced: {ids}",
-  "settings.importWarnings": "{n} warning(s), e.g. {first}"
+  "settings.importWarnings": "{n} warning(s), e.g. {first}",
+  "error.pipeline.parse": "Invalid pipeline file: {detail}",
+  "error.pipeline.badName": "Invalid pipeline name “{name}”: use lowercase letters, digits and -",
+  "error.pipeline.noSteps": "The pipeline has no steps",
+  "error.pipeline.badStep": "Step {step} is invalid: it needs a tool and plain option values",
+  "error.pipeline.unknownTool": "Step {step}: no tool named “{tool}” is installed",
+  "error.pipeline.unknownOption": "Step {step}: {tool} has no option “{key}”",
+  "error.pipeline.idTaken": "The name “{name}” is already used by another tool or pipeline",
+  "error.pipeline.step": "Step {step} ({tool}): {detail}",
+  "cli.pipelineSkipped": "Skipped pipeline {file}: {reason}"
 }
