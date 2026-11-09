@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Kotilo Kit — Pipeline ayarları</title>
+<script src="./support.js"></script>
+<script src="themes.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+a{color:#89b4fa}a:hover{color:#b4befe}
+</style>
+</helmet>
+<div style="{{vars}}; width: 1280px; height: 800px; box-sizing: border-box; background: var(--base); border-radius: 12px; border: 1px solid var(--s1); display: flex; flex-direction: column; font-family: Inter, system-ui, sans-serif; color: var(--text); overflow: hidden">
+
+  <div style="display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: var(--mantle); border-bottom: 1px solid var(--s0)">
+    <span style="display: flex; gap: 7px; margin-right: 8px"><span style="width: 11px; height: 11px; border-radius: 50%; background: var(--red)"></span><span style="width: 11px; height: 11px; border-radius: 50%; background: var(--yellow)"></span><span style="width: 11px; height: 11px; border-radius: 50%; background: var(--green)"></span></span>
+    <span style="font-size: 13px; font-weight: 600">Kotilo Kit</span>
+    <span style="color: var(--overlay)">/</span>
+    <span style="font-size: 13px; color: var(--subtext)">Ayarlar</span>
+    <span style="color: var(--overlay)">/</span>
+    <span style="font-size: 13px; color: var(--text)">Pipeline'lar</span>
+  </div>
+
+  <div style="display: flex; flex: 1; min-height: 0">
+    <nav aria-label="Ayarlar" style="width: 232px; box-sizing: border-box; padding: 12px 10px; border-right: 1px solid var(--s0); background: var(--mantle); display: flex; flex-direction: column; gap: 2px; font-size: 13px">
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Genel</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Görünüm</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Kısayollar</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Pano algılama</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Eklentiler</a>
+      <a href="#" aria-current="page" style="padding: 7px 10px; border-radius: 7px; background: var(--s0); color: var(--text); text-decoration: none; font-weight: 500">Pipeline'lar</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Gizlilik</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Hakkında</a>
+    </nav>
+
+    <main style="flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 24px 28px; gap: 18px; overflow: hidden">
+      <div style="display: flex; align-items: center; gap: 12px">
+        <h1 style="margin: 0; font-size: 20px; font-weight: 600">Pipeline'lar</h1>
+        <span style="font: 400 11px JetBrains Mono, monospace; color: var(--overlay)">3 dosya</span>
+        <span style="flex: 1"></span>
+        <button style="padding: 6px 12px; border-radius: 7px; border: 1px solid var(--s0); background: var(--mantle); color: var(--subtext); font-size: 12px; cursor: pointer">Klasörü aç</button>
+        <button style="padding: 6px 14px; border-radius: 7px; border: none; background: var(--blue); color: var(--crust); font-size: 12px; font-weight: 600; cursor: pointer">+ Yeni pipeline</button>
+      </div>
+      <p style="margin: -8px 0 0; font-size: 12px; color: var(--subtext)">Araçları zincirle: her adımın çıktısı sonrakinin girişi olur. Pipeline'lar palette'te araç gibi listelenir ve CLI'dan çalışır: <span style="font-family: JetBrains Mono, monospace; color: var(--text)">kotilo kit jwt-scopes &lt; in.txt</span></p>
+
+      <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+        <li style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; border: 1px solid var(--s0); border-radius: 10px; background: var(--mantle)">
+          <span style="width: 8px; height: 8px; box-sizing: border-box; border-radius: 2px; border: 1.5px solid var(--text)"></span>
+          <span style="width: 150px; font: 500 13px JetBrains Mono, monospace">jwt-scopes</span>
+          <span style="flex: 1; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--subtext)">
+            <span style="display: flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--blue)"></span>Base64 decode</span><span style="color: var(--overlay)">→</span>
+            <span style="display: flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--yellow)"></span>JSON <span style="font-family: JetBrains Mono, monospace; font-size: 11px; color: var(--overlay)">$.scopes</span></span><span style="color: var(--overlay)">→</span>
+            <span style="display: flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--green)"></span>Case UPPER</span>
+          </span>
+          <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--subtext)"><input type="checkbox" checked style="accent-color: var(--blue); width: 14px; height: 14px">Palette</label>
+          <button style="padding: 4px 10px; border-radius: 5px; border: 1px solid var(--s0); background: transparent; color: var(--subtext); font-size: 11px; cursor: pointer">Düzenle</button>
+          <button style="padding: 4px 10px; border-radius: 5px; border: 1px solid var(--s0); background: transparent; color: var(--subtext); font-size: 11px; cursor: pointer">Çoğalt</button>
+          <button aria-label="jwt-scopes pipeline'ını sil" style="padding: 4px 10px; border-radius: 5px; border: 1px solid var(--s0); background: transparent; color: var(--subtext); font-size: 11px; cursor: pointer">Sil</button>
+        </li>
+
+        <li style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; border: 1px solid var(--s0); border-radius: 10px; background: var(--mantle)">
+          <span style="width: 8px; height: 8px; box-sizing: border-box; border-radius: 2px; border: 1.5px solid var(--text)"></span>
+          <span style="width: 150px; font: 500 13px JetBrains Mono, monospace">csv-to-md</span>
+          <span style="flex: 1; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--subtext)">
+            <span style="display: flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--green)"></span>Satır işlemleri <span style="font-family: JetBrains Mono, monospace; font-size: 11px; color: var(--overlay)">tekilleştir</span></span><span style="color: var(--overlay)">→</span>
+            <span style="display: flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--yellow)"></span>CSV → Markdown</span>
+          </span>
+          <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--subtext)"><input type="checkbox" checked style="accent-color: var(--blue); width: 14px; height: 14px">Palette</label>
+          <button style="padding: 4px 10px; border-radius: 5px; border: 1px solid var(--s0); background: transparent; color: var(--subtext); font-size: 11px; cursor: pointer">Düzenle</button>
+          <button style="padding: 4px 10px; border-radius: 5px; border: 1px solid var(--s0); background: transparent; color: var(--subtext); font-size: 11px; cursor: pointer">Çoğalt</button>
+          <button aria-label="csv-to-md pipeline'ını sil" style="padding: 4px 10px; border-radius: 5px; border: 1px solid var(--s0); background: transparent; color: var(--subtext); font-size: 11px; cursor: pointer">Sil</button>
+        </li>
+
+        <li style="display: flex; flex-direction: column; gap: 6px; padding: 12px 16px; border: 1px solid color-mix(in srgb, var(--red) 40%, transparent); border-radius: 10px; background: var(--mantle)">
+          <div style="display: flex; align-items: center; gap: 14px">
+            <span style="width: 8px; height: 8px; box-sizing: border-box; border-radius: 2px; border: 1.5px solid var(--subtext)"></span>
+            <span style="width: 150px; font: 500 13px JetBrains Mono, monospace; color: var(--subtext)">gz-payload</span>
+            <span style="flex: 1; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--subtext)">
+              <span style="display: flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--blue)"></span>Base64 decode</span><span style="color: var(--overlay)">→</span>
+              <span style="font-family: JetBrains Mono, monospace; font-size: 11px; color: var(--red); text-decoration: line-through">gzip</span><span style="color: var(--overlay)">→</span>
+              <span style="display: flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 2px; background: var(--yellow)"></span>JSON</span>
+            </span>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--overlay)"><input type="checkbox" disabled style="width: 14px; height: 14px">Palette</label>
+            <button style="padding: 4px 10px; border-radius: 5px; border: 1px solid var(--s0); background: transparent; color: var(--subtext); font-size: 11px; cursor: pointer">Düzenle</button>
+            <button style="padding: 4px 10px; border-radius: 5px; border: 1px solid var(--s0); background: transparent; color: var(--subtext); font-size: 11px; cursor: pointer">Çoğalt</button>
+            <button aria-label="gz-payload pipeline'ını sil" style="padding: 4px 10px; border-radius: 5px; border: 1px solid var(--s0); background: transparent; color: var(--subtext); font-size: 11px; cursor: pointer">Sil</button>
+          </div>
+          <div style="padding-left: 22px; font-size: 12px; color: var(--red)">2. adım: "gzip" adlı araç yüklü değil. Palette'te gösterilmiyor.</div>
+        </li>
+      </ul>
+
+      <section style="border: 1px solid var(--s0); border-radius: 10px; background: var(--mantle); overflow: hidden; display: flex; flex-direction: column">
+        <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--s0); font-size: 12px">
+          <h2 style="margin: 0; font-size: 12px; font-weight: 600">Dosya biçimi</h2>
+          <span style="font: 400 11px JetBrains Mono, monospace; color: var(--overlay)">~/.config/kotilo/kit/pipelines/jwt-scopes.toml</span>
+        </div>
+        <pre style="margin: 0; padding: 12px 14px; font: 400 12px/1.6 JetBrains Mono, monospace; color: var(--text)"><span style="color: var(--subtext)">name</span> = <span style="color: var(--green)">"jwt-scopes"</span>
+<span style="color: var(--subtext)">palette</span> = <span style="color: var(--peach)">true</span>
+
+<span style="color: var(--blue)">[[steps]]</span>
+<span style="color: var(--subtext)">tool</span> = <span style="color: var(--green)">"base64"</span>
+<span style="color: var(--subtext)">opts</span> = { mode = <span style="color: var(--green)">"decode"</span>, urlSafe = <span style="color: var(--peach)">true</span> }
+
+<span style="color: var(--blue)">[[steps]]</span>
+<span style="color: var(--subtext)">tool</span> = <span style="color: var(--green)">"json"</span>
+<span style="color: var(--subtext)">opts</span> = { query = <span style="color: var(--green)">"$.scopes[*]"</span> }</pre>
+      </section>
+    </main>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 16px; padding: 6px 16px; background: var(--crust); border-top: 1px solid var(--s0); font: 400 11px JetBrains Mono, monospace; color: var(--overlay)">
+    <span style="display: flex; align-items: center; gap: 6px"><span style="width: 6px; height: 6px; border-radius: 50%; background: var(--green)"></span>çevrimdışı · ağ yok · telemetri yok</span>
+    <span>{{themeName}}</span>
+    <span style="flex: 1"></span>
+    <span>ayarlar: ~/.config/kotilo/kit/config.toml</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","default":"catppuccin-mocha","options":["catppuccin-mocha","gruvbox-dark","tokyo-night","everforest-dark","nord","rose-pine-moon","dracula"],"section":"Tema"},"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var id = this.props.theme || 'catppuccin-mocha';
+    var t = window.KotiloThemes[id] || window.KotiloThemes['catppuccin-mocha'];
+    return { vars: window.kotiloThemeVars(id), themeName: t.name };
+  }
+}
+</script>
+</body>
+</html>

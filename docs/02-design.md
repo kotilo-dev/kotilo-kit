@@ -1,6 +1,6 @@
 # 02 — Tasarım
 
-Mockup (Claude Design canvas, 3 artboard): **Palette 720×480**, **Tam pencere 1280×800 (Base64)**, **Ayarlar › Tema 1280×800**. Her artboard'un Tweaks panelinde `theme` anahtarı 7 temayı gösterir; uygulama görünümü bu mockup'a birebir uyar.
+Mockup (Claude Design canvas, 3 artboard): **Palette 720×480**, **Tam pencere 1280×800 (Base64)**, **Ayarlar › Tema 1280×800**. 1.1 ekleri ayrı canvas'ta ("Kotilo Kit 1.1 Mockup", 5 artboard): **Pipeline düzenleyici 1280×800**, **Pipeline'a ekle menüsü**, **Ayarlar › Pipeline'lar**, **Ayarlar › Eklentiler**, **kit add onayı** (`docs/mockup/`, aşağıda *1.1*). Her artboard'un Tweaks panelinde `theme` anahtarı 7 temayı gösterir; uygulama görünümü bu mockup'a birebir uyar.
 
 ## Token'lar
 Tüm Kotilo ürünleriyle ortak ad seti. CSS değişkeni `--kit-<token>`; değerler yalnızca `05-themes.toml`'dan gelir.
@@ -50,6 +50,14 @@ Aksan üstüne metin daima `crust` (ör. mavi buton → `crust` yazı). Kategori
 - Kenar çubuğu: Genel, Görünüm, Kısayollar, Pano algılama, Eklentiler, Pipeline'lar, Gizlilik, Hakkında.
 - Tema kartları 4 sütun grid: üst yarı temanın `base` zemini üstünde `text`/`subtext` çizgileri ve 7 aksan karesi (16 px, köşe 4); alt yarı ad 13/500 + id mono 11 `overlay`; seçili kart kenarlığı 2 px `blue`, diğerleri `s0`. Son kart "+ Özel tema" kesik kenarlık.
 - İki ayar kartı: Yazı tipi (mono seçimi, boyut slider 11–18, ligature) ve Pencere (palette opaklığı 60–100, köşe 0–16, kompakt yoğunluk).
+
+### 1.1 — Pipeline ve eklentiler
+- **Pipeline ikonu:** kategori rengi yok; kenar çubuğu ve listelerde 8 px kare yerine 1.5 px kenarlıklı içi boş kare (`text` seçili, `subtext` diğer). Kenar çubuğunda "PIPELINE" bölümü kategorilerin en üstünde.
+- **Pipeline'a ekle** (araç başlık satırındaki ikincil buton): butonun altında sağa hizalı 340 px menü, zemin `mantle`, kenarlık `s1`, köşe 10. Üstte "Pipeline ara…" arama; ilk satır "+ Yeni pipeline" (seçili, `enter` rozeti; aracı mevcut seçenekleriyle ilk adım yapar ve düzenleyiciyi açar); "SONUNA EKLE" başlığı altında mevcut pipeline'lar (ad mono 12 + zincir 11 `subtext`). Alt şerit `crust`: "↵ ekle · seçili seçenekler adımla taşınır".
+- **Pipeline düzenleyici** (ana alan): başlık satırı "Pipeline / [ad input mono 18/600]" + "N adım · canlı" meta, sağda "Palette'te göster" checkbox, Vazgeç (ikincil), Kaydet (`blue`). Altında grid `360px | 1fr`: solda **Adımlar** paneli (adım kartı: numara mono 11 `overlay`, kategori karesi, ad 13/600, ↑ ↓ × ikon butonları 24 px; kartın içinde aracın seçenekleri aynı bileşenlerle; seçili kart 2 px `blue` kenarlık; kartlar arası "↓ metin" mono 11 `overlay`; en altta kesik kenarlıklı "+ Adım ekle" `ctrl ↵`; panel alt şeridinde dosya yolu mono 11). Sağda Giriş ve Çıktı panelleri alt alta (1fr/1fr); Çıktı başlığında adım seçici (son adım varsayılan, ara çıktılar seçilebilir) + "N satır · N ms".
+- **Ayarlar › Pipeline'lar:** başlık + "N dosya" meta, sağda "Klasörü aç" (ikincil), "+ Yeni pipeline" (`blue`). Açıklama satırı CLI örneğiyle. Her pipeline bir satır kartı (`mantle`, köşe 10): ad mono 13/500 (150 px), adım zinciri (kategori karesi + ad, ayırıcı "→" `overlay`), "Palette" checkbox, Düzenle · Çoğalt · Sil. Bozuk pipeline: kenarlık `red` %40, eksik adım üstü çizili `red`, altında `red` 12 px neden satırı; Palette kapalı. Altta "Dosya biçimi" kartı TOML örneği.
+- **Ayarlar › Eklentiler:** başlık + "N etkin · N hatalı", "Klasörü aç", "kit-tools'tan ekle…" (`blue`). Kalkan ikonlu bilgi şeridi (sandbox sınırları + klasör yolu). Eklenti kartı: kategori karesi, ad 13/600 + "id · sürüm" mono 11, açıklama 12 `subtext`; kaynak rozeti ("kit-tools · imza doğrulandı" `teal` onay ikonlu ya da "yerel dosya" `subtext`), "Etkin" checkbox, Kaldır. Yüklenemeyen eklenti: kenarlık `red` %40, `red` mono 12 hata satırı, "Yeniden yükle". Alt not: Kit kendiliğinden ağa çıkmaz.
+- **kit add onayı:** 480 px modal (`base`, kenarlık `s1`, gölge palette ile aynı), başlık 16/600 "kit-tools'tan eklenti kur", alt metin "Kit'in yaptığı tek ağ çağrısı budur". Eklenti adı input (mono); `mantle` tanım listesi: Bağlanılacak, İndirilecek, Gönderilen, Doğrulama. Alt şerit `mantle`: "esc iptal", İptal, "Bağlan ve kur" (`blue`). "Bir daha sorma" yoktur; her kurulumda sorulur.
 
 ## Etkileşim
 - Klavye öncelikli: palette'te ↑↓ seçim, `Tab` seçenekler, `Alt+harf` seçenek değiştirme, `Ctrl+Shift+C` çıktıyı kopyala, `Ctrl+L` girişi temizle.
