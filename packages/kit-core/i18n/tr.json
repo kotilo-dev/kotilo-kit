@@ -642,5 +642,14 @@
   "settings.importFailed": "Tema içe aktarılamadı: {detail}",
   "settings.noThemes": "[themes.<id>] bloğu bulunamadı",
   "settings.importBuiltin": "Yerleşik tema adları değiştirilemez: {ids}",
-  "settings.importWarnings": "{n} uyarı, örn. {first}"
+  "settings.importWarnings": "{n} uyarı, örn. {first}",
+  "error.pipeline.parse": "Geçersiz pipeline dosyası: {detail}",
+  "error.pipeline.badName": "Geçersiz pipeline adı “{name}”: küçük harf, rakam ve - kullan",
+  "error.pipeline.noSteps": "Pipeline'da adım yok",
+  "error.pipeline.badStep": "{step}. adım geçersiz: bir araç ve düz seçenek değerleri gerekir",
+  "error.pipeline.unknownTool": "{step}. adım: “{tool}” adlı araç yüklü değil",
+  "error.pipeline.unknownOption": "{step}. adım: {tool} aracında “{key}” seçeneği yok",
+  "error.pipeline.idTaken": "“{name}” adı başka bir araç ya da pipeline tarafından kullanılıyor",
+  "error.pipeline.step": "{step}. adım ({tool}): {detail}",
+  "cli.pipelineSkipped": "{file} pipeline'ı atlandı: {reason}"
 }

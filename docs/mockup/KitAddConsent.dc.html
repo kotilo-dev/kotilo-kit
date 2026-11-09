@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Kotilo Kit — kit-tools ağ onayı</title>
+<script src="./support.js"></script>
+<script src="themes.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+a{color:#89b4fa}a:hover{color:#b4befe}
+</style>
+</helmet>
+<div style="{{vars}}; width: 560px; height: 460px; box-sizing: border-box; background: var(--crust); border-radius: 12px; font-family: Inter, system-ui, sans-serif; color: var(--text); display: flex; align-items: center; justify-content: center">
+
+  <div role="dialog" aria-modal="true" aria-labelledby="consent-title" style="width: 480px; box-sizing: border-box; border: 1px solid var(--s1); border-radius: 12px; background: var(--base); box-shadow: 0 24px 64px rgba(0,0,0,0.5); display: flex; flex-direction: column; overflow: hidden">
+    <div style="padding: 18px 20px 6px; display: flex; flex-direction: column; gap: 6px">
+      <h2 id="consent-title" style="margin: 0; font-size: 16px; font-weight: 600">kit-tools'tan eklenti kur</h2>
+      <p style="margin: 0; font-size: 12px; color: var(--subtext)">Kurulum için ağa bağlanılacak. Kit'in yaptığı tek ağ çağrısı budur.</p>
+    </div>
+
+    <div style="padding: 12px 20px; display: flex; flex-direction: column; gap: 12px">
+      <label style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--subtext)">Eklenti
+        <input value="slug" style="padding: 7px 10px; border-radius: 6px; border: 1px solid var(--s1); background: var(--mantle); font: 400 13px JetBrains Mono, monospace; color: var(--text); outline: none">
+      </label>
+
+      <dl style="margin: 0; display: grid; grid-template-columns: 96px minmax(0, 1fr); row-gap: 8px; column-gap: 12px; padding: 12px 14px; border: 1px solid var(--s0); border-radius: 8px; background: var(--mantle); font-size: 12px">
+        <dt style="color: var(--subtext)">Bağlanılacak</dt>
+        <dd style="margin: 0; font-family: JetBrains Mono, monospace; font-size: 11px">github.com/kotilo-dev/kit-tools</dd>
+        <dt style="color: var(--subtext)">İndirilecek</dt>
+        <dd style="margin: 0; font-family: JetBrains Mono, monospace; font-size: 11px">tools/slug.ts · slug.ts.sig</dd>
+        <dt style="color: var(--subtext)">Gönderilen</dt>
+        <dd style="margin: 0">Yalnızca dosya isteği. Pano, ayar ve kullanım bilgisi gönderilmez.</dd>
+        <dt style="color: var(--subtext)">Doğrulama</dt>
+        <dd style="margin: 0">ed25519 imzası uygulamadaki anahtarla doğrulanır; tutmazsa dosya silinir.</dd>
+      </dl>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 10px; padding: 12px 20px; border-top: 1px solid var(--s0); background: var(--mantle)">
+      <span style="font: 400 11px JetBrains Mono, monospace; color: var(--overlay)">esc iptal</span>
+      <span style="flex: 1"></span>
+      <button style="padding: 7px 14px; border-radius: 7px; border: 1px solid var(--s0); background: var(--base); color: var(--subtext); font-size: 12px; cursor: pointer">İptal</button>
+      <button style="padding: 7px 14px; border-radius: 7px; border: none; background: var(--blue); color: var(--crust); font-size: 12px; font-weight: 600; cursor: pointer">Bağlan ve kur</button>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","default":"catppuccin-mocha","options":["catppuccin-mocha","gruvbox-dark","tokyo-night","everforest-dark","nord","rose-pine-moon","dracula"],"section":"Tema"},"$preview":{"width":560,"height":460}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var id = this.props.theme || 'catppuccin-mocha';
+    return { vars: window.kotiloThemeVars(id) };
+  }
+}
+</script>
+</body>
+</html>

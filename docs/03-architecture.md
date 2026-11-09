@@ -73,11 +73,26 @@ interface Host {
 - **Kotilo Shell / Launcher (gelecek):** aynı `kit-ui` Palette bileşeni, kendi `Host`'u.
 
 ## Pipeline (1.1)
-- `kit-core/pipeline`: `{ steps: [{ tool, opts }] }`, her adımın çıktısı sonrakinin girişi; tip uyumsuzluğu (table → text) otomatik düzleştirme ya da hata.
-- TOML dosyası `defineTool` ile sarılıp registry'ye girer (`category: 'pipeline'`).
+- `kit-core/pipeline`: `{ name, palette, steps: [{ tool, opts }] }`, her adımın çıktısı sonrakinin girişi. Tablo çıktısı sonraki adıma TSV (başlık + satırlar) olarak geçer; `bytes` yalnızca `accepts: ['file']` olan adıma taşınır.
+- Dosya `<config>/pipelines/<name>.toml`; `name` yoksa dosya adı kullanılır, `palette` varsayılan `true`:
+  ```toml
+  name = "jwt-scopes"
+  palette = true
+
+  [[steps]]
+  tool = "base64"
+  opts = { mode = "decode", urlSafe = true }
+
+  [[steps]]
+  tool = "json"
+  opts = { query = "$.scopes[*]" }
+  ```
+- `registryWithPipelines(tools, files)` her geçerli dosyayı `pipelineTool` ile `defineTool`'a sarar (`category: 'pipeline'`, açıklama "Base64 → JSON format") ve registry'ye ekler. Bilinmeyen araç/seçenek, araç id'siyle çakışan ad ya da bozuk TOML: pipeline kaydedilmez, sorun adım numarasıyla raporlanır (`error.pipeline.*`; Ayarlar › Pipeline'lar ve `kotilo kit list` gösterir). Pipeline başka pipeline'ı adım olarak kullanamaz.
+- Hata veren adım `error.pipeline.step` ile adım numarası, araç adı ve aracın kendi mesajını taşır ("2. adım (JSON biçimlendir): …").
+- Kabuk dosyaları okur (`cli/main.ts`, masaüstünde Tauri); `kit-core` dosya sistemine dokunmaz.
 
 ## Eklenti yükleme (1.1)
-- `~/.config/kotilo/kit/tools/*.ts` esbuild ile derlenir, `new Function` değil; QuickJS sandbox'ta çalışır (ağ/fs/DOM yok, 50 ms CPU bütçesi, bellek 32 MB).
+- `~/.config/kotilo/kit/tools/*.ts` Sucrase ile JS'e çevrilir (yalnızca tip/JSX soyma; ~200 KB, esbuild-wasm ~11 MB olduğu için 25 MB bütçesini korumak adına seçildi — 1.1 kararı), `new Function` değil; QuickJS-wasm sandbox'ta çalışır (ağ/fs/DOM yok, 50 ms CPU bütçesi, bellek 32 MB). Eklenti tek dosyadır; `@kotilo/kit-core`'dan yalnızca `defineTool` ve `fail` import edebilir, başka import yoktur.
 - `kotilo kit add <name>`: `kotilo-dev/kit-tools` deposundan tek dosya indirir — uygulamadaki tek ağ çağrısı, her seferinde kullanıcı onayı, imza (ed25519) doğrulanır.
 
 ## Config

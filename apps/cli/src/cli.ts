@@ -1,7 +1,7 @@
 import {
   CATEGORIES,
   createContext,
-  createRegistry,
+  registryWithPipelines,
   errorMessage,
   localeFromTag,
   resolveOptions,
@@ -24,6 +24,8 @@ export interface CliIO {
   /** Fallback locale tag when env has none (e.g. Intl default). */
   systemLocale?: string;
   now?: Date;
+  /** `<config>/pipelines/*.toml` files, read by main.ts (cli.ts stays free of fs). */
+  pipelines?: { file: string; source: string }[];
 }
 
 export interface CliResult {
@@ -107,7 +109,7 @@ function toolHelp(tool: Tool<any>, locale: Locale): string {
 
 function listTools(tools: readonly Tool<any>[], locale: Locale): string {
   const out: string[] = [];
-  for (const cat of CATEGORIES) {
+  for (const cat of [...CATEGORIES, 'pipeline' as const]) {
     const inCat = tools.filter((x) => x.category === cat);
     if (!inCat.length) continue;
     out.push(t(locale, `category.${cat}`).toLocaleUpperCase(locale === 'tr' ? 'tr-TR' : 'en-US'));
@@ -150,7 +152,10 @@ export function runCli(argv: string[], io: CliIO): CliResult {
   const { positionals, flags } = parseArgs(argv);
   const langFlag = flags.get('lang');
   const locale = typeof langFlag === 'string' ? localeFromTag(langFlag) : detectLocale(io.env, io.systemLocale);
-  const registry = createRegistry(builtinTools);
+  const { registry, pipelines } = registryWithPipelines(builtinTools, io.pipelines ?? []);
+  const skipped = pipelines
+    .filter((p) => p.issues.length)
+    .map((p) => t(locale, 'cli.pipelineSkipped', { file: p.file, reason: t(locale, p.issues[0]!.code, p.issues[0]!.params) }));
   const ok = (stdout: string | Uint8Array): CliResult => ({ stdout, stderr: '', code: 0 });
   const err = (msg: string, code = 1): CliResult => ({ stdout: '', stderr: msg.endsWith('\n') ? msg : msg + '\n', code });
 
@@ -167,7 +172,7 @@ export function runCli(argv: string[], io: CliIO): CliResult {
     if (flags.get('json')) {
       return ok(JSON.stringify(registry.tools.map((x) => ({ id: x.id, category: x.category, name: x.name[locale], description: x.description[locale] })), null, 2) + '\n');
     }
-    return ok(listTools(registry.tools, locale));
+    return { stdout: listTools(registry.tools, locale), stderr: skipped.map((s) => s + '\n').join(''), code: 0 };
   }
 
   if (command === 'detect') {
@@ -178,7 +183,12 @@ export function runCli(argv: string[], io: CliIO): CliResult {
   }
 
   const tool = registry.get(command);
-  if (!tool) return err(t(locale, 'cli.unknownTool', { id: command }), 2);
+  if (!tool) {
+    // a pipeline file with this name that failed to load: say why instead of "unknown tool"
+    const broken = pipelines.find((p) => p.issues.length && p.name === command);
+    if (broken) return err(t(locale, broken.issues[0]!.code, broken.issues[0]!.params));
+    return err(t(locale, 'cli.unknownTool', { id: command }), 2);
+  }
   if (flags.get('help')) return ok(toolHelp(tool, locale));
 
   try {
