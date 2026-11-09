@@ -92,14 +92,23 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
   const [appliedTheme, setAppliedTheme] = useState(config.theme.id);
   useEffect(() => syncAppearance(host, { onList: setThemeList, onApplied: setAppliedTheme }), [host]);
 
+  // "Send to tool ›" hands its output to whichever tool is picked next
+  const carryInput = useRef(false);
+
+  /** Switching tools starts from a blank input unless the input is meant for the new tool. */
   const selectTool = useCallback(
-    (id: string) => {
+    (id: string, keepInput = false) => {
       if (!registry.get(id)) return;
+      if (id !== toolId && !keepInput && !carryInput.current) {
+        setFile(null);
+        setInput('');
+      }
+      carryInput.current = false;
       setToolId(id);
       const nowSec = Math.floor(host.now().getTime() / 1000);
       void host.config.update((c) => pushRecent(c, id, nowSec));
     },
-    [host, registry],
+    [host, registry, toolId],
   );
 
   // palette ctrl+Enter hand-off
@@ -188,6 +197,7 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
     if (outcome.kind !== 'ok' || outcome.result.bytes) return;
     setFile(null);
     setInput(outputText);
+    carryInput.current = true;
     setSearch('');
     searchRef.current?.focus();
   };
@@ -252,7 +262,7 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
     const best = registry.detect(text)[0];
     if (!best || best.score < 0.5) return;
     e.preventDefault();
-    selectTool(best.tool.id);
+    selectTool(best.tool.id, true);
     setFile(null);
     setInput(text);
     setSearch('');
@@ -502,7 +512,10 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
                   value={input}
                   readOnly={file !== null}
                   spellCheck={false}
-                  onChange={(e) => setInput(e.target.value)}
+                  onChange={(e) => {
+                    carryInput.current = false;
+                    setInput(e.target.value);
+                  }}
                 />
               </section>
               {paneOptions.map((o) => (
@@ -566,7 +579,7 @@ export function FullWindow({ host, registry, version, pluginCount = 0 }: FullWin
                     href={`#${d.tool.id}`}
                     onClick={(e) => {
                       e.preventDefault();
-                      selectTool(d.tool.id);
+                      selectTool(d.tool.id, true);
                     }}
                   >
                     {d.tool.name[locale]}
