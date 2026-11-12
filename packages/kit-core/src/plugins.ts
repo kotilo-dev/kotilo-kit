@@ -148,6 +148,15 @@ export async function loadPlugins(files: readonly PluginFile[], opts: LoadOption
 
 /** Runs inside the sandbox before the plugin: `require` knows only `@kotilo/kit-core` (`defineTool`, `fail`). */
 const PRELUDE = `
+// QuickJS has no Intl: locale-aware case and comparison are answered by the host's Intl (tr-TR İ/ı)
+(function () {
+  const lower = __kitCase, cmp = __kitCompare;
+  const loc = (l) => (l === undefined ? '' : Array.isArray(l) ? String(l[0] === undefined ? '' : l[0]) : String(l));
+  const def = (name, fn) => Object.defineProperty(String.prototype, name, { value: fn, writable: true, configurable: true });
+  def('toLocaleLowerCase', function (l) { return lower(String(this), loc(l), false); });
+  def('toLocaleUpperCase', function (l) { return lower(String(this), loc(l), true); });
+  def('localeCompare', function (that, l) { return cmp(String(this), String(that), loc(l)); });
+})();
 const __kit = { def: undefined, count: 0, loc: '' };
 class KitFail { constructor(code, params) { this.code = String(code); this.params = params && typeof params === 'object' ? params : {}; } }
 const __kitCore = Object.freeze({
@@ -201,6 +210,16 @@ globalThis.__kitDetect = function (input) {
 };
 `;
 
+/** A plugin-supplied locale tag, or undefined (host default) when empty or not a valid BCP 47 tag. */
+function hostLocale(tag: string): string | undefined {
+  if (!tag) return undefined;
+  try {
+    return Intl.getCanonicalLocales(tag)[0];
+  } catch {
+    return undefined;
+  }
+}
+
 type LoadResult = { meta: unknown; loc?: string } | { error: PluginIssue };
 
 class Sandbox {
@@ -228,6 +247,14 @@ class Sandbox {
       }
       return vm.newString(this.ctx ? this.ctx.t(vm.getString(key), p) : vm.getString(key));
     }).consume((fn) => vm.setProp(vm.global, '__kitT', fn));
+    vm.newFunction('__kitCase', (str, locale, upper) => {
+      const s = vm.getString(str);
+      const l = hostLocale(vm.getString(locale));
+      return vm.newString(vm.dump(upper) ? s.toLocaleUpperCase(l) : s.toLocaleLowerCase(l));
+    }).consume((fn) => vm.setProp(vm.global, '__kitCase', fn));
+    vm.newFunction('__kitCompare', (a, b, locale) =>
+      vm.newNumber(vm.getString(a).localeCompare(vm.getString(b), hostLocale(vm.getString(locale)))),
+    ).consume((fn) => vm.setProp(vm.global, '__kitCompare', fn));
   }
 
   private deadline(ms: number) {

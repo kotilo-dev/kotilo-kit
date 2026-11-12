@@ -99,6 +99,19 @@ describe('loadPlugins', () => {
     expect(plugins[1]!.error!.code).toBe('error.plugin.load');
   });
 
+  it('locale-aware case and compare follow tr-TR (İ/ı) via the host Intl', async () => {
+    const probe = tool(
+      `(input) => ({ output: [input.toLocaleLowerCase('tr-TR'), input.toLocaleUpperCase('tr'), 'ıi'.toLocaleUpperCase(['tr-TR']), input.toLocaleLowerCase('en'), String('ç'.localeCompare('d', 'tr-TR')), 'İ'.toLocaleLowerCase(['en-US']).length].join('|') })`,
+    );
+    const { tools } = await load({ 'probe.ts': probe });
+    expect(runTool(tools[0]!, 'İstanbul Işık').output).toBe('istanbul ışık|İSTANBUL IŞIK|Iİ|i̇stanbul işık|-1|2');
+  });
+
+  it('the SLUG example keeps İ as i', async () => {
+    const { tools } = await load({ 'slug.ts': SLUG });
+    expect(runTool(tools[0]!, 'İstanbul Şehir Hatları', { sep: '-' }, { locale: 'tr', now: new Date() }).output).toBe('istanbul-sehir-hatlari');
+  });
+
   it('the sandbox has no network, fs or DOM globals', async () => {
     const probe = tool(`() => ({ output: [typeof fetch, typeof XMLHttpRequest, typeof document, typeof process, typeof std, typeof os, typeof WebAssembly].join(',') })`);
     const { tools } = await load({ 'probe.ts': probe });

@@ -97,6 +97,7 @@ interface Host {
 - Dosya başına tek `defineTool`. Doğrulama hataları (`error.plugin.*`) satır:sütunla raporlanır: Ayarlar › Eklentiler kartı ve `kotilo kit list` stderr'i. Kimlik yerleşik araç ya da pipeline ile çakışırsa yüklenmez.
 - Eklenti metinleri: `defineTool({ messages: { en: {…}, tr: {…} } })`; anahtarlar yalnızca `tool.<id>.*` / `error.<id>.*` olabilir (seçenek etiketleri, `fail` kodları), yerleşik anahtarlar her zaman önceliklidir.
 - Kapatılan eklentiler `config.toml` › `[plugins] disabled = ["id"]`; dosya yerinde kalır.
+- QuickJS'te `Intl` yok. `toLocaleLowerCase`, `toLocaleUpperCase` ve `localeCompare` sandbox'ta host'un `Intl`'ine köprülenir, böylece `tr-TR` İ/ı doğru çalışır. `Intl.*` nesneleri (Collator, NumberFormat…) eklentide kullanılamaz.
 - Bilinen sınır: QuickJS çöp toplayıcıda geçen süre kesme denetimine girmez; bellek sınırına yavaş yavaş dayanan bir eklenti durdurulmadan önce birkaç saniye sürebilir.
 - `kotilo kit add <name>`: `kotilo-dev/kit-tools` deposundan tek dosya indirir — uygulamadaki tek ağ çağrısı, her seferinde kullanıcı onayı, imza (ed25519) doğrulanır.
 
