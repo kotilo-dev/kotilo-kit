@@ -4,7 +4,7 @@
 
 Goal: **clipboard → result in two keystrokes.** Copy a JWT, press `Ctrl+Shift+K`, hit `Enter` — the decoded payload is on your clipboard.
 
-> **Status: pre-alpha (phase K3).** The core library, all 31 1.0 tools, the CLI, the desktop palette (global shortcut → palette → Enter → clipboard), the full window and Settings › Appearance (7 themes + light pairs, system light/dark, .toml theme import, bundled mono fonts, opacity/radius/density, contrast CI) work today. See the [roadmap](#roadmap).
+> **Status: 1.1.** 31 built-in tools, the CLI, the desktop palette and full window, 7 themes, pipelines (chain tools, save them as TOML) and sandboxed plugins, including signed installs from [kit-tools](https://github.com/kotilo-dev/kit-tools). See the [roadmap](#roadmap).
 
 Part of [Kotilo](https://kotilo.dev) · Türkçe: [aşağıda](#türkçe)
 
@@ -62,6 +62,33 @@ pnpm build:desktop     # release build
 
 Press `Ctrl+Shift+K` (`Cmd+Shift+K` on macOS) anywhere. Tools that recognize your clipboard appear under **Suggested**. `Enter` runs the selected one and puts the result on the clipboard. `Ctrl+Enter` opens the tool in the full window, `Tab` shows its options, and `Alt+letter` switches an option. `Ctrl+1…9` runs a row directly. Clipboard detection asks for consent on first launch, and no clipboard content is ever stored. The full window (tray › Open, or `Ctrl+Enter` from the palette) has every tool in a sidebar with live input → output. `Ctrl+K` searches, and pasting recognized content into the search opens the matching tool. `Ctrl+Shift+C` copies the output and `Ctrl+L` clears the input. Requires the [Tauri prerequisites](https://v2.tauri.app/start/prerequisites/).
 
+## Pipelines and plugins
+
+A **pipeline** chains tools: the output of one step is the input of the next. Build one in the full window (output panel › "Add to pipeline", or Settings › Pipelines) or write the TOML file yourself in `<config>/pipelines/`. Pipelines appear next to the tools and run from the CLI by name:
+
+```toml
+# <config>/pipelines/b64-json.toml  →  pbpaste | kotilo kit b64-json
+name = "b64-json"
+
+[[steps]]
+tool = "base64"
+opts = { mode = "decode" }
+
+[[steps]]
+tool = "json"
+opts = { sortKeys = true }
+```
+
+A **plugin** is one `defineTool` file in `<config>/tools/*.ts`. Kit strips the types and runs it in a QuickJS sandbox with no network, file system or DOM, a CPU budget and a memory cap. Settings › Plugins lists, disables and removes plugins.
+
+```sh
+kotilo kit add slug    # install from kit-tools: asks every time, verifies the ed25519 signature
+```
+
+`kit add` (or Settings › Plugins › "Add from kit-tools…") is the only network call Kit ever makes. It downloads a signed index from `kotilo.dev/kit-tools`, checks the signature against the key built into the app, and checks the tool file's sha256 before anything is written.
+
+`<config>` is `~/.config/kotilo/kit` (Windows: `%APPDATA%\kotilo\kit`).
+
 ## Writing a tool
 
 Every tool — built-in or plugin — is one `defineTool` module. `run` is a pure function. The UI is declared through `options`, and tools never contain React or HTML.
@@ -113,12 +140,12 @@ Contributing: one tool per PR — `src/<category>/<id>.ts`, i18n entries in `pac
 | **K1** ✓ | Tauri shell: hidden window, global shortcut, clipboard, tray, palette window |
 | **K2** ✓ | Full window: category tree, tool panel, suggestion strip, status bar; all 1.0 tools |
 | **K3** ✓ | Theme system: 7 themes (Catppuccin, Gruvbox, Tokyo Night, Everforest, Nord, Rosé Pine, Dracula), settings, contrast CI |
-| K4 | Packaging (winget, AUR, Homebrew), generated tool list, GitHub releases → 1.0 tag |
-| K5 (1.1) | Pipelines, plugin loader, `kit-tools` repo |
+| **K4** ✓ | Packaging (winget, AUR, Homebrew), generated tool list, GitHub releases → 1.0 tag |
+| **K5** ✓ (1.1) | Pipelines, plugin loader, `kit add` + signed [`kit-tools`](https://github.com/kotilo-dev/kit-tools) repo |
 
 ## Türkçe
 
-Kotilo Kit; base64, JSON, JWT, zaman damgası, regex, hash gibi günlük dönüşümleri **tamamen çevrimdışı**, tek pencerede ve dev temalarıyla yapan açık kaynak bir araç kutusu. Arayüz ve hata metinleri EN/TR. Türkçe büyük/küçük harf dönüşümü (İ/ı) ve sıralama `tr-TR` kurallarıyla yapılıyor. Spec belgeleri (`docs/`) Türkçe.
+Kotilo Kit; base64, JSON, JWT, zaman damgası, regex, hash gibi günlük dönüşümleri **tamamen çevrimdışı**, tek pencerede ve dev temalarıyla yapan açık kaynak bir araç kutusu. Arayüz ve hata metinleri EN/TR. Türkçe büyük/küçük harf dönüşümü (İ/ı) ve sıralama `tr-TR` kurallarıyla yapılıyor. Pipeline'larla araçları zincirleyebilir, sandbox'ta çalışan eklentiler ekleyebilirsin; `kotilo kit add <ad>` imzalı [kit-tools](https://github.com/kotilo-dev/kit-tools) deposundan kurar (Kit'in yaptığı tek ağ çağrısı, her seferinde onay ister). Spec belgeleri (`docs/`) Türkçe.
 
 ## License
 
