@@ -18,6 +18,8 @@ export interface KitConfig {
   };
   /** Only tool ids and when they were used (Unix seconds, same order) — never content. */
   recent: { ids: string[]; used: number[] };
+  /** Plugin tool ids switched off in Settings › Plugins (the file stays in `tools/`). */
+  plugins: { disabled: string[] };
 }
 
 export const RECENT_MAX = 5;
@@ -41,6 +43,7 @@ export function defaultConfig(opts: { locale?: Locale; platform?: string } = {})
       compact: false,
     },
     recent: { ids: [], used: [] },
+    plugins: { disabled: [] },
   };
 }
 
@@ -56,6 +59,7 @@ export function parseConfig(source: string, defaults: KitConfig = defaultConfig(
   const c = raw.clipboard ?? {};
   const th = raw.theme ?? {};
   const r = raw.recent ?? {};
+  const pl = raw.plugins ?? {};
   const d = defaults;
   return {
     general: {
@@ -75,6 +79,9 @@ export function parseConfig(source: string, defaults: KitConfig = defaultConfig(
       compact: bool(th.compact, d.theme.compact),
     },
     recent: parseRecent(r.ids, r.used),
+    plugins: {
+      disabled: Array.isArray(pl.disabled) ? [...new Set(pl.disabled.filter((x): x is string => typeof x === 'string'))] : [...d.plugins.disabled],
+    },
   };
 }
 

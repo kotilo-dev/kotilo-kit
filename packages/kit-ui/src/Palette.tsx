@@ -18,6 +18,7 @@ import type { Host } from './host.js';
 import { ClipboardIcon, SearchIcon, ToolIcon } from './icons.js';
 import { CATEGORY_ACCENT, buildItems, clipboardPreview, formatUsed, type Section } from './model.js';
 import { usePipelines } from './pipelines.js';
+import { usePlugins } from './plugins.js';
 import { syncAppearance } from './theme.js';
 
 export interface PaletteProps {
@@ -41,7 +42,7 @@ const letterOf = (e: KeyboardEvent) => (e.code.startsWith('Key') ? e.code.slice(
 
 export function Palette({ host, registry: baseRegistry }: PaletteProps) {
   // pipelines with `palette = true` are listed like tools
-  const registry = usePipelines(host, baseRegistry).paletteRegistry;
+  const registry = usePipelines(host, usePlugins(host, baseRegistry).registry).paletteRegistry;
   const [config, setConfig] = useState(() => host.config.get());
   const [query, setQuery] = useState('');
   const [clip, setClip] = useState('');

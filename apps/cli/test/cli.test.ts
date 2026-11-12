@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'vitest';
+import { loadPlugins } from '@kotilo/kit-core';
+import { afterAll, describe, expect, it } from 'vitest';
 import { parseArgs, runCli, type CliIO } from '../src/cli.js';
 
 const io = (stdin = '', extra: Partial<CliIO> = {}): CliIO => ({
@@ -87,6 +88,32 @@ describe('runCli', () => {
 
   it('--tz overrides TZ', () => {
     expect(runCli(['timestamp', '--tz', 'Europe/Istanbul'], io('0')).stdout).toContain('1970-01-01 02:00:00 +02:00');
+  });
+
+  describe('plugins', async () => {
+    const set = await loadPlugins([
+      {
+        file: '/cfg/tools/shout.ts',
+        source: `import { defineTool } from '@kotilo/kit-core';
+export default defineTool({ id: 'shout', category: 'text', name: 'Shout', description: 'Upper-case with !', run: (s: string) => ({ output: s.trim().toUpperCase() + '!' }) });
+`,
+      },
+      { file: '/cfg/tools/bad.ts', source: 'const = 1' },
+    ]);
+    afterAll(() => set.dispose());
+
+    it('runs a plugin like a tool and lists it', () => {
+      expect(runCli(['shout'], io('hey\n', { plugins: set.plugins })).stdout).toBe('HEY!\n');
+      const r = runCli(['list'], io('', { stdinIsTTY: true, plugins: set.plugins }));
+      expect(r.stdout).toMatch(/shout\s+Upper-case with !/);
+      expect(r.stderr).toMatch(/^Skipped plugin \/cfg\/tools\/bad\.ts: 1:\d+ Syntax error/);
+    });
+
+    it('disabled plugins are not registered; pipelines can use plugins', () => {
+      expect(runCli(['shout'], io('hey', { plugins: set.plugins, disabledPlugins: ['shout'] })).code).toBe(2);
+      const pipelines = [{ file: '/cfg/pipelines/loud.toml', source: '[[steps]]\ntool = "shout"' }];
+      expect(runCli(['loud'], io('hi', { plugins: set.plugins, pipelines })).stdout).toBe('HI!\n');
+    });
   });
 
   describe('pipelines', () => {

@@ -9,6 +9,8 @@ export { PipelineEditor, type EditorSeed } from './PipelineEditor.js';
 export { PipelineMenu } from './PipelineMenu.js';
 export { OptionControl } from './OptionControl.js';
 export * from './pipelines.js';
+export * from './plugins.js';
+export { SettingsPlugins } from './SettingsPlugins.js';
 export {
   MONO_FONTS,
   applyAppearance,

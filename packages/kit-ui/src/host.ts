@@ -23,6 +23,9 @@ export interface PipelineStore {
   dir?: string;
 }
 
+/** Same file operations over `<config>/tools/<name>.ts`. */
+export type PluginStore = PipelineStore;
+
 export interface ThemeStore {
   id(): string;
   set(id: string): Promise<void>;
@@ -61,6 +64,8 @@ export interface Host {
   };
   /** Pipelines folder. Absent = pipelines are not available in this shell. */
   pipelines?: PipelineStore;
+  /** `tools/*.ts` plugin folder (names are file stems). Absent = no plugins in this shell. */
+  plugins?: PluginStore;
   /** Shown in the settings status bar, e.g. `%APPDATA%\kotilo\kit\config.toml`. */
   configPath?: string;
   /** Frameless window controls (Windows/Linux full window). Absent = native title bar. */
@@ -96,7 +101,11 @@ export function configThemeStore(config: ConfigStore): ThemeStore {
 }
 
 /** In-memory PipelineStore — tests and previews. `files` maps name → TOML source. */
-export function memoryPipelineStore(files: Record<string, string> = {}, dir = '/cfg/pipelines'): PipelineStore & { files: Record<string, string> } {
+export function memoryPipelineStore(
+  files: Record<string, string> = {},
+  dir = '/cfg/pipelines',
+  ext = '.toml',
+): PipelineStore & { files: Record<string, string> } {
   const subs = new Set<() => void>();
   const changed = () => subs.forEach((cb) => cb());
   const store = {
@@ -105,7 +114,7 @@ export function memoryPipelineStore(files: Record<string, string> = {}, dir = '/
     async list() {
       return Object.keys(store.files)
         .sort()
-        .map((name) => ({ file: `${dir}/${name}.toml`, source: store.files[name]! }));
+        .map((name) => ({ file: `${dir}/${name}${ext}`, source: store.files[name]! }));
     },
     async write(name: string, toml: string) {
       store.files[name] = toml;
@@ -121,4 +130,9 @@ export function memoryPipelineStore(files: Record<string, string> = {}, dir = '/
     },
   };
   return store;
+}
+
+/** In-memory PluginStore — tests and previews. `files` maps file stem → TypeScript source. */
+export function memoryPluginStore(files: Record<string, string> = {}, dir = '/cfg/tools'): PluginStore & { files: Record<string, string> } {
+  return memoryPipelineStore(files, dir, '.ts');
 }

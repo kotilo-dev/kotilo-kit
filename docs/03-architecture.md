@@ -93,6 +93,12 @@ interface Host {
 
 ## Eklenti yükleme (1.1)
 - `~/.config/kotilo/kit/tools/*.ts` Sucrase ile JS'e çevrilir (yalnızca tip/JSX soyma; ~200 KB, esbuild-wasm ~11 MB olduğu için 25 MB bütçesini korumak adına seçildi — 1.1 kararı), `new Function` değil; QuickJS-wasm sandbox'ta çalışır (ağ/fs/DOM yok, 50 ms CPU bütçesi, bellek 32 MB). Eklenti tek dosyadır; `@kotilo/kit-core`'dan yalnızca `defineTool` ve `fail` import edebilir, başka import yoktur.
+- Yükleyici `kit-core/plugins.ts` → `loadPlugins(files, { taken })`; dosyaları kabuk okur (CLI `main.ts`, masaüstünde Tauri `plugins_list`). Her eklentinin kendi QuickJS runtime'ı vardır; meta veri sandbox'tan JSON olarak çıkar, `run`/`detect` sandbox'a çağrı olarak gider — eklenti kodu ana realm'de hiç çalışmaz. `detect` çağrısı başına 5 ms (registry'nin 20 ms bütçesi için). Wasm ve Sucrase yalnızca `tools/` boş değilse yüklenir (ayrı chunk). Masaüstü CSP'si bunun için `'wasm-unsafe-eval'` içerir (yalnızca wasm derleme; JS `eval` kapalı kalır).
+- Dosya başına tek `defineTool`. Doğrulama hataları (`error.plugin.*`) satır:sütunla raporlanır: Ayarlar › Eklentiler kartı ve `kotilo kit list` stderr'i. Kimlik yerleşik araç ya da pipeline ile çakışırsa yüklenmez.
+- Eklenti metinleri: `defineTool({ messages: { en: {…}, tr: {…} } })`; anahtarlar yalnızca `tool.<id>.*` / `error.<id>.*` olabilir (seçenek etiketleri, `fail` kodları), yerleşik anahtarlar her zaman önceliklidir.
+- Kapatılan eklentiler `config.toml` › `[plugins] disabled = ["id"]`; dosya yerinde kalır.
+- QuickJS'te `Intl` yok. `toLocaleLowerCase`, `toLocaleUpperCase` ve `localeCompare` sandbox'ta host'un `Intl`'ine köprülenir, böylece `tr-TR` İ/ı doğru çalışır. `Intl.*` nesneleri (Collator, NumberFormat…) eklentide kullanılamaz.
+- Bilinen sınır: QuickJS çöp toplayıcıda geçen süre kesme denetimine girmez; bellek sınırına yavaş yavaş dayanan bir eklenti durdurulmadan önce birkaç saniye sürebilir.
 - `kotilo kit add <name>`: `kotilo-dev/kit-tools` deposundan tek dosya indirir — uygulamadaki tek ağ çağrısı, her seferinde kullanıcı onayı, imza (ed25519) doğrulanır.
 
 ## Config

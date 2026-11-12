@@ -8,8 +8,11 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@jitl/quickjs-singlefile-mjs-release-sync": "0.32.0",
     "fuse.js": "^7.5.0",
-    "smol-toml": "^1.9.1"
+    "quickjs-emscripten-core": "0.32.0",
+    "smol-toml": "^1.9.1",
+    "sucrase": "3.35.1"
   },
   "repository": {
     "type": "git",

@@ -50,7 +50,7 @@ Bu repo 1.0 kabuğunu ve çekirdeği içerir; Shell ve Launcher entegrasyonu `ki
 - Zincir TOML olarak `~/.config/kotilo/kit/pipelines/<ad>.toml`; palette'te araç gibi listelenir.
 
 ### F6 — Eklentiler (1.1)
-- `~/.config/kotilo/kit/tools/*.ts` dizininden `defineTool` modülleri yüklenir (esbuild ile derlenir, sandbox: ağ ve fs yok).
+- `~/.config/kotilo/kit/tools/*.ts` dizininden `defineTool` modülleri yüklenir (Sucrase ile tip soyulur, QuickJS-wasm sandbox'ta çalışır: ağ, fs ve DOM yok).
 - `kotilo kit add <name>` resmî depodan (`kotilo-dev/kit-tools`) kurar; depo kopyası yerelde, ağ erişimi yalnızca bu komutta ve kullanıcı onayıyla.
 
 ### F7 — CLI

@@ -108,12 +108,21 @@ importers:
 
   packages/kit-core:
     dependencies:
+      '@jitl/quickjs-singlefile-mjs-release-sync':
+        specifier: 0.32.0
+        version: 0.32.0
       fuse.js:
         specifier: ^7.5.0
         version: 7.5.0
+      quickjs-emscripten-core:
+        specifier: 0.32.0
+        version: 0.32.0
       smol-toml:
         specifier: ^1.9.1
         version: 1.9.1
+      sucrase:
+        specifier: 3.35.1
+        version: 3.35.1
 
   packages/kit-themes:
     dependencies:
@@ -518,6 +527,12 @@ packages:
   '@humanwhocodes/retry@0.4.3':
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
+
+  '@jitl/quickjs-ffi-types@0.32.0':
+    resolution: {integrity: sha512-v9T+GQpmk43VDJ7d72sf0Nexhk+ArvtUihW27dy7lqAl0zBObFKtSBBIm5RBjwIhE8VwsPPm9PNuvPvNqLWUEg==}
+
+  '@jitl/quickjs-singlefile-mjs-release-sync@0.32.0':
+    resolution: {integrity: sha512-h9g2Dri6WxKNjX6a1+sFAafOVxj1n5YIA1GAzMoSdIqK1M8cG07tz3GxKVC3Gbdutz14uQ3oc3Q2lll8otInhA==}
 
   '@jridgewell/gen-mapping@0.3.13':
     resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
@@ -1657,6 +1672,9 @@ packages:
     resolution: {integrity: sha512-+Owyggi9IxT1ePKGafcI87ubSmxol6smwJ+RAHDQlx9+9cPwFWDiKFFCPuWhr9ignlGpZ9vDQLw67N4dcTVFEA==}
     engines: {node: '>=20'}
 
+  quickjs-emscripten-core@0.32.0:
+    resolution: {integrity: sha512-QFnPfjFey8EqknSrSxe1hZrf1/8z7/6s1QzGOmKo6++02r7QRRX7ZoyNaZh7JuVjWsVW87KnQrbZqnHkOAzUyg==}
+
   railroad-diagrams@1.0.0:
     resolution: {integrity: sha512-cz93DjNeLY0idrCNOH6PviZGRN9GJhsdm9hpn1YCS879fj4W+x5IFJhhkRZcwVgMmFF7R82UA/7Oh+R8lLZg6A==}
 
@@ -2258,6 +2276,12 @@ snapshots:
   '@humanwhocodes/module-importer@1.0.1': {}
 
   '@humanwhocodes/retry@0.4.3': {}
+
+  '@jitl/quickjs-ffi-types@0.32.0': {}
+
+  '@jitl/quickjs-singlefile-mjs-release-sync@0.32.0':
+    dependencies:
+      '@jitl/quickjs-ffi-types': 0.32.0
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
@@ -3220,6 +3244,10 @@ snapshots:
   qified@0.10.1:
     dependencies:
       hookified: 2.2.0
+
+  quickjs-emscripten-core@0.32.0:
+    dependencies:
+      '@jitl/quickjs-ffi-types': 0.32.0
 
   railroad-diagrams@1.0.0: {}
 
