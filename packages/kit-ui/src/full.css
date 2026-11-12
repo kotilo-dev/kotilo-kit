@@ -1314,3 +1314,115 @@
   font-size: 12px;
   color: var(--kit-overlay);
 }
+
+/* ---------- 1.1 kit add — docs/02-design.md › 1.1 › kit add onayı, docs/mockup/KitAddConsent.dc.html ---------- */
+.kf-plugin-badge-kit {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--kit-teal);
+}
+.kf-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--kit-crust) 60%, transparent);
+}
+.kf-modal {
+  width: 480px;
+  max-width: calc(100vw - 32px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--kit-s1);
+  border-radius: 12px;
+  background: var(--kit-base);
+  box-shadow: 0 24px 64px color-mix(in srgb, var(--kit-crust) 80%, transparent);
+}
+.kf-modal-head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px 6px;
+}
+.kf-modal-head h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--kit-text);
+}
+.kf-modal-head p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--kit-subtext);
+}
+.kf-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 20px;
+}
+.kf-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--kit-subtext);
+}
+.kf-modal-field input {
+  padding: 7px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--kit-s1);
+  background: var(--kit-mantle);
+  font-size: 13px;
+  color: var(--kit-text);
+}
+.kf-modal-field input[aria-invalid='true'] {
+  border-color: color-mix(in srgb, var(--kit-red) 40%, transparent);
+}
+.kf-consent {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  row-gap: 8px;
+  column-gap: 12px;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--kit-s0);
+  border-radius: 8px;
+  background: var(--kit-mantle);
+  font-size: 12px;
+}
+.kf-consent dt {
+  color: var(--kit-subtext);
+}
+.kf-consent dd {
+  margin: 0;
+  color: var(--kit-text);
+  overflow-wrap: anywhere;
+}
+.kf-consent dd[style] {
+  font-size: 11px;
+}
+.kf-modal-error {
+  margin: 0;
+  font-size: 12px;
+  color: var(--kit-red);
+}
+.kf-modal-foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--kit-s0);
+  background: var(--kit-mantle);
+}
+.kf-modal-foot .kf-btn:not(.kf-btn-primary) {
+  background: var(--kit-base);
+}
+.kf-modal-hint {
+  font-size: 11px;
+  color: var(--kit-overlay);
+}

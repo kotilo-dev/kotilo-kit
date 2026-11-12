@@ -18,8 +18,11 @@ export interface KitConfig {
   };
   /** Only tool ids and when they were used (Unix seconds, same order) — never content. */
   recent: { ids: string[]; used: number[] };
-  /** Plugin tool ids switched off in Settings › Plugins (the file stays in `tools/`). */
-  plugins: { disabled: string[] };
+  /**
+   * `disabled`: plugin tool ids switched off in Settings › Plugins (the file stays in `tools/`).
+   * `installed`: tools installed by `kit add` — version + sha256 of the signed file (kittools.ts).
+   */
+  plugins: { disabled: string[]; installed: Record<string, { version: string; sha256: string }> };
 }
 
 export const RECENT_MAX = 5;
@@ -43,7 +46,7 @@ export function defaultConfig(opts: { locale?: Locale; platform?: string } = {})
       compact: false,
     },
     recent: { ids: [], used: [] },
-    plugins: { disabled: [] },
+    plugins: { disabled: [], installed: {} },
   };
 }
 
@@ -81,12 +84,22 @@ export function parseConfig(source: string, defaults: KitConfig = defaultConfig(
     recent: parseRecent(r.ids, r.used),
     plugins: {
       disabled: Array.isArray(pl.disabled) ? [...new Set(pl.disabled.filter((x): x is string => typeof x === 'string'))] : [...d.plugins.disabled],
+      installed: parseInstalled(pl.installed),
     },
   };
 }
 
 export function stringifyConfig(config: KitConfig): string {
   return stringify(config) + '\n';
+}
+
+function parseInstalled(raw: unknown): KitConfig['plugins']['installed'] {
+  const out: KitConfig['plugins']['installed'] = {};
+  if (!raw || typeof raw !== 'object') return out;
+  for (const [id, v] of Object.entries(raw as Record<string, { version?: unknown; sha256?: unknown }>)) {
+    if (v && typeof v.version === 'string' && typeof v.sha256 === 'string' && /^[0-9a-f]{64}$/.test(v.sha256)) out[id] = { version: v.version, sha256: v.sha256 };
+  }
+  return out;
 }
 
 function parseRecent(ids: unknown, used: unknown): KitConfig['recent'] {

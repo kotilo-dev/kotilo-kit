@@ -44,7 +44,8 @@ interface ParsedArgs {
   flags: Map<string, string | boolean>;
 }
 
-export function parseArgs(argv: string[]): ParsedArgs {
+/** `booleans`: flags that never take a value (`kit add --yes slug` keeps `slug` positional). */
+export function parseArgs(argv: string[], booleans: ReadonlySet<string> = new Set()): ParsedArgs {
   const positionals: string[] = [];
   const flags = new Map<string, string | boolean>();
   for (let i = 0; i < argv.length; i++) {
@@ -61,7 +62,7 @@ export function parseArgs(argv: string[]): ParsedArgs {
         flags.set(a.slice(5), false);
       } else {
         const next = argv[i + 1];
-        if (next !== undefined && !next.startsWith('--')) {
+        if (next !== undefined && !next.startsWith('--') && !booleans.has(a.slice(2))) {
           flags.set(a.slice(2), next);
           i++;
         } else flags.set(a.slice(2), true);

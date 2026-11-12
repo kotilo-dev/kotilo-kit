@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "tools": [
+    {
+      "id": "slug",
+      "version": "1.0.0",
+      "file": "tools/slug.ts",
+      "sha256": "97ebbe493e630b61e76f10a021a7b0ff22c2b09bd0b96ba8f40a2833edc3f3e9",
+      "bytes": 1305,
+      "summary": {
+        "en": "Turn text into a URL-friendly slug",
+        "tr": "Metni URL dostu slug yapar"
+      }
+    }
+  ]
+}

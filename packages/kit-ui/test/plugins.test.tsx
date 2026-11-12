@@ -1,4 +1,6 @@
 // @vitest-environment jsdom
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { createRegistry, defaultConfig } from '@kotilo/kit-core';
 import { builtinTools } from '@kotilo/kit-tools';
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
@@ -100,5 +102,90 @@ describe('Palette plugins', () => {
     render(<Palette host={host} registry={registry} />);
     await type(screen.getByRole('combobox'), 'shout');
     await waitFor(() => expect(screen.getAllByText('Shout').length).toBeGreaterThan(0), { timeout: 5000 });
+  });
+});
+
+// real kit-tools files (signed with the key built into kit-core), so the whole chain is checked offline
+const KIT = join(import.meta.dirname, 'fixtures', 'kit-tools');
+const kitFetch = vi.fn(async (path: string) => new Uint8Array(readFileSync(join(KIT, path))));
+const SLUG_SOURCE = readFileSync(join(KIT, 'tools', 'slug.ts'), 'utf8');
+
+async function openAdd(host: Host) {
+  render(<FullWindow host={host} registry={registry} version="1.1.0" />);
+  await click(screen.getByRole('button', { name: 'Settings' }));
+  await click(screen.getByRole('link', { name: 'Plugins' }));
+  await click(screen.getByRole('button', { name: 'Add from kit-tools…' }));
+  return screen.getByRole('dialog', { name: 'Install a plugin from kit-tools' });
+}
+
+describe('kit add (Settings › Plugins)', () => {
+  afterEach(() => kitFetch.mockClear());
+
+  it('no kitTools in the host: no install button', async () => {
+    const { host } = makeHost({});
+    render(<FullWindow host={host} registry={registry} version="1.1.0" />);
+    await click(screen.getByRole('button', { name: 'Settings' }));
+    await click(screen.getByRole('link', { name: 'Plugins' }));
+    expect(screen.queryByRole('button', { name: 'Add from kit-tools…' })).toBeNull();
+  });
+
+  it('consent first: nothing is fetched until "Connect and install"; then the signed tool is installed with its badge', async () => {
+    const { host, store, config } = makeHost({});
+    const dialog = await openAdd({ ...host, kitTools: { fetch: kitFetch } });
+    expect(dialog.textContent).toContain('kotilo.dev/kit-tools');
+    const confirm = screen.getByRole('button', { name: 'Connect and install' }) as HTMLButtonElement;
+    expect(confirm.disabled).toBe(true);
+    await type(screen.getByRole('textbox', { name: 'Plugin' }), 'slug');
+    expect(dialog.textContent).toContain('index.json · index.json.sig · tools/slug.ts');
+    expect(kitFetch).not.toHaveBeenCalled();
+
+    await click(confirm);
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+    expect(kitFetch.mock.calls.map(([p]) => p).sort()).toEqual(['index.json', 'index.json.sig', 'tools/slug.ts']);
+    expect(store.files.slug).toBe(SLUG_SOURCE);
+    expect(config.get().plugins.installed.slug?.version).toBe('1.0.0');
+    expect(screen.getByRole('status').textContent).toBe('slug 1.0.0 installed from kit-tools.');
+    await waitFor(() => expect(screen.getByText('kit-tools · signature verified')).toBeTruthy(), { timeout: 5000 });
+    expect(screen.getByText('slug · 1.0.0')).toBeTruthy();
+  });
+
+  it('esc cancels without a request', async () => {
+    const { host } = makeHost({});
+    const dialog = await openAdd({ ...host, kitTools: { fetch: kitFetch } });
+    await act(async () => void fireEvent.keyDown(dialog, { key: 'Escape' }));
+    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(kitFetch).not.toHaveBeenCalled();
+  });
+
+  it('a local file with the same name is never overwritten', async () => {
+    const mine = SHOUT.replace("'shout'", "'slug'");
+    const { host, store } = makeHost({ slug: mine });
+    await openAdd({ ...host, kitTools: { fetch: kitFetch } });
+    await type(screen.getByRole('textbox', { name: 'Plugin' }), 'slug');
+    await click(screen.getByRole('button', { name: 'Connect and install' }));
+    await waitFor(() => expect(screen.getByRole('alert').textContent).toBe('tools/slug.ts already exists and was not installed from kit-tools. Remove it first.'));
+    expect(store.files.slug).toBe(mine);
+  });
+
+  it('a tampered download installs nothing and says why', async () => {
+    const { host, store, config } = makeHost({});
+    const tampered = vi.fn(async (path: string) => (path.endsWith('.ts') ? new TextEncoder().encode(SLUG_SOURCE + '//x') : kitFetch(path)));
+    await openAdd({ ...host, kitTools: { fetch: tampered } });
+    await type(screen.getByRole('textbox', { name: 'Plugin' }), 'slug');
+    await click(screen.getByRole('button', { name: 'Connect and install' }));
+    await waitFor(() => expect(screen.getByRole('alert').textContent).toBe('tools/slug.ts does not match the signed list. Nothing was installed.'));
+    expect(store.files.slug).toBeUndefined();
+    expect(config.get().plugins.installed).toEqual({});
+  });
+
+  it('a local plugin file shows "local file" even with a stale install record', async () => {
+    const { host, config } = makeHost({ shout: SHOUT });
+    await config.update((c) => ({ ...c, plugins: { ...c.plugins, installed: { shout: { version: '1.0.0', sha256: '0'.repeat(64) } } } }));
+    render(<FullWindow host={host} registry={registry} version="1.1.0" />);
+    await pluginsLoaded();
+    await click(screen.getByRole('button', { name: 'Settings' }));
+    await click(screen.getByRole('link', { name: 'Plugins' }));
+    expect(screen.getByText('local file')).toBeTruthy();
+    expect(screen.queryByText('kit-tools · signature verified')).toBeNull();
   });
 });
