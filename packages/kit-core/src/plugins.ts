@@ -6,6 +6,7 @@
  *
  * The shell reads the files; kit-core never touches the file system.
  */
+import { sha256Hex } from './kittools.js';
 import type { QuickJSContext, QuickJSHandle, QuickJSRuntime, QuickJSWASMModule } from 'quickjs-emscripten-core';
 import { defineTool } from './define.js';
 import { ToolError } from './errors.js';
@@ -38,6 +39,8 @@ export interface LoadedPlugin {
   file: string;
   /** `tools/<name>.ts` — how Settings and the CLI refer to the file. */
   display: string;
+  /** sha256 of the file as loaded: matches `[plugins.installed.<id>]` when it came from kit-tools unchanged. */
+  sha256: string;
   tool?: Tool<any>;
   error?: PluginIssue;
 }
@@ -83,7 +86,7 @@ export async function loadPlugins(files: readonly PluginFile[], opts: LoadOption
 
   for (const f of files) {
     const display = pluginDisplayName(f.file);
-    const entry: LoadedPlugin = { file: f.file, display };
+    const entry: LoadedPlugin = { file: f.file, display, sha256: sha256Hex(f.source) };
     plugins.push(entry);
 
     let code: string;

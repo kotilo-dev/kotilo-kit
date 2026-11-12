@@ -47,6 +47,10 @@ importers:
       '@kotilo/kit-tools':
         specifier: workspace:*
         version: link:../../packages/kit-tools
+    devDependencies:
+      '@noble/curves':
+        specifier: ^2.4.0
+        version: 2.4.0
 
   apps/desktop:
     dependencies:
@@ -111,6 +115,12 @@ importers:
       '@jitl/quickjs-singlefile-mjs-release-sync':
         specifier: 0.32.0
         version: 0.32.0
+      '@noble/curves':
+        specifier: ^2.4.0
+        version: 2.4.0
+      '@noble/hashes':
+        specifier: ^2.4.0
+        version: 2.4.0
       fuse.js:
         specifier: ^7.5.0
         version: 7.5.0
@@ -558,6 +568,10 @@ packages:
 
   '@keyv/serialize@1.1.1':
     resolution: {integrity: sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==}
+
+  '@noble/curves@2.4.0':
+    resolution: {integrity: sha512-P4/62zrgfH33CneE3Dn4WhJVA22YUU0eR51wKIan4NVRvwsA0YnPTwWGpNbpuacSujmSFLvyzpyuR30+fbq2Ew==}
+    engines: {node: '>= 20.19.0'}
 
   '@noble/hashes@2.4.0':
     resolution: {integrity: sha512-X5XaVWZIBCT7HHZGm5I7ZQXDwLG+bGXuSrMQAW+7Zvl87h1kmc1ZB1VSRJcpUfoUrGQp4Fkoxm5kZ+Ms+aW+eA==}
@@ -2309,6 +2323,10 @@ snapshots:
       keyv: 5.6.0
 
   '@keyv/serialize@1.1.1': {}
+
+  '@noble/curves@2.4.0':
+    dependencies:
+      '@noble/hashes': 2.4.0
 
   '@noble/hashes@2.4.0': {}
 

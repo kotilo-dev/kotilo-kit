@@ -115,6 +115,14 @@ export function ShieldIcon() {
 }
 
 /** Windows/Linux caption glyphs (10 px, 1 px stroke) for the frameless full window. */
+export function CheckIcon() {
+  return (
+    <svg width="11" height="11" viewBox="0 0 24 24" {...stroke('var(--kit-teal)', 2.5)} aria-hidden="true">
+      <path d="M5 12l5 5 9-10" />
+    </svg>
+  );
+}
+
 export function CaptionIcon({ kind }: { kind: 'min' | 'max' | 'close' }) {
   const d = { min: 'M0 5h10', max: 'M.5 .5h9v9h-9z', close: 'M0 0l10 10M10 0L0 10' }[kind];
   return (

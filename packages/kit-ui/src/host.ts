@@ -1,4 +1,4 @@
-import type { KitConfig, Locale } from '@kotilo/kit-core';
+import type { KitConfig, KitToolsFetch, Locale } from '@kotilo/kit-core';
 
 export type Platform = 'mac' | 'windows' | 'linux';
 
@@ -66,6 +66,11 @@ export interface Host {
   pipelines?: PipelineStore;
   /** `tools/*.ts` plugin folder (names are file stems). Absent = no plugins in this shell. */
   plugins?: PluginStore;
+  /**
+   * kit-tools downloads for `kit add` — the only network access in Kit, used only after the user
+   * confirmed the consent dialog. Absent = installing from kit-tools is not offered.
+   */
+  kitTools?: { fetch: KitToolsFetch };
   /** Shown in the settings status bar, e.g. `%APPDATA%\kotilo\kit\config.toml`. */
   configPath?: string;
   /** Frameless window controls (Windows/Linux full window). Absent = native title bar. */

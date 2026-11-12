@@ -1,4 +1,4 @@
-import { createRegistry, loadPlugins, type LoadedPlugin, type PluginSet, type Registry, type Tool } from '@kotilo/kit-core';
+import { ToolError, createRegistry, fetchKitTool, loadPlugins, recordKitTool, sha256Hex, type LoadedPlugin, type PluginSet, type Registry, type Tool } from '@kotilo/kit-core';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Host } from './host.js';
 
@@ -20,6 +20,15 @@ export interface Plugins {
   restore(file: string, source: string): Promise<void>;
   /** Read the folder and load everything again (Settings › "Reload"). */
   reload(): void;
+  /** kit-tools version when this file is an unchanged kit-tools install, else undefined (local file). */
+  versionOf(plugin: LoadedPlugin): string | undefined;
+  /** Whether this shell can install from kit-tools (`host.kitTools`). */
+  canInstall: boolean;
+  /**
+   * `kit add`: download + verify (kit-core), write `tools/<id>.ts`, record version + sha256.
+   * Call only after the user confirmed the consent dialog. Rejects with a ToolError.
+   */
+  install(name: string): Promise<{ id: string; version: string; from?: string }>;
 }
 
 /** `/x/tools/hexdump.ts` → `hexdump` (what PluginStore calls a name). */
@@ -29,7 +38,15 @@ export const pluginStem = (file: string) => (file.split(/[\\/]/).pop() ?? file).
 export function usePlugins(host: Host, base: Registry): Plugins {
   const store = host.plugins;
   const [disabledIds, setDisabledIds] = useState(() => host.config.get().plugins.disabled);
-  useEffect(() => host.config.subscribe((c) => setDisabledIds(c.plugins.disabled)), [host]);
+  const [installed, setInstalled] = useState(() => host.config.get().plugins.installed);
+  useEffect(
+    () =>
+      host.config.subscribe((c) => {
+        setDisabledIds(c.plugins.disabled);
+        setInstalled(c.plugins.installed);
+      }),
+    [host],
+  );
   const [set, setSet] = useState<PluginSet | null>(null);
   const [loading, setLoading] = useState(Boolean(store));
   const [generation, setGeneration] = useState(0);
@@ -70,7 +87,7 @@ export function usePlugins(host: Host, base: Registry): Plugins {
     (id: string, on: boolean) =>
       host.config.update((c) => {
         const rest = c.plugins.disabled.filter((x) => x !== id);
-        return { ...c, plugins: { disabled: on ? rest : [...rest, id] } };
+        return { ...c, plugins: { ...c.plugins, disabled: on ? rest : [...rest, id] } };
       }),
     [host],
   );
@@ -85,6 +102,35 @@ export function usePlugins(host: Host, base: Registry): Plugins {
   );
   const restore = useCallback(async (file: string, source: string) => void (await store?.write(pluginStem(file), source)), [store]);
 
+  const versionOf = useCallback(
+    (p: LoadedPlugin) => {
+      const rec = installed[pluginStem(p.file)];
+      return rec && rec.sha256 === p.sha256 ? rec.version : undefined;
+    },
+    [installed],
+  );
+
+  const kitTools = host.kitTools;
+  const install = useCallback(
+    async (name: string) => {
+      if (!store || !kitTools) throw new ToolError('error.kitAdd.network', { detail: 'unavailable' });
+      const tool = await fetchKitTool(name, kitTools.fetch);
+      const existing = (await store.list()).find((f) => pluginStem(f.file) === tool.id);
+      const rec = host.config.get().plugins.installed[tool.id];
+      let from: string | undefined;
+      if (existing) {
+        // a file is ours to replace only when it is the exact bytes a previous kit add wrote
+        if (!rec || sha256Hex(existing.source) !== rec.sha256) throw new ToolError('error.kitAdd.exists', { name: tool.id });
+        from = rec.version;
+      }
+      // record first: the reload triggered by the write then already shows the kit-tools badge
+      await host.config.update((c) => recordKitTool(c, tool));
+      await store.write(tool.id, tool.source);
+      return { id: tool.id, version: tool.version, ...(from && from !== tool.version ? { from } : {}) };
+    },
+    [host, store, kitTools],
+  );
+
   return {
     registry,
     loaded: set?.plugins ?? [],
@@ -96,5 +142,8 @@ export function usePlugins(host: Host, base: Registry): Plugins {
     remove,
     restore,
     reload,
+    versionOf,
+    canInstall: Boolean(store && kitTools),
+    install,
   };
 }

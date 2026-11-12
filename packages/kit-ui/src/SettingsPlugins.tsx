@@ -1,7 +1,8 @@
 import { PLUGIN_CPU_MS, PLUGIN_MEMORY_BYTES, type Locale } from '@kotilo/kit-core';
 import { useState } from 'react';
 import type { Host } from './host.js';
-import { ShieldIcon } from './icons.js';
+import { CheckIcon, ShieldIcon } from './icons.js';
+import { KitAddDialog } from './KitAddDialog.js';
 import { CATEGORY_ACCENT } from './model.js';
 import type { Plugins } from './plugins.js';
 
@@ -16,6 +17,7 @@ export interface SettingsPluginsProps {
 /** docs/02-design.md › 1.1 › Ayarlar › Eklentiler (mockup SettingsPlugins.dc.html). */
 export function SettingsPlugins({ host, plugins, locale, tr, monoFamily }: SettingsPluginsProps) {
   const [notice, setNotice] = useState<{ text: string; undo?: () => void } | null>(null);
+  const [adding, setAdding] = useState(false);
   const failed = plugins.loaded.filter((p) => p.error).length;
   const enabled = plugins.loaded.filter((p) => p.tool && !plugins.disabled.has(p.tool.id)).length;
   const dir = host.plugins?.dir ?? '';
@@ -39,10 +41,11 @@ export function SettingsPlugins({ host, plugins, locale, tr, monoFamily }: Setti
             {tr('settings.plugins.openFolder')}
           </button>
         )}
-        {/* kit add (K5 4/4) brings the install flow; the button is in the mockup already */}
-        <button className="kf-btn kf-btn-primary" disabled title={tr('settings.plugins.addSoon')}>
-          {tr('settings.plugins.add')}
-        </button>
+        {plugins.canInstall && (
+          <button className="kf-btn kf-btn-primary" onClick={() => setAdding(true)}>
+            {tr('settings.plugins.add')}
+          </button>
+        )}
       </div>
 
       <div className="kf-plugin-info">
@@ -74,6 +77,7 @@ export function SettingsPlugins({ host, plugins, locale, tr, monoFamily }: Setti
         {plugins.loaded.map((p) => {
           const tool = p.tool;
           const label = tool ? tool.name[locale] : p.display.replace(/^tools\//, '').replace(/\.ts$/, '');
+          const version = plugins.versionOf(p);
           return (
             <li key={p.file} className={`kf-plugin${p.error ? ' kf-plugin-error' : ''}`}>
               <div className="kf-plugin-main">
@@ -87,12 +91,19 @@ export function SettingsPlugins({ host, plugins, locale, tr, monoFamily }: Setti
                   <span className="kf-plugin-title">
                     <span className="kf-plugin-name">{label}</span>
                     <span className="kf-plugin-id" style={{ fontFamily: monoFamily }}>
-                      {tool ? `${tool.id} · ${p.display}` : p.display}
+                      {tool ? `${tool.id} · ${version ?? p.display}` : p.display}
                     </span>
                   </span>
                   {tool && <span className="kf-plugin-desc">{tool.description[locale]}</span>}
                 </span>
-                <span className="kf-plugin-badge">{tr('settings.plugins.local')}</span>
+                {version ? (
+                  <span className="kf-plugin-badge kf-plugin-badge-kit">
+                    <CheckIcon />
+                    {tr('settings.plugins.kitTools')}
+                  </span>
+                ) : (
+                  <span className="kf-plugin-badge">{tr('settings.plugins.local')}</span>
+                )}
                 {tool ? (
                   <label className="kf-check">
                     <input type="checkbox" checked={!plugins.disabled.has(tool.id)} onChange={(e) => void plugins.setEnabled(tool.id, e.target.checked)} />
@@ -118,6 +129,20 @@ export function SettingsPlugins({ host, plugins, locale, tr, monoFamily }: Setti
       </ul>
 
       <p className="kf-plugin-foot">{tr('settings.plugins.footer')}</p>
+
+      {adding && (
+        <KitAddDialog
+          locale={locale}
+          tr={tr}
+          monoFamily={monoFamily}
+          install={plugins.install}
+          onCancel={() => setAdding(false)}
+          onDone={(text) => {
+            setAdding(false);
+            setNotice({ text });
+          }}
+        />
+      )}
     </main>
   );
 }

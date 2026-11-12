@@ -99,7 +99,12 @@ interface Host {
 - Kapatılan eklentiler `config.toml` › `[plugins] disabled = ["id"]`; dosya yerinde kalır.
 - QuickJS'te `Intl` yok. `toLocaleLowerCase`, `toLocaleUpperCase` ve `localeCompare` sandbox'ta host'un `Intl`'ine köprülenir, böylece `tr-TR` İ/ı doğru çalışır. `Intl.*` nesneleri (Collator, NumberFormat…) eklentide kullanılamaz.
 - Bilinen sınır: QuickJS çöp toplayıcıda geçen süre kesme denetimine girmez; bellek sınırına yavaş yavaş dayanan bir eklenti durdurulmadan önce birkaç saniye sürebilir.
-- `kotilo kit add <name>`: `kotilo-dev/kit-tools` deposundan tek dosya indirir — uygulamadaki tek ağ çağrısı, her seferinde kullanıcı onayı, imza (ed25519) doğrulanır.
+- `kotilo kit add <name>` (masaüstünde Ayarlar › Eklentiler › "kit-tools'tan ekle…"): uygulamadaki tek ağ çağrısı. Her seferinde onay istenir, "bir daha sorma" yoktur. CLI terminalde `[y/N]` sorar; terminal yoksa yalnızca o çağrı için `--yes` ister.
+  - Kaynak: `kotilo-dev/kit-tools` GitHub Pages'te, `https://kotilo.dev/kit-tools/` adresinde. İndirilen dosyalar: `index.json`, `index.json.sig`, `tools/<id>.ts`. Yönlendirme reddedilir, çerez ve referrer gönderilmez.
+  - Güven zinciri (`kit-core/kittools.ts`, saf): `index.json.sig`, `index.json` baytları üzerinde ed25519 imzasıdır ve uygulamaya gömülü açık anahtarla (`KIT_TOOLS_PUBLIC_KEY`) doğrulanır. `index.json` her aracın sürümünü ve sha256'sını sabitler; indirilen `.ts` bu sha256 ile eşleşmelidir. Bir adım tutmazsa hiçbir dosya yazılmaz.
+  - İndirme işini kabuk yapar (`Host.kitTools.fetch`, CLI'da `fetch`). Çekirdek ağa çıkmaz. Masaüstü CSP `connect-src` yalnızca `https://kotilo.dev/kit-tools/` yoluna izin verir.
+  - Kurulum `config.toml`'a `[plugins.installed.<id>] version, sha256` olarak yazılır. "kit-tools · imza doğrulandı" rozeti ve sürüm yalnızca dosyanın sha256'sı kayıtla aynıysa görünür; dosya düzenlenirse eklenti "yerel dosya" olur.
+  - Aynı adda yerel bir dosya varsa üzerine yazılmaz: masaüstünde hata gösterilir, CLI'da `--force` gerekir. Daha önce kit-tools'tan kurulmuş ve değiştirilmemiş dosya güncellenir.
 
 ## Config
 `~/.config/kotilo/kit/config.toml`:

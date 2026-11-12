@@ -17,5 +17,8 @@
     "type": "git",
     "url": "git+https://github.com/kotilo-dev/kotilo-kit.git",
     "directory": "apps/cli"
+  },
+  "devDependencies": {
+    "@noble/curves": "^2.4.0"
   }
 }

@@ -1,4 +1,4 @@
-import { defaultConfig, localeFromTag, parseConfig, stringifyConfig, type KitConfig } from '@kotilo/kit-core';
+import { KIT_TOOLS_BASE, defaultConfig, localeFromTag, parseConfig, stringifyConfig, type KitConfig } from '@kotilo/kit-core';
 import { configThemeStore, type ConfigStore, type Host, type Platform } from '@kotilo/kit-ui';
 import { invoke } from '@tauri-apps/api/core';
 import { emit, listen } from '@tauri-apps/api/event';
@@ -126,6 +126,21 @@ export async function createTauriHost(): Promise<Host> {
       },
       openFolder: () => void invoke('open_config_folder', { sub: 'tools' }),
       dir: await invoke<string>('plugins_dir_display').catch(() => undefined),
+    },
+    // kit add: the only network call in Kit, made after the consent dialog. CSP connect-src allows
+    // exactly this origin; kit-core verifies the ed25519 signature + sha256 before anything is written.
+    kitTools: {
+      async fetch(path) {
+        const res = await fetch(new URL(path, KIT_TOOLS_BASE), {
+          redirect: 'error',
+          cache: 'no-store',
+          credentials: 'omit',
+          referrerPolicy: 'no-referrer',
+          signal: AbortSignal.timeout(15_000),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status} ${path}`);
+        return new Uint8Array(await res.arrayBuffer());
+      },
     },
     configPath: await invoke<string>('config_path_display').catch(() => undefined),
     onOpenFull(cb) {

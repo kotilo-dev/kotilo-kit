@@ -5,5 +5,7 @@
     "jsx": "react-jsx",
     "types": ["node"]
   },
-  "include": ["src", "test", "../kit-themes/src/raw.d.ts"]
+  "include": ["src", "test", "../kit-themes/src/raw.d.ts"],
+  // signed kit-tools files, byte-for-byte; they are plugin sources, not part of this package
+  "exclude": ["test/fixtures"]
 }
