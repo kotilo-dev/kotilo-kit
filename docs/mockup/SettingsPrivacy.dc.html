@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Kotilo Kit — Gizlilik ayarları</title>
+<script src="./support.js"></script>
+<script src="themes.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#89b4fa}a:hover{color:#b4befe}
+</style>
+</helmet>
+<div style="{{vars}}; width: 1280px; height: 800px; box-sizing: border-box; background: var(--base); border-radius: 12px; border: 1px solid var(--s1); display: flex; flex-direction: column; font-family: Inter, system-ui, sans-serif; color: var(--text); overflow: hidden">
+
+  <div style="display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: var(--mantle); border-bottom: 1px solid var(--s0)">
+    <span style="display: flex; gap: 7px; margin-right: 8px"><span style="width: 11px; height: 11px; border-radius: 50%; background: var(--red)"></span><span style="width: 11px; height: 11px; border-radius: 50%; background: var(--yellow)"></span><span style="width: 11px; height: 11px; border-radius: 50%; background: var(--green)"></span></span>
+    <span style="font-size: 13px; font-weight: 600">Kotilo Kit</span>
+    <span style="color: var(--overlay)">/</span>
+    <span style="font-size: 13px; color: var(--subtext)">Ayarlar</span>
+    <span style="color: var(--overlay)">/</span>
+    <span style="font-size: 13px; color: var(--text)">Gizlilik</span>
+  </div>
+
+  <div style="display: flex; flex: 1; min-height: 0">
+    <nav aria-label="Ayarlar" style="width: 232px; box-sizing: border-box; padding: 12px 10px; border-right: 1px solid var(--s0); background: var(--mantle); display: flex; flex-direction: column; gap: 2px; font-size: 13px">
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Genel</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Görünüm</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Kısayollar</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Pano algılama</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Eklentiler</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Pipeline'lar</a>
+      <a href="#" aria-current="page" style="padding: 7px 10px; border-radius: 7px; background: var(--s0); color: var(--text); text-decoration: none; font-weight: 500">Gizlilik</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Hakkında</a>
+    </nav>
+
+    <main style="flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 24px 28px; gap: 18px; overflow: hidden">
+      <h1 style="margin: 0; font-size: 20px; font-weight: 600">Gizlilik</h1>
+
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px">
+        <section style="border: 1px solid var(--s0); border-radius: 10px; background: var(--mantle); padding: 14px 16px; display: flex; flex-direction: column; gap: 6px">
+          <span style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/></svg>Ağ yok</span>
+          <span style="font-size: 12px; color: var(--subtext)">Kit kendiliğinden ağa çıkmaz, güncelleme denetlemez. Tek istisna: kit-tools'tan eklenti eklerken, her seferinde onayınla.</span>
+        </section>
+        <section style="border: 1px solid var(--s0); border-radius: 10px; background: var(--mantle); padding: 14px 16px; display: flex; flex-direction: column; gap: 6px">
+          <span style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/></svg>Telemetri yok</span>
+          <span style="font-size: 12px; color: var(--subtext)">Kullanım verisi, hata raporu ya da cihaz bilgisi toplanmaz ve gönderilmez.</span>
+        </section>
+        <section style="border: 1px solid var(--s0); border-radius: 10px; background: var(--mantle); padding: 14px 16px; display: flex; flex-direction: column; gap: 6px">
+          <span style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/></svg>Pano geçmişi yok</span>
+          <span style="font-size: 12px; color: var(--subtext)">Pano içeriği hiçbir yere yazılmaz. Algılama yalnızca bellekte puan hesaplar.</span>
+        </section>
+      </div>
+
+      <section style="border: 1px solid var(--s0); border-radius: 10px; background: var(--mantle); padding: 14px 16px; display: flex; flex-direction: column; gap: 10px">
+        <div style="display: flex; align-items: center; gap: 12px">
+          <h2 style="margin: 0; flex: 1; font-size: 13px; font-weight: 600">Son kullanılanlar</h2>
+          <button style="padding: 6px 12px; border-radius: 7px; border: 1px solid var(--s0); background: var(--base); color: var(--subtext); font-size: 12px; cursor: pointer">Listeyi temizle</button>
+        </div>
+        <span style="font-size: 12px; color: var(--subtext)">Palette'te en son kullandığın 5 araç. Yalnızca araç kimliği ve zamanı saklanır, giriş ya da çıktı saklanmaz.</span>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap; font: 400 11px JetBrains Mono, monospace">
+          <span style="padding: 3px 8px; border-radius: 6px; border: 1px solid var(--s0); background: var(--base); color: var(--text)">jwt</span>
+          <span style="padding: 3px 8px; border-radius: 6px; border: 1px solid var(--s0); background: var(--base); color: var(--text)">base64</span>
+          <span style="padding: 3px 8px; border-radius: 6px; border: 1px solid var(--s0); background: var(--base); color: var(--text)">json</span>
+          <span style="padding: 3px 8px; border-radius: 6px; border: 1px solid var(--s0); background: var(--base); color: var(--text)">timestamp</span>
+        </div>
+      </section>
+
+      <section style="border: 1px solid var(--s0); border-radius: 10px; background: var(--mantle); padding: 14px 16px; display: flex; flex-direction: column; gap: 10px">
+        <div style="display: flex; align-items: center; gap: 12px">
+          <h2 style="margin: 0; flex: 1; font-size: 13px; font-weight: 600">Diskte tutulanlar</h2>
+          <button style="padding: 6px 12px; border-radius: 7px; border: 1px solid var(--s0); background: var(--base); color: var(--subtext); font-size: 12px; cursor: pointer">Klasörü aç</button>
+        </div>
+        <dl style="margin: 0; display: grid; grid-template-columns: 160px 1fr; row-gap: 8px; column-gap: 12px; font-size: 12px">
+          <dt style="font: 400 12px JetBrains Mono, monospace; color: var(--text)">config.toml</dt><dd style="margin: 0; color: var(--subtext)">Ayarlar ve son kullanılan araç kimlikleri</dd>
+          <dt style="font: 400 12px JetBrains Mono, monospace; color: var(--text)">themes.toml</dt><dd style="margin: 0; color: var(--subtext)">İçe aktardığın temalar</dd>
+          <dt style="font: 400 12px JetBrains Mono, monospace; color: var(--text)">pipelines/</dt><dd style="margin: 0; color: var(--subtext)">Kaydettiğin pipeline'lar</dd>
+          <dt style="font: 400 12px JetBrains Mono, monospace; color: var(--text)">tools/</dt><dd style="margin: 0; color: var(--subtext)">Eklentiler</dd>
+        </dl>
+        <code style="font: 400 11px JetBrains Mono, monospace; color: var(--overlay)">%APPDATA%\kotilo\kit\</code>
+      </section>
+    </main>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 16px; padding: 6px 16px; background: var(--crust); border-top: 1px solid var(--s0); font: 400 11px JetBrains Mono, monospace; color: var(--overlay)">
+    <span style="display: flex; align-items: center; gap: 6px"><span style="width: 6px; height: 6px; border-radius: 50%; background: var(--green)"></span>çevrimdışı · ağ yok · telemetri yok</span>
+    <span>{{themeName}}</span>
+    <span style="flex: 1"></span>
+    <span>ayarlar: %APPDATA%\kotilo\kit\config.toml</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","default":"catppuccin-mocha","options":["catppuccin-mocha","gruvbox-dark","tokyo-night","everforest-dark","nord","rose-pine-moon","dracula"],"section":"Tema"},"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var id = this.props.theme || 'catppuccin-mocha';
+    var t = window.KotiloThemes[id] || window.KotiloThemes['catppuccin-mocha'];
+    return { vars: window.kotiloThemeVars(id), themeName: t.name };
+  }
+}
+</script>
+</body>
+</html>

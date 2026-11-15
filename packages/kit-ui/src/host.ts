@@ -73,6 +73,14 @@ export interface Host {
   kitTools?: { fetch: KitToolsFetch };
   /** Shown in the settings status bar, e.g. `%APPDATA%\kotilo\kit\config.toml`. */
   configPath?: string;
+  /** Reveal the folder that holds config.toml (Settings › General, Privacy). */
+  openConfigFolder?(): void;
+  /**
+   * Re-register the global palette shortcut (`Ctrl+Shift+K` syntax) right away. Rejects when the OS
+   * refuses it (e.g. another app owns it); the previous shortcut then stays active.
+   * Absent = the shell has no global shortcut, Settings › Shortcuts shows it read-only.
+   */
+  setHotkey?(accelerator: string): Promise<void>;
   /** Frameless window controls (Windows/Linux full window). Absent = native title bar. */
   windowControls?: { minimize(): void; toggleMaximize(): void; close(): void };
   now(): Date;

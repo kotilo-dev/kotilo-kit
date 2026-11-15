@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Kotilo Kit — Hakkında</title>
+<script src="./support.js"></script>
+<script src="themes.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#89b4fa}a:hover{color:#b4befe}
+</style>
+</helmet>
+<div style="{{vars}}; width: 1280px; height: 800px; box-sizing: border-box; background: var(--base); border-radius: 12px; border: 1px solid var(--s1); display: flex; flex-direction: column; font-family: Inter, system-ui, sans-serif; color: var(--text); overflow: hidden">
+
+  <div style="display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: var(--mantle); border-bottom: 1px solid var(--s0)">
+    <span style="display: flex; gap: 7px; margin-right: 8px"><span style="width: 11px; height: 11px; border-radius: 50%; background: var(--red)"></span><span style="width: 11px; height: 11px; border-radius: 50%; background: var(--yellow)"></span><span style="width: 11px; height: 11px; border-radius: 50%; background: var(--green)"></span></span>
+    <span style="font-size: 13px; font-weight: 600">Kotilo Kit</span>
+    <span style="color: var(--overlay)">/</span>
+    <span style="font-size: 13px; color: var(--subtext)">Ayarlar</span>
+    <span style="color: var(--overlay)">/</span>
+    <span style="font-size: 13px; color: var(--text)">Hakkında</span>
+  </div>
+
+  <div style="display: flex; flex: 1; min-height: 0">
+    <nav aria-label="Ayarlar" style="width: 232px; box-sizing: border-box; padding: 12px 10px; border-right: 1px solid var(--s0); background: var(--mantle); display: flex; flex-direction: column; gap: 2px; font-size: 13px">
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Genel</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Görünüm</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Kısayollar</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Pano algılama</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Eklentiler</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Pipeline'lar</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Gizlilik</a>
+      <a href="#" aria-current="page" style="padding: 7px 10px; border-radius: 7px; background: var(--s0); color: var(--text); text-decoration: none; font-weight: 500">Hakkında</a>
+    </nav>
+
+    <main style="flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 24px 28px; gap: 18px; overflow: hidden">
+      <h1 style="margin: 0; font-size: 20px; font-weight: 600">Hakkında</h1>
+
+      <section style="border: 1px solid var(--s0); border-radius: 10px; background: var(--mantle); padding: 18px 16px; display: flex; align-items: center; gap: 16px">
+        <span style="width: 48px; height: 48px; border-radius: 12px; background: var(--mauve)" aria-hidden="true"></span>
+        <span style="flex: 1; display: flex; flex-direction: column; gap: 4px">
+          <span style="display: flex; align-items: baseline; gap: 10px"><span style="font-size: 18px; font-weight: 600">Kotilo Kit</span><span style="font: 500 13px JetBrains Mono, monospace; color: var(--subtext)">1.1.1</span></span>
+          <span style="font-size: 12px; color: var(--subtext)">Çevrimdışı geliştirici araç kutusu · 32 yerleşik araç · 2 eklenti · 3 pipeline</span>
+        </span>
+        <span style="display: flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 6px; border: 1px solid var(--s0); font: 400 11px JetBrains Mono, monospace; color: var(--subtext)"><span style="width: 6px; height: 6px; border-radius: 50%; background: var(--green)"></span>çevrimdışı</span>
+        <button style="padding: 6px 12px; border-radius: 7px; border: 1px solid var(--s0); background: var(--base); color: var(--subtext); font-size: 12px; cursor: pointer">Sürüm bilgisini kopyala</button>
+      </section>
+
+      <section style="border: 1px solid var(--s0); border-radius: 10px; background: var(--mantle); padding: 14px 16px; display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-size: 13px; font-weight: 600">Bağlantılar</h2>
+        <span style="font-size: 12px; color: var(--subtext)">Kit tarayıcı açmaz; adresi kopyalayıp kendin açabilirsin.</span>
+        <dl style="margin: 0; display: grid; grid-template-columns: 120px 1fr auto; row-gap: 8px; column-gap: 12px; font-size: 12px; align-items: center">
+          <dt style="color: var(--subtext)">Web sitesi</dt><dd style="margin: 0; font: 400 12px JetBrains Mono, monospace; color: var(--text)">kotilo.dev</dd><button aria-label="Web sitesi adresini kopyala" style="padding: 4px 10px; border-radius: 5px; border: 1px solid var(--s0); background: transparent; color: var(--subtext); font-size: 11px; cursor: pointer">Kopyala</button>
+          <dt style="color: var(--subtext)">Kaynak kod</dt><dd style="margin: 0; font: 400 12px JetBrains Mono, monospace; color: var(--text)">github.com/kotilo-dev/kotilo-kit</dd><button aria-label="Kaynak kod adresini kopyala" style="padding: 4px 10px; border-radius: 5px; border: 1px solid var(--s0); background: transparent; color: var(--subtext); font-size: 11px; cursor: pointer">Kopyala</button>
+          <dt style="color: var(--subtext)">Hata bildir</dt><dd style="margin: 0; font: 400 12px JetBrains Mono, monospace; color: var(--text)">github.com/kotilo-dev/kotilo-kit/issues</dd><button aria-label="Hata bildirme adresini kopyala" style="padding: 4px 10px; border-radius: 5px; border: 1px solid var(--s0); background: transparent; color: var(--subtext); font-size: 11px; cursor: pointer">Kopyala</button>
+        </dl>
+      </section>
+
+      <section style="border: 1px solid var(--s0); border-radius: 10px; background: var(--mantle); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px">
+        <h2 style="margin: 0; font-size: 13px; font-weight: 600">Lisans</h2>
+        <span style="font-size: 12px; color: var(--subtext)">MIT Lisansı · © 2026 Kotilo</span>
+        <span style="font-size: 12px; color: var(--subtext)">Paketli yazı tipleri SIL Open Font License 1.1 ile: Inter, JetBrains Mono, Fira Code, Cascadia Code, Iosevka.</span>
+      </section>
+    </main>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 16px; padding: 6px 16px; background: var(--crust); border-top: 1px solid var(--s0); font: 400 11px JetBrains Mono, monospace; color: var(--overlay)">
+    <span style="display: flex; align-items: center; gap: 6px"><span style="width: 6px; height: 6px; border-radius: 50%; background: var(--green)"></span>çevrimdışı · ağ yok · telemetri yok</span>
+    <span>{{themeName}}</span>
+    <span style="flex: 1"></span>
+    <span>ayarlar: %APPDATA%\kotilo\kit\config.toml</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","default":"catppuccin-mocha","options":["catppuccin-mocha","gruvbox-dark","tokyo-night","everforest-dark","nord","rose-pine-moon","dracula"],"section":"Tema"},"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var id = this.props.theme || 'catppuccin-mocha';
+    var t = window.KotiloThemes[id] || window.KotiloThemes['catppuccin-mocha'];
+    return { vars: window.kotiloThemeVars(id), themeName: t.name };
+  }
+}
+</script>
+</body>
+</html>
