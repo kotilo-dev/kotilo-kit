@@ -8,6 +8,23 @@ Goal: **clipboard → result in two keystrokes.** Copy a JWT, press `Ctrl+Shift+
 
 Part of [Kotilo](https://kotilo.dev) · Türkçe: [aşağıda](#türkçe)
 
+<p align="center">
+  <img src="docs/screenshots/palette.png" width="560" alt="The Kotilo Kit palette: a JWT on the clipboard is detected and JWT decode is suggested; recently used tools below">
+</p>
+
+![The full window decoding a JWT: tool sidebar, input on the left, decoded header, payload and time claims on the right](docs/screenshots/full-window.png)
+
+<table>
+  <tr>
+    <td><img src="docs/screenshots/settings-themes.png" alt="Settings › Appearance with the seven built-in themes, font and window options"></td>
+    <td><img src="docs/screenshots/full-window-tokyo-night.png" alt="JSON format in the Tokyo Night theme"></td>
+  </tr>
+  <tr>
+    <td align="center">Settings › Appearance: 7 themes, fonts, density</td>
+    <td align="center">JSON format in Tokyo Night</td>
+  </tr>
+</table>
+
 ## Install
 
 Installers for Windows (MSI / setup.exe), macOS (universal .dmg) and Linux (.AppImage / .deb) are attached to every [GitHub release](https://github.com/kotilo-dev/kotilo-kit/releases). The MSI, setup.exe, dmg and deb are each ≤ 25 MB (the AppImage embeds WebKitGTK and is ~80 MB). All of them work offline. After 1.0 the package managers follow:
