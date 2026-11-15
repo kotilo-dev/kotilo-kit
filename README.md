@@ -4,7 +4,7 @@
 
 Goal: **clipboard → result in two keystrokes.** Copy a JWT, press `Ctrl+Shift+K`, hit `Enter` — the decoded payload is on your clipboard.
 
-> **Status: 1.1.** 31 built-in tools, the CLI, the desktop palette and full window, 7 themes, pipelines (chain tools, save them as TOML) and sandboxed plugins, including signed installs from [kit-tools](https://github.com/kotilo-dev/kit-tools). See the [roadmap](#roadmap).
+> **Status: 1.1.1.** 31 built-in tools, the CLI, the desktop palette and full window, 7 themes, pipelines (chain tools, save them as TOML) and sandboxed plugins, including signed installs from [kit-tools](https://github.com/kotilo-dev/kit-tools). Every Settings section works: general, appearance, shortcuts (change the global shortcut without a restart), clipboard detection, plugins, pipelines, privacy and about. See the [roadmap](#roadmap).
 
 Part of [Kotilo](https://kotilo.dev) · Türkçe: [aşağıda](#türkçe)
 
