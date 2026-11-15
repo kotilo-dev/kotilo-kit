@@ -47,6 +47,21 @@ describe('defineTool', () => {
     ).toThrow(/duplicate/);
     expect(() => defineTool({ ...base, id: 'def', options: [{ key: 'm', type: 'segmented', values: ['x'], default: 'y' }] })).toThrow(/default/);
   });
+
+  it('accepts an interface as the option type (plugin authors), still rejects non-option values', () => {
+    interface Opts {
+      mode: 'a' | 'b';
+      n: number;
+    }
+    const base = { category: 'text' as const, name: { en: 'x', tr: 'x' }, description: { en: 'x', tr: 'x' } };
+    const tool = defineTool<Opts>({ ...base, id: 'iface', run: (input, o) => ({ output: `${o.mode}${o.n}${input}` }) });
+    expect(tool.id).toBe('iface');
+    interface Bad {
+      list: string[];
+    }
+    // @ts-expect-error string[] is not an OptionValue
+    defineTool<Bad>({ ...base, id: 'bad', run: () => ({ output: '' }) });
+  });
 });
 
 describe('resolveOptions', () => {

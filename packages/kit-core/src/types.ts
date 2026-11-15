@@ -25,6 +25,11 @@ export const CATEGORIES: readonly Category[] = [
 
 export type OptionValue = string | number | boolean;
 export type OptionValues = Record<string, OptionValue>;
+/**
+ * Constraint for a tool's option type. Self-referential so `interface Opts { … }` works as well as
+ * `type Opts = { … }` (interfaces have no implicit index signature, so they fail `extends OptionValues`).
+ */
+export type OptionShape<O> = { [K in keyof O]: OptionValue };
 
 interface OptionBase {
   key: string;
@@ -92,13 +97,13 @@ export interface RunContext {
   t: (key: string, params?: Record<string, string | number>) => string;
 }
 
-export interface ToolExample<O extends OptionValues = OptionValues> {
+export interface ToolExample<O extends OptionShape<O> = OptionValues> {
   input: string;
   opts?: Partial<O>;
   output: string;
 }
 
-export interface ToolDef<O extends OptionValues = OptionValues> {
+export interface ToolDef<O extends OptionShape<O> = OptionValues> {
   id: string;
   category: Category;
   name: Localized;
@@ -118,6 +123,6 @@ export interface ToolDef<O extends OptionValues = OptionValues> {
   messages?: Partial<Record<Locale, Record<string, string>>>;
 }
 
-export interface Tool<O extends OptionValues = OptionValues> extends Required<Omit<ToolDef<O>, 'detect' | 'messages'>> {
+export interface Tool<O extends OptionShape<O> = OptionValues> extends Required<Omit<ToolDef<O>, 'detect' | 'messages'>> {
   detect?: (input: string) => number;
 }

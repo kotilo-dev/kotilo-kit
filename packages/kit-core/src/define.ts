@@ -1,10 +1,10 @@
 import { translator } from './i18n.js';
-import type { Locale, OptionDef, OptionValues, RunContext, Tool, ToolDef, ToolResult } from './types.js';
+import type { Locale, OptionDef, OptionShape, OptionValues, RunContext, Tool, ToolDef, ToolResult } from './types.js';
 
 const ID_RE = /^[a-z][a-z0-9-]*$/;
 
 /** Declare a tool. Built-in tools use exactly the same API as user plugins. */
-export function defineTool<O extends OptionValues = OptionValues>(def: ToolDef<O>): Tool<O> {
+export function defineTool<O extends OptionShape<O> = OptionValues>(def: ToolDef<O>): Tool<O> {
   if (!ID_RE.test(def.id)) throw new Error(`defineTool: invalid id "${def.id}"`);
   const seen = new Set<string>();
   for (const opt of def.options ?? []) {
