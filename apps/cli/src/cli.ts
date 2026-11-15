@@ -15,7 +15,7 @@ import {
 } from '@kotilo/kit-core';
 import { builtinTools } from '@kotilo/kit-tools';
 
-export const VERSION = '1.1.0'; // release.yml checks this against the tag
+export const VERSION = '1.1.1'; // release.yml checks this against the tag
 
 export interface CliIO {
   /** Called only by commands that consume input, so `--version`/`--help`/`list` never block on an open pipe. */
