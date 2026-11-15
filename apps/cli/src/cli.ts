@@ -18,7 +18,8 @@ import { builtinTools } from '@kotilo/kit-tools';
 export const VERSION = '1.1.0'; // release.yml checks this against the tag
 
 export interface CliIO {
-  stdin: Uint8Array;
+  /** Called only by commands that consume input, so `--version`/`--help`/`list` never block on an open pipe. */
+  stdin: () => Uint8Array;
   stdinIsTTY: boolean;
   stdoutIsTTY: boolean;
   env: Record<string, string | undefined>;
@@ -182,7 +183,9 @@ export function runCli(argv: string[], io: CliIO): CliResult {
   if (flags.get('version')) return ok(`kotilo-kit ${VERSION}\n`);
   if (!command || command === 'help') return command || flags.get('help') ? ok(t(locale, 'cli.usage') + '\n') : err(t(locale, 'cli.usage'), 2);
 
-  const input = io.stdinIsTTY ? '' : decodeInput(io.stdin);
+  let bytes: Uint8Array | undefined;
+  const stdinBytes = () => (bytes ??= io.stdinIsTTY ? new Uint8Array() : io.stdin());
+  const readInput = () => (io.stdinIsTTY ? '' : decodeInput(stdinBytes()));
 
   if (command === 'list') {
     if (flags.get('json')) {
@@ -192,7 +195,7 @@ export function runCli(argv: string[], io: CliIO): CliResult {
   }
 
   if (command === 'detect') {
-    const hits = registry.detect(input, { limit: 10, budgetMs: Infinity });
+    const hits = registry.detect(readInput(), { limit: 10, budgetMs: Infinity });
     if (flags.get('json')) return ok(JSON.stringify(hits.map((h) => ({ id: h.tool.id, score: h.score })), null, 2) + '\n');
     if (!hits.length) return { stdout: '', stderr: t(locale, 'cli.noDetection') + '\n', code: 1 };
     return ok(hits.map((h) => `${h.score.toFixed(2)}  ${h.tool.id.padEnd(14)} ${h.tool.name[locale]}`).join('\n') + '\n');
@@ -220,9 +223,10 @@ export function runCli(argv: string[], io: CliIO): CliResult {
       locale,
       ...(io.now ? { now: io.now } : {}),
       ...(typeof tzFlag === 'string' ? { tz: tzFlag } : io.env.TZ ? { tz: io.env.TZ } : {}),
-      ...(tool.accepts.includes('file') && !io.stdinIsTTY ? { bytes: io.stdin } : {}),
+      ...(tool.accepts.includes('file') && !io.stdinIsTTY ? { bytes: stdinBytes() } : {}),
     });
     // text tools: a single trailing newline from `echo`/files is not part of the value
+    const input = readInput();
     const text = tool.accepts.includes('file') ? input : input.replace(/\r?\n$/, '');
     const result = tool.run(text, resolveOptions(tool.options, opts), ctx);
     return ok(render(result, io, flags.get('json') === true));

@@ -121,7 +121,7 @@ async function main() {
   // plugins run in the QuickJS sandbox; the wasm is only loaded when tools/ has files
   const plugins = await loadPlugins(readFiles('tools', '.ts'), { taken: (id) => builtinIds.has(id) });
   const result = runCli(argv, {
-    stdin: readStdin(),
+    stdin: readStdin,
     stdinIsTTY: Boolean(process.stdin.isTTY),
     stdoutIsTTY: Boolean(process.stdout.isTTY),
     env: process.env,
