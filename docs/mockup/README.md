@@ -1,5 +1,5 @@
 # Mockup kaynakları
-Claude Design canvas'ından alınan artboard'lar (HTML, tema değişkenleriyle). Tarayıcıda doğrudan açılmaz (Design runtime'ı ister); yerleşim ve renk referansı için okunur. Görsel referans için canvas linki: Claude Design › "Kotilo Kit Mockup"; 1.1 ekranları "Kotilo Kit 1.1 Mockup".
+Claude Design canvas'ından alınan artboard'lar (HTML, tema değişkenleriyle). Tarayıcıda doğrudan açılmaz (Design runtime'ı ister); yerleşim ve renk referansı için okunur. Görsel referans için canvas linki: Claude Design › "Kotilo Kit Mockup"; 1.1 ekranları "Kotilo Kit 1.1 Mockup"; 1.1.1 ayar ekranları "Kotilo Kit 1.1.1 Ayarlar Mockup".
 - Main.dc.html — Palette penceresi 720×480
 - App.dc.html — Tam pencere, Base64 aracı 1280×800
 - Themes.dc.html — Ayarlar › Görünüm 1280×800
@@ -8,4 +8,9 @@ Claude Design canvas'ından alınan artboard'lar (HTML, tema değişkenleriyle).
 - SettingsPipelines.dc.html — 1.1: Ayarlar › Pipeline'lar 1280×800
 - SettingsPlugins.dc.html — 1.1: Ayarlar › Eklentiler 1280×800
 - KitAddConsent.dc.html — 1.1: kit add ağ onayı 560×460
+- SettingsGeneral.dc.html — 1.1.1: Ayarlar › Genel 1280×800
+- SettingsShortcuts.dc.html — 1.1.1: Ayarlar › Kısayollar 1280×800 (Tweaks: çakışma uyarısı)
+- SettingsClipboard.dc.html — 1.1.1: Ayarlar › Pano algılama 1280×800
+- SettingsPrivacy.dc.html — 1.1.1: Ayarlar › Gizlilik 1280×800
+- SettingsAbout.dc.html — 1.1.1: Ayarlar › Hakkında 1280×800
 - themes.js — mockup'ın tema haritası (kanonik kaynak: ../05-themes.toml)

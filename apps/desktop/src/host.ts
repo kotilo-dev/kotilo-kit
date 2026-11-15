@@ -143,6 +143,9 @@ export async function createTauriHost(): Promise<Host> {
       },
     },
     configPath: await invoke<string>('config_path_display').catch(() => undefined),
+    openConfigFolder: () => void invoke('open_config_folder', { sub: '' }),
+    // Rust registers the new shortcut before dropping the old one, so a refused combo changes nothing
+    setHotkey: (accelerator) => invoke('hotkey_set', { accelerator }),
     onOpenFull(cb) {
       void invoke<FullPayload | null>('pending_full').then((p) => p && cb(p.toolId, p.input));
       const unlisten = listen<FullPayload>('open-full', (e) => cb(e.payload.toolId, e.payload.input));

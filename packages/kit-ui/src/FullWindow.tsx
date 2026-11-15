@@ -41,7 +41,12 @@ import { OptionControl } from './OptionControl.js';
 import { PipelineEditor, type EditorSeed } from './PipelineEditor.js';
 import { PipelineMenu } from './PipelineMenu.js';
 import { changedOptions, uniqueName, usePipelines } from './pipelines.js';
-import { SettingsAppearance, SettingsNav, type SettingsSection } from './Settings.js';
+import { SETTINGS_SECTIONS, SettingsAppearance, SettingsNav, type SettingsSection } from './Settings.js';
+import { SettingsAbout } from './SettingsAbout.js';
+import { SettingsClipboard } from './SettingsClipboard.js';
+import { SettingsGeneral } from './SettingsGeneral.js';
+import { SettingsPrivacy } from './SettingsPrivacy.js';
+import { SettingsShortcuts } from './SettingsShortcuts.js';
 import { SettingsPipelines } from './SettingsPipelines.js';
 import { SettingsPlugins } from './SettingsPlugins.js';
 import { usePlugins } from './plugins.js';
@@ -419,10 +424,26 @@ export function FullWindow({ host, registry: builtinRegistry, version }: FullWin
           <SettingsNav
             tr={tr}
             section={settingsSection}
-            enabled={['appearance', ...(plugins.available ? (['plugins'] as const) : []), ...(pipelines.available ? (['pipelines'] as const) : [])]}
+            enabled={SETTINGS_SECTIONS.filter((s) => (s === 'plugins' ? plugins.available : s === 'pipelines' ? pipelines.available : true))}
             onSection={setSettingsSection}
           />
-          {settingsSection === 'plugins' ? (
+          {settingsSection === 'general' ? (
+            <SettingsGeneral host={host} config={config} tr={tr} monoFamily={mono.fontFamily} />
+          ) : settingsSection === 'shortcuts' ? (
+            <SettingsShortcuts host={host} config={config} tr={tr} monoFamily={mono.fontFamily} />
+          ) : settingsSection === 'clipboard' ? (
+            <SettingsClipboard host={host} config={config} registry={registry} locale={locale} tr={tr} monoFamily={mono.fontFamily} />
+          ) : settingsSection === 'privacy' ? (
+            <SettingsPrivacy host={host} config={config} tr={tr} monoFamily={mono.fontFamily} />
+          ) : settingsSection === 'about' ? (
+            <SettingsAbout
+              host={host}
+              version={version}
+              counts={{ tools: builtinRegistry.tools.length, plugins: pluginCount, pipelines: pipelineCount }}
+              tr={tr}
+              monoFamily={mono.fontFamily}
+            />
+          ) : settingsSection === 'plugins' ? (
             <SettingsPlugins host={host} plugins={plugins} locale={locale} tr={tr} monoFamily={mono.fontFamily} />
           ) : settingsSection === 'pipelines' ? (
             <SettingsPipelines

@@ -38,6 +38,10 @@ struct AppState {
     /// Bumped on every toast so an older timer does not hide a newer toast.
     toast_gen: AtomicU64,
     theme_items: Mutex<Vec<(String, CheckMenuItem<Wry>)>>,
+    /// Locale the tray labels were built with; config_write rebuilds the menu when it changes.
+    tray_locale: Mutex<String>,
+    /// The global shortcut currently registered (Settings › Shortcuts swaps it via hotkey_set).
+    hotkey: Mutex<Option<tauri_plugin_global_shortcut::Shortcut>>,
 }
 
 // ---------- config.toml (same location as kit-core `configDir`) ----------
@@ -64,11 +68,13 @@ fn read_config_text() -> String {
     fs::read_to_string(config_path()).unwrap_or_default()
 }
 
-/// The few values Rust itself needs: hotkey, UI locale (tray labels), theme (tray check mark).
+/// The few values Rust itself needs: hotkey, UI locale (tray labels), theme (tray check mark),
+/// whether the full window opens at launch.
 struct ShellSettings {
     hotkey: String,
     locale: String,
     theme: String,
+    start_hidden: bool,
 }
 
 fn shell_settings() -> ShellSettings {
@@ -80,6 +86,7 @@ fn shell_settings() -> ShellSettings {
         hotkey: get("general", "hotkey").unwrap_or_else(|| "CommandOrControl+Shift+K".into()),
         locale: if locale.to_lowercase().starts_with("tr") { "tr".into() } else { "en".into() },
         theme: get("theme", "id").unwrap_or_else(|| DEFAULT_THEME.into()),
+        start_hidden: value.get("general").and_then(|s| s.get("start_hidden")).and_then(|v| v.as_bool()).unwrap_or(true),
     }
 }
 
@@ -146,6 +153,33 @@ fn config_write(app: AppHandle, contents: String) -> Result<(), String> {
     fs::write(&tmp, contents.as_bytes()).map_err(|e| e.to_string())?;
     fs::rename(&tmp, config_path()).map_err(|e| e.to_string())?;
     sync_theme_checks(&app);
+    // Settings › General › Language: tray labels follow without a restart
+    let locale = shell_settings().locale;
+    let changed = *app.state::<AppState>().tray_locale.lock().unwrap() != locale;
+    if changed {
+        if let (Some(tray), Ok(menu)) = (app.tray_by_id("kit"), build_menu(&app)) {
+            let _ = tray.set_menu(Some(menu));
+        }
+    }
+    Ok(())
+}
+
+/// Settings › Shortcuts: register the new global shortcut first and drop the old one only after
+/// that worked, so a combo another app owns leaves the current shortcut in place.
+#[tauri::command]
+fn hotkey_set(app: AppHandle, accelerator: String) -> Result<(), String> {
+    use tauri_plugin_global_shortcut::{GlobalShortcutExt, Shortcut};
+    let next: Shortcut = accelerator.parse().map_err(|e| format!("{e}"))?;
+    let state = app.state::<AppState>();
+    let mut current = state.hotkey.lock().unwrap();
+    if *current == Some(next) {
+        return Ok(());
+    }
+    app.global_shortcut().register(next).map_err(|e| e.to_string())?;
+    if let Some(old) = current.take() {
+        let _ = app.global_shortcut().unregister(old);
+    }
+    *current = Some(next);
     Ok(())
 }
 
@@ -269,10 +303,10 @@ fn pipelines_dir_display() -> String {
     }
 }
 
-/// Settings › "Open folder": reveal `pipelines/` or `tools/` in the OS file manager.
+/// Settings › "Open folder": reveal the config folder (`""`), `pipelines/` or `tools/` in the OS file manager.
 #[tauri::command]
 fn open_config_folder(sub: String) -> Result<(), String> {
-    if sub != "pipelines" && sub != "tools" {
+    if !sub.is_empty() && sub != "pipelines" && sub != "tools" {
         return Err(format!("unknown folder: {sub}"));
     }
     let dir = config_dir().join(&sub);
@@ -424,7 +458,8 @@ fn sync_theme_checks(app: &AppHandle) {
     }
 }
 
-fn build_tray(app: &AppHandle) -> tauri::Result<()> {
+/// Tray menu in the configured locale; also remembers the theme items and locale it was built with.
+fn build_menu(app: &AppHandle) -> tauri::Result<Menu<Wry>> {
     let settings = shell_settings();
     let l = settings.locale.as_str();
     let open = MenuItem::with_id(app, "open", tr(l, "tray.open"), true, None::<&str>)?;
@@ -441,7 +476,12 @@ fn build_tray(app: &AppHandle) -> tauri::Result<()> {
     let sep = PredefinedMenuItem::separator(app)?;
     let menu = Menu::with_items(app, &[&open, &palette, &themes, &sep, &quit])?;
     *app.state::<AppState>().theme_items.lock().unwrap() = items;
+    *app.state::<AppState>().tray_locale.lock().unwrap() = settings.locale;
+    Ok(menu)
+}
 
+fn build_tray(app: &AppHandle) -> tauri::Result<()> {
+    let menu = build_menu(app)?;
     TrayIconBuilder::with_id("kit")
         .icon(app.default_window_icon().cloned().expect("bundle icon"))
         .tooltip("Kotilo Kit")
@@ -483,7 +523,7 @@ pub fn run() {
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_dialog::init())
         .manage(AppState::default())
-        .invoke_handler(tauri::generate_handler![config_read, config_write, config_path_display, themes_read, themes_write, pipelines_list, pipeline_write, pipeline_delete, pipelines_dir_display, plugins_list, plugin_write, plugin_delete, plugins_dir_display, open_config_folder, hide_window, notify, open_full, pending_full, save_file])
+        .invoke_handler(tauri::generate_handler![config_read, config_write, config_path_display, themes_read, themes_write, pipelines_list, pipeline_write, pipeline_delete, pipelines_dir_display, plugins_list, plugin_write, plugin_delete, plugins_dir_display, open_config_folder, hide_window, notify, open_full, pending_full, save_file, hotkey_set])
         .setup(|app| {
             #[cfg(target_os = "macos")]
             app.set_activation_policy(tauri::ActivationPolicy::Accessory);
@@ -517,13 +557,18 @@ pub fn run() {
                     .parse()
                     .or_else(|_| "CommandOrControl+Shift+K".parse())
                     .expect("default shortcut parses");
-                if let Err(e) = app.global_shortcut().register(shortcut) {
+                match app.global_shortcut().register(shortcut) {
+                    Ok(()) => *app.state::<AppState>().hotkey.lock().unwrap() = Some(shortcut),
                     // another app owns the combo — the tray still works
-                    eprintln!("[kit] could not register global shortcut {hotkey}: {e}");
+                    Err(e) => eprintln!("[kit] could not register global shortcut {hotkey}: {e}"),
                 }
             }
 
             build_tray(app.handle())?;
+            // Settings › General › Start hidden (default): off = the full window opens at launch too
+            if !shell_settings().start_hidden {
+                show_main(app.handle());
+            }
             Ok(())
         })
         .on_window_event(|window, event| match (window.label(), event) {
@@ -540,4 +585,16 @@ pub fn run() {
         })
         .run(tauri::generate_context!())
         .expect("error while running Kotilo Kit");
+}
+
+#[cfg(test)]
+mod tests {
+    /// kit-ui's recorder (packages/kit-ui/src/hotkey.ts) writes these spellings into config.toml.
+    #[test]
+    fn recorder_spellings_parse_as_global_shortcuts() {
+        use tauri_plugin_global_shortcut::Shortcut;
+        for combo in ["Ctrl+Shift+K", "Cmd+Shift+K", "Ctrl+Alt+Space", "Alt+1", "F9", "Cmd+Ctrl+Alt+Shift+Z"] {
+            assert!(combo.parse::<Shortcut>().is_ok(), "{combo}");
+        }
+    }
 }

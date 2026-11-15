@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Kotilo Kit — Kısayol ayarları</title>
+<script src="./support.js"></script>
+<script src="themes.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#89b4fa}a:hover{color:#b4befe}
+</style>
+</helmet>
+<div style="{{vars}}; width: 1280px; height: 800px; box-sizing: border-box; background: var(--base); border-radius: 12px; border: 1px solid var(--s1); display: flex; flex-direction: column; font-family: Inter, system-ui, sans-serif; color: var(--text); overflow: hidden">
+
+  <div style="display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: var(--mantle); border-bottom: 1px solid var(--s0)">
+    <span style="display: flex; gap: 7px; margin-right: 8px"><span style="width: 11px; height: 11px; border-radius: 50%; background: var(--red)"></span><span style="width: 11px; height: 11px; border-radius: 50%; background: var(--yellow)"></span><span style="width: 11px; height: 11px; border-radius: 50%; background: var(--green)"></span></span>
+    <span style="font-size: 13px; font-weight: 600">Kotilo Kit</span>
+    <span style="color: var(--overlay)">/</span>
+    <span style="font-size: 13px; color: var(--subtext)">Ayarlar</span>
+    <span style="color: var(--overlay)">/</span>
+    <span style="font-size: 13px; color: var(--text)">Kısayollar</span>
+  </div>
+
+  <div style="display: flex; flex: 1; min-height: 0">
+    <nav aria-label="Ayarlar" style="width: 232px; box-sizing: border-box; padding: 12px 10px; border-right: 1px solid var(--s0); background: var(--mantle); display: flex; flex-direction: column; gap: 2px; font-size: 13px">
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Genel</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Görünüm</a>
+      <a href="#" aria-current="page" style="padding: 7px 10px; border-radius: 7px; background: var(--s0); color: var(--text); text-decoration: none; font-weight: 500">Kısayollar</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Pano algılama</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Eklentiler</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Pipeline'lar</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Gizlilik</a>
+      <a href="#" style="padding: 7px 10px; border-radius: 7px; color: var(--subtext); text-decoration: none">Hakkında</a>
+    </nav>
+
+    <main style="flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 24px 28px; gap: 18px; overflow: hidden">
+      <h1 style="margin: 0; font-size: 20px; font-weight: 600">Kısayollar</h1>
+
+      <section style="border: 1px solid var(--s0); border-radius: 10px; background: var(--mantle); padding: 14px 16px; display: flex; flex-direction: column; gap: 10px">
+        <div style="display: flex; align-items: center; gap: 16px">
+          <span style="flex: 1; display: flex; flex-direction: column; gap: 3px">
+            <span style="font-size: 13px; font-weight: 600">Palette'i aç / kapat</span>
+            <span style="font-size: 12px; color: var(--subtext)">Sistem genelinde çalışır. Değiştir'e bas, sonra yeni tuş birleşimini gir; Esc vazgeçer.</span>
+          </span>
+          <span style="display: flex; gap: 4px; font: 500 12px JetBrains Mono, monospace">
+            <kbd style="padding: 4px 8px; border-radius: 5px; border: 1px solid var(--s1); background: var(--base); color: var(--text)">Ctrl</kbd>
+            <kbd style="padding: 4px 8px; border-radius: 5px; border: 1px solid var(--s1); background: var(--base); color: var(--text)">Shift</kbd>
+            <kbd style="padding: 4px 8px; border-radius: 5px; border: 1px solid var(--s1); background: var(--base); color: var(--text)">K</kbd>
+          </span>
+          <button style="padding: 6px 12px; border-radius: 7px; border: 1px solid var(--s0); background: var(--base); color: var(--subtext); font-size: 12px; cursor: pointer">Değiştir</button>
+          <button style="padding: 6px 12px; border-radius: 7px; border: 1px solid var(--s0); background: transparent; color: var(--subtext); font-size: 12px; cursor: pointer">Varsayılan</button>
+        </div>
+        <sc-if value="{{showConflict}}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 6px; border: 1px solid color-mix(in srgb, var(--red) 40%, transparent); font-size: 12px; color: var(--red)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg>
+            <span>Ctrl+Alt+Space kaydedilemedi: başka bir uygulama kullanıyor. Önceki kısayol (Ctrl+Shift+K) geçerli kaldı.</span>
+          </div>
+        </sc-if>
+      </section>
+
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+        <section style="border: 1px solid var(--s0); border-radius: 10px; background: var(--mantle); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px">
+          <h2 style="margin: 0 0 4px; font-size: 13px; font-weight: 600">Palette</h2>
+          <dl style="margin: 0; display: grid; grid-template-columns: 130px 1fr; row-gap: 9px; column-gap: 12px; font-size: 12px; align-items: center">
+            <dt style="font: 400 12px JetBrains Mono, monospace; color: var(--text)">↑ ↓</dt><dd style="margin: 0; color: var(--subtext)">Araç seç</dd>
+            <dt style="font: 400 12px JetBrains Mono, monospace; color: var(--text)">Enter</dt><dd style="margin: 0; color: var(--subtext)">Panodakiyle çalıştır, sonucu kopyala</dd>
+            <dt style="font: 400 12px JetBrains Mono, monospace; color: var(--text)">Ctrl Enter</dt><dd style="margin: 0; color: var(--subtext)">Tam pencerede aç</dd>
+            <dt style="font: 400 12px JetBrains Mono, monospace; color: var(--text)">Ctrl 1–9</dt><dd style="margin: 0; color: var(--subtext)">N'inci sonucu çalıştır</dd>
+            <dt style="font: 400 12px JetBrains Mono, monospace; color: var(--text)">Tab</dt><dd style="margin: 0; color: var(--subtext)">Seçenekleri aç / kapat</dd>
+            <dt style="font: 400 12px JetBrains Mono, monospace; color: var(--text)">Alt harf</dt><dd style="margin: 0; color: var(--subtext)">Seçeneği değiştir</dd>
+            <dt style="font: 400 12px JetBrains Mono, monospace; color: var(--text)">Esc</dt><dd style="margin: 0; color: var(--subtext)">Kapat</dd>
+          </dl>
+        </section>
+        <section style="border: 1px solid var(--s0); border-radius: 10px; background: var(--mantle); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px">
+          <h2 style="margin: 0 0 4px; font-size: 13px; font-weight: 600">Tam pencere</h2>
+          <dl style="margin: 0; display: grid; grid-template-columns: 130px 1fr; row-gap: 9px; column-gap: 12px; font-size: 12px; align-items: center">
+            <dt style="font: 400 12px JetBrains Mono, monospace; color: var(--text)">Ctrl K</dt><dd style="margin: 0; color: var(--subtext)">Araç ara</dd>
+            <dt style="font: 400 12px JetBrains Mono, monospace; color: var(--text)">Ctrl Shift C</dt><dd style="margin: 0; color: var(--subtext)">Çıktıyı kopyala</dd>
+            <dt style="font: 400 12px JetBrains Mono, monospace; color: var(--text)">Ctrl L</dt><dd style="margin: 0; color: var(--subtext)">Girişi temizle</dd>
+            <dt style="font: 400 12px JetBrains Mono, monospace; color: var(--text)">Alt harf</dt><dd style="margin: 0; color: var(--subtext)">Seçeneği değiştir</dd>
+            <dt style="font: 400 12px JetBrains Mono, monospace; color: var(--text)">Esc</dt><dd style="margin: 0; color: var(--subtext)">Ayarlardan araçlara dön</dd>
+          </dl>
+        </section>
+      </div>
+
+      <p style="margin: 0; font-size: 12px; color: var(--subtext)">Uygulama içi kısayollar sabittir. macOS'ta Ctrl yerine ⌘ kullanılır.</p>
+    </main>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 16px; padding: 6px 16px; background: var(--crust); border-top: 1px solid var(--s0); font: 400 11px JetBrains Mono, monospace; color: var(--overlay)">
+    <span style="display: flex; align-items: center; gap: 6px"><span style="width: 6px; height: 6px; border-radius: 50%; background: var(--green)"></span>çevrimdışı · ağ yok · telemetri yok</span>
+    <span>{{themeName}}</span>
+    <span style="flex: 1"></span>
+    <span>ayarlar: %APPDATA%\kotilo\kit\config.toml</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","default":"catppuccin-mocha","options":["catppuccin-mocha","gruvbox-dark","tokyo-night","everforest-dark","nord","rose-pine-moon","dracula"],"section":"Tema"},"showConflict":{"editor":"boolean","default":true,"section":"Durum"},"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var id = this.props.theme || 'catppuccin-mocha';
+    var t = window.KotiloThemes[id] || window.KotiloThemes['catppuccin-mocha'];
+    return { vars: window.kotiloThemeVars(id), themeName: t.name, showConflict: this.props.showConflict ?? true };
+  }
+}
+</script>
+</body>
+</html>
