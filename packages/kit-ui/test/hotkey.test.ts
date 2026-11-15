@@ -25,6 +25,12 @@ describe('acceleratorFromEvent', () => {
     expect(acceleratorFromEvent(ev('KeyK', { altKey: true }, '˚'), 'mac')).toBe('Alt+K');
   });
 
+  it('falls back to the key when code is missing, but only for unambiguous ASCII', () => {
+    expect(acceleratorFromEvent(ev('', { ctrlKey: true, altKey: true }, 'j'), 'windows')).toBe('Ctrl+Alt+J');
+    expect(acceleratorFromEvent(ev('Unidentified', { ctrlKey: true }, ' '), 'windows')).toBe('Ctrl+Space');
+    expect(acceleratorFromEvent(ev('', { ctrlKey: true }, 'ı'), 'windows')).toBeNull();
+  });
+
   it('waits while only modifiers are down and rejects combos that would eat typing', () => {
     expect(acceleratorFromEvent(ev('ControlLeft', { ctrlKey: true }, 'Control'), 'windows')).toBeNull();
     expect(acceleratorFromEvent(ev('KeyK'), 'windows')).toBeNull();

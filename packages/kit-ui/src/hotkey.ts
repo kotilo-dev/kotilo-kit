@@ -23,13 +23,24 @@ function keyName(code: string): string | null {
 }
 
 /**
+ * Fallback when `code` is empty or unknown (synthetic input, some remote-desktop / IME paths):
+ * only unambiguous ASCII letters, digits, F-keys and Space; layout letters like `ı` stay null.
+ */
+function keyNameFromKey(key: string): string | null {
+  if (/^[a-z0-9]$/i.test(key)) return key.toUpperCase();
+  if (/^F([1-9]|1[0-9]|2[0-4])$/.test(key)) return key;
+  if (key === ' ') return 'Space';
+  return null;
+}
+
+/**
  * Global shortcut from a keydown, e.g. `Ctrl+Shift+K` / `Cmd+Alt+Space` (same spelling as
  * `general.hotkey` in config.toml). `null` while only modifiers are held, for keys we do not
  * accept, and for combos without Ctrl/Alt/Cmd (a bare letter or Shift+letter would eat typing).
  */
 export function acceleratorFromEvent(e: KeyLike, platform: Platform): string | null {
   if (MODIFIER_KEYS.has(e.key)) return null;
-  const key = keyName(e.code);
+  const key = keyName(e.code) ?? (e.code === '' || e.code === 'Unidentified' ? keyNameFromKey(e.key) : null);
   if (!key) return null;
   const mac = platform === 'mac';
   const mods: string[] = [];
