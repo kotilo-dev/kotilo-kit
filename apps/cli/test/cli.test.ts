@@ -3,7 +3,7 @@ import { afterAll, describe, expect, it } from 'vitest';
 import { parseArgs, runCli, type CliIO } from '../src/cli.js';
 
 const io = (stdin = '', extra: Partial<CliIO> = {}): CliIO => ({
-  stdin: new TextEncoder().encode(stdin),
+  stdin: () => new TextEncoder().encode(stdin),
   stdinIsTTY: false,
   stdoutIsTTY: false,
   env: { LANG: 'en_US.UTF-8', TZ: 'UTC' },
@@ -23,6 +23,15 @@ describe('runCli', () => {
   it('pnpm kit base64 decode < in.txt', () => {
     const r = runCli(['base64', 'decode'], io('aGVsbG8gS290aWxvIQ==\n'));
     expect(r).toEqual({ stdout: 'hello Kotilo!\n', stderr: '', code: 0 });
+  });
+
+  it('does not read stdin for --version, help, list or tool --help (open non-TTY pipe must not block)', () => {
+    const stdin = () => {
+      throw new Error('stdin read');
+    };
+    for (const argv of [['--version'], ['--help'], ['help'], [], ['list'], ['base64', '--help'], ['nope']]) {
+      expect(() => runCli(argv, io('', { stdin })), argv.join(' ')).not.toThrow();
+    }
   });
 
   it('base64 encode keeps stdin bytes (like coreutils base64)', () => {
